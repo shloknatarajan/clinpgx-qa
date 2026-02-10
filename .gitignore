@@ -2,3 +2,5 @@
 .pixi/*
 !.pixi/config.toml
 venv/
+__pycache__
+.env
