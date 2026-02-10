@@ -61,7 +61,7 @@ ChainFamily = Literal[
 AmbiguityRisk = Literal["low", "medium", "high"]
 
 FAMILY_PROPORTIONS: dict[str, float] = {
-    "A": 0.60, "B": 0.20, "C": 0.15, "D": 0.03, "E": 0.02,
+    "A": 0.75, "B": 0.25, "C": 0.0, "D": 0.00, "E": 0.00,
 }
 
 EVAL_STAT_FIELDS = [
@@ -377,6 +377,26 @@ def _get_modality(source: str) -> str:
     return "functional_assay" if source == "var_fa_ann" else "clinical_association"
 
 
+def with_options(question: str, reasoning_type: str) -> str:
+    """Append discrete answer options to question text where applicable."""
+    if reasoning_type == "statistical_extraction":
+        return question
+    if reasoning_type == "claim_verification":
+        if "supported, contradicted, or not reported" in question:
+            return question + " Answer one of: supported, contradicted, not_reported."
+        if "supported or contradicted" in question:
+            return question + " Answer one of: supported, contradicted."
+    if reasoning_type == "evidence_provenance_localization":
+        if question == (
+            "What type of evidence does this annotation represent: "
+            "clinical association or functional assay?"
+        ):
+            return question + " Answer one of: clinical_association, functional_assay."
+    if reasoning_type in ("objective_evaluation", "counterfactual_evaluation"):
+        return question + " Answer true or false."
+    return question
+
+
 def _read_paper(
     pmid: str, paper_map: dict[str, Path], include_text: bool,
 ) -> str | None:
@@ -398,6 +418,8 @@ def _read_paper(
 
 def enumerate_a(
     all_anns: list[tuple[dict, str]], sp_index: dict[str, list[dict]],
+    paper_map: dict[str, Path],
+
 ) -> list[tuple]:
     candidates = []
     for ann, source in all_anns:
@@ -405,6 +427,8 @@ def enumerate_a(
         sentence = ann.get("Sentence", "").strip()
         pmid = ann.get("PMID", "").strip()
         if not (ann_id and sentence and pmid):
+            continue
+        if pmid not in paper_map: 
             continue
         for sp in sp_index.get(ann_id, []):
             for field in EVAL_STAT_FIELDS:
@@ -416,12 +440,15 @@ def enumerate_a(
 
 def enumerate_b(
     all_anns: list[tuple[dict, str]], pools: dict, rng: random.Random,
+    paper_map: dict[str, Path],
 ) -> list[tuple]:
     candidates = []
     for ann, source in all_anns:
         sentence = ann.get("Sentence", "").strip()
         pmid = ann.get("PMID", "").strip()
         if not (sentence and pmid):
+            continue
+        if pmid not in paper_map: 
             continue
         result = make_negative(ann, source, pools, rng)
         if result is not None:
@@ -619,20 +646,22 @@ def build_chain_a(
     label = _get_label(ann)
     modality = _get_modality(source)
 
+    t1_q = f"Based on PMID {pmid}, is the following pharmacogenomic claim supported or contradicted: {sentence}"
     t1 = Turn(
         turn=1,
         reasoning_type="claim_verification",
-        question=f"Based on PMID {pmid}, is the following pharmacogenomic claim supported or contradicted: {sentence}",
+        question=with_options(t1_q, "claim_verification"),
         answer=label,
         answer_source_fields=["Sentence", "Is/Is Not associated", "Significance"],
         evidence_required=True,
         evidence_granularity="document",
         metadata={"Variant Annotation ID": ann_id},
     )
+    t2_q = "What type of evidence does this annotation represent: clinical association or functional assay?"
     t2 = Turn(
         turn=2,
         reasoning_type="evidence_provenance_localization",
-        question="What type of evidence does this annotation represent: clinical association or functional assay?",
+        question=with_options(t2_q, "evidence_provenance_localization"),
         answer=modality,
         answer_source_fields=["source_file"],
         evidence_required=False,
@@ -650,6 +679,7 @@ def build_chain_a(
         metadata={"Study Parameters ID": sp_id},
     )
     t4 = _build_eval(sp, field, 4, rng)
+    t4.question = with_options(t4.question, t4.reasoning_type)
 
     tags = ["claim_verification", "evidence_provenance", "numeric_extraction"]
     if t4.reasoning_type == "counterfactual_evaluation":
@@ -683,13 +713,14 @@ def build_chain_b(
     pmid = ann["PMID"].strip()
     ann_id = ann.get("Variant Annotation ID", "").strip()
 
+    t1_q = (
+        f"Based on PMID {pmid}, is the following pharmacogenomic claim "
+        f"supported, contradicted, or not reported: {neg_sentence}"
+    )
     t1 = Turn(
         turn=1,
         reasoning_type="claim_verification",
-        question=(
-            f"Based on PMID {pmid}, is the following pharmacogenomic claim "
-            f"supported, contradicted, or not reported: {neg_sentence}"
-        ),
+        question=with_options(t1_q, "claim_verification"),
         answer="not_reported",
         answer_source_fields=["Sentence"],
         evidence_required=True,
@@ -697,10 +728,11 @@ def build_chain_b(
         negative_type=neg_type,
         metadata={"Variant Annotation ID": ann_id, "original_pmid": pmid},
     )
+    t2_q = f"Does PMID {pmid} report any quantitative statistic (p-value/OR/CI) for this claim?"
     t2 = Turn(
         turn=2,
         reasoning_type="evidence_provenance_localization",
-        question=f"Does PMID {pmid} report any quantitative statistic (p-value/OR/CI) for this claim?",
+        question=with_options(t2_q, "evidence_provenance_localization"),
         answer="no",
         answer_source_fields=["study_parameters"],
         evidence_required=False,
@@ -984,8 +1016,8 @@ def generate_all_chains(
     pools = build_swap_pools(all_anns, sp_index)
 
     logger.info("Enumerating candidates...")
-    cands_a = enumerate_a(all_anns, sp_index)
-    cands_b = enumerate_b(all_anns, pools, rng)
+    cands_a = enumerate_a(all_anns, sp_index, paper_map)
+    cands_b = enumerate_b(all_anns, pools, rng, paper_map)
     cands_c = enumerate_c(summaries, evidence_index) if include_summary else []
     cands_d = enumerate_d(all_anns, sp_index)
     cands_e = enumerate_e(summaries, history_index, rng) if include_temporal else []
