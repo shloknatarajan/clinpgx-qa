@@ -1,0 +1,13 @@
+
+======================================================================
+Yes/No Results  |  model=gpt-5.2  |  4025/5000 (80.5%)
+======================================================================
+
+By flip_type:
+  flip_type             Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  association_flip         1702     1880     90.5%
+  direction_flip           1184     1239     95.6%
+  original                 1139     1881     60.6%
+
+Eval results saved to runs/20260211_023809_gpt-5.2/yes_no_eval_results.jsonl

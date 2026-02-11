@@ -1,0 +1,15 @@
+
+======================================================================
+Yes/No Results  |  model=anthropic/claude-sonnet-4-5-20250929  |  43/5000 (0.9%)
+======================================================================
+
+By flip_type:
+  flip_type             Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  association_flip           17     1880      0.9%
+  direction_flip             15     1239      1.2%
+  original                   11     1881      0.6%
+
+  Parse failures: 4950/5000 (99.0%)
+
+Eval results saved to runs/20260211_023809_anthropic_claude-sonnet-4-5-20250929/yes_no_eval_results.jsonl

@@ -1,0 +1,11 @@
+
+======================================================================
+Yes/No Results  |  model=anthropic/claude-haiku-4-5-20251001  |  1/1 (100.0%)
+======================================================================
+
+By flip_type:
+  flip_type             Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  original                    1        1    100.0%
+
+Eval results saved to runs/20260211_023711_anthropic_claude-haiku-4-5-20251001/yes_no_eval_results.jsonl
