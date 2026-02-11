@@ -73,9 +73,7 @@ ANN_TYPE_FIELDS: dict[str, dict[str, str]] = {
 }
 
 # Phenotype values are prefixed with "Side Effect:", "Disease:", "Other:" etc.
-_PHENO_PREFIX_RE = re.compile(
-    r"^(Side Effect|Disease|Other)\s*:\s*", re.IGNORECASE
-)
+_PHENO_PREFIX_RE = re.compile(r"^(Side Effect|Disease|Other)\s*:\s*", re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
@@ -212,7 +210,9 @@ def generate_all_questions(
     """Generate FITB questions from all benchmark JSONs in *benchmark_dir*."""
     directory = Path(benchmark_dir)
     if not directory.exists() or not directory.is_dir():
-        raise ValueError(f"Directory {benchmark_dir} does not exist or is not a directory.")
+        raise ValueError(
+            f"Directory {benchmark_dir} does not exist or is not a directory."
+        )
 
     all_questions: list[FITBQuestion] = []
     for json_file in sorted(directory.glob("*.json")):

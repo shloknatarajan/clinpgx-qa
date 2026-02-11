@@ -170,7 +170,12 @@ SAMPLE_SP = {
 
 class TestFamilyBNoStats:
     def test_family_b_has_no_statistical_extraction(self):
-        cand = (SAMPLE_ANN, "var_drug_ann", "Fake claim not reported.", "not_reported_variant_swap")
+        cand = (
+            SAMPLE_ANN,
+            "var_drug_ann",
+            "Fake claim not reported.",
+            "not_reported_variant_swap",
+        )
         rng = random.Random(42)
         chain = build_chain_b(cand, "chain_test", rng, {}, False)
         for t in chain.turns:
@@ -203,7 +208,8 @@ class TestFamilyAStructure:
         assert chain.turns[1].reasoning_type == "evidence_provenance_localization"
         assert chain.turns[2].reasoning_type == "statistical_extraction"
         assert chain.turns[3].reasoning_type in (
-            "objective_evaluation", "counterfactual_evaluation",
+            "objective_evaluation",
+            "counterfactual_evaluation",
         )
 
 
@@ -317,8 +323,16 @@ class TestFamilyEStructure:
             "Latest History Date (YYYY-MM-DD)": "2023-01-15",
         }
         history = [
-            {"Date (YYYY-MM-DD)": "2021-03-24", "Type": "Update", "Comment": "Score added"},
-            {"Date (YYYY-MM-DD)": "2023-01-15", "Type": "Correction", "Comment": "Fixed"},
+            {
+                "Date (YYYY-MM-DD)": "2021-03-24",
+                "Type": "Update",
+                "Comment": "Score added",
+            },
+            {
+                "Date (YYYY-MM-DD)": "2023-01-15",
+                "Type": "Correction",
+                "Comment": "Fixed",
+            },
         ]
         cand = (summary, history, 2020)
         rng = random.Random(42)

@@ -25,15 +25,19 @@ MODELS = [
 
 def run_model(model: str, limit: int) -> dict:
     """Run generate + score for a single model. Returns result summary."""
-    print(f"\n{'='*70}")
+    print(f"\n{'=' * 70}")
     print(f"  Starting: {model}  |  limit={limit}")
-    print(f"{'='*70}\n")
+    print(f"{'=' * 70}\n")
 
     # Generate
     gen_cmd = [
-        sys.executable, "src/eval/yes_no.py", "generate",
-        "--model", model,
-        "--limit", str(limit),
+        sys.executable,
+        "src/eval/yes_no.py",
+        "generate",
+        "--model",
+        model,
+        "--limit",
+        str(limit),
     ]
     gen_result = subprocess.run(gen_cmd, capture_output=True, text=True)
     print(gen_result.stderr, end="")
@@ -51,12 +55,19 @@ def run_model(model: str, limit: int) -> dict:
             break
 
     if not responses_path:
-        return {"model": model, "status": "no_responses_path", "error": gen_result.stderr}
+        return {
+            "model": model,
+            "status": "no_responses_path",
+            "error": gen_result.stderr,
+        }
 
     # Score
     score_cmd = [
-        sys.executable, "src/eval/yes_no.py", "score",
-        "--responses-path", responses_path,
+        sys.executable,
+        "src/eval/yes_no.py",
+        "score",
+        "--responses-path",
+        responses_path,
     ]
     score_result = subprocess.run(score_cmd, capture_output=True, text=True)
     print(score_result.stderr, end="")
@@ -77,11 +88,15 @@ def run_model(model: str, limit: int) -> dict:
 def main():
     parser = argparse.ArgumentParser(description="Run yes/no eval across models")
     parser.add_argument(
-        "--limit", type=int, default=10000,
+        "--limit",
+        type=int,
+        default=10000,
         help="Number of questions per model (default: 10000)",
     )
     parser.add_argument(
-        "--models", nargs="+", default=MODELS,
+        "--models",
+        nargs="+",
+        default=MODELS,
         help="Model identifiers to evaluate",
     )
     args = parser.parse_args()
@@ -96,9 +111,9 @@ def main():
     elapsed = datetime.now() - start
 
     # Final summary
-    print(f"\n\n{'='*70}")
+    print(f"\n\n{'=' * 70}")
     print(f"  ALL MODELS COMPLETE  |  {elapsed.total_seconds():.0f}s elapsed")
-    print(f"{'='*70}\n")
+    print(f"{'=' * 70}\n")
 
     for r in results:
         status = "OK" if r["status"] == "ok" else f"FAILED ({r['status']})"

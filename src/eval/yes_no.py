@@ -111,7 +111,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
             out_f.flush()
 
             if (i + 1) % 25 == 0 or (i + 1) == len(questions):
-                logger.info(f"  [{i+1}/{len(questions)}]")
+                logger.info(f"  [{i + 1}/{len(questions)}]")
 
     logger.info(f"Responses saved to {responses_path}")
     return responses_path
@@ -153,11 +153,13 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
         correct += int(is_correct)
         total += 1
 
-        results.append({
-            **r,
-            "prediction_parsed": predicted,
-            "correct": is_correct,
-        })
+        results.append(
+            {
+                **r,
+                "prediction_parsed": predicted,
+                "correct": is_correct,
+            }
+        )
 
     # Build summary text
     model = records[0]["model"] if records else "unknown"
@@ -167,7 +169,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     lines.append("=" * 70)
     lines.append(
         f"Yes/No Results  |  model={model}  |  "
-        f"{correct}/{total} ({correct/total:.1%})"
+        f"{correct}/{total} ({correct / total:.1%})"
     )
     lines.append("=" * 70)
 
@@ -182,7 +184,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     lines.append("")
     lines.append("By flip_type:")
     lines.append(f"  {'flip_type':<20} {'Correct':>8} {'Total':>8} {'Accuracy':>10}")
-    lines.append(f"  {'-'*20} {'-'*8} {'-'*8} {'-'*10}")
+    lines.append(f"  {'-' * 20} {'-' * 8} {'-' * 8} {'-' * 10}")
     for ft in sorted(flip_stats):
         s = flip_stats[ft]
         acc = s["correct"] / s["total"] if s["total"] else 0
@@ -192,14 +194,14 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     unparsed = sum(1 for r in results if r["prediction_parsed"] is None)
     if unparsed:
         lines.append("")
-        lines.append(f"  Parse failures: {unparsed}/{total} ({unparsed/total:.1%})")
+        lines.append(f"  Parse failures: {unparsed}/{total} ({unparsed / total:.1%})")
 
     # Paper context stats
     no_paper = sum(1 for r in results if not r["had_paper_context"])
     if no_paper:
         lines.append(
             f"  Questions without paper context: {no_paper}/{total} "
-            f"({no_paper/total:.1%})"
+            f"({no_paper / total:.1%})"
         )
 
     # Determine output dir
@@ -246,14 +248,17 @@ def main() -> None:
         help="Path to yes/no questions JSONL",
     )
     gen_p.add_argument(
-        "--limit", type=int, default=0,
+        "--limit",
+        type=int,
+        default=0,
         help="Limit number of questions (0 = all)",
     )
 
     # score
     score_p = subparsers.add_parser("score", help="Score saved responses")
     score_p.add_argument(
-        "--responses-path", required=True,
+        "--responses-path",
+        required=True,
         help="Path to responses JSONL from generate step",
     )
 

@@ -94,7 +94,8 @@ def make_question(pmcid: str, statement: str) -> str:
 
 
 def generate_questions(
-    annotations: list[dict], pmid_to_pmcid: dict[str, str],
+    annotations: list[dict],
+    pmid_to_pmcid: dict[str, str],
 ) -> list[TrueFalseQuestion]:
     """Generate true/false questions from annotations by flipping categories."""
     questions = []

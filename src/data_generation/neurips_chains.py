@@ -43,7 +43,12 @@ ReasoningType = Literal[
 ]
 
 EvidenceGranularity = Literal[
-    "document", "modality", "aggregation", "temporal", "db_record", "heuristic",
+    "document",
+    "modality",
+    "aggregation",
+    "temporal",
+    "db_record",
+    "heuristic",
 ]
 
 NegativeTypeLit = Literal[
@@ -66,11 +71,19 @@ ChainFamily = Literal[
 AmbiguityRisk = Literal["low", "medium", "high"]
 
 FAMILY_PROPORTIONS: dict[str, float] = {
-    "A": 0.75, "B": 0.25, "C": 0.0, "D": 0.00, "E": 0.00,
+    "A": 0.75,
+    "B": 0.25,
+    "C": 0.0,
+    "D": 0.00,
+    "E": 0.00,
 }
 
 EVAL_STAT_FIELDS = [
-    "P Value", "Ratio Stat", "Confidence Interval", "Study Cases", "Study Controls",
+    "P Value",
+    "Ratio Stat",
+    "Confidence Interval",
+    "Study Cases",
+    "Study Controls",
 ]
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -233,7 +246,8 @@ def safe_float(s: str) -> float | None:
 
 
 def build_swap_pools(
-    all_anns: list[tuple[dict, str]], sp_index: dict[str, list[dict]],
+    all_anns: list[tuple[dict, str]],
+    sp_index: dict[str, list[dict]],
 ) -> dict[str, Any]:
     by_gene_pheno: dict[tuple[str, str], list[dict]] = defaultdict(list)
     by_gene_variant: dict[tuple[str, str], list[dict]] = defaultdict(list)
@@ -281,7 +295,10 @@ def _build_pmid_entities(
 
 
 def make_negative(
-    ann: dict, source: str, pools: dict, rng: random.Random,
+    ann: dict,
+    source: str,
+    pools: dict,
+    rng: random.Random,
     pmid_entities: dict[str, set[tuple[str, str, str]]] | None = None,
     pmid_to_pmcid: dict[str, str] | None = None,
 ) -> tuple[str, NegativeTypeLit] | None:
@@ -311,8 +328,7 @@ def make_negative(
         )
         # Filter out variants that appear in any annotation for the same PMID
         alts = [
-            v for v in alts
-            if (v.lower(), drug.lower(), pheno.lower()) not in known
+            v for v in alts if (v.lower(), drug.lower(), pheno.lower()) not in known
         ]
         if alts:
             alt = rng.choice(alts)
@@ -334,7 +350,8 @@ def make_negative(
         )
         # Filter out drugs that appear in any annotation for the same PMID
         alt_drugs = [
-            d for d in alt_drugs
+            d
+            for d in alt_drugs
             if (variant.lower(), d.lower(), pheno.lower()) not in known
         ]
         if alt_drugs:
@@ -349,8 +366,7 @@ def make_negative(
     alt_phenos = [p for p in pools["phenotypes"] if p != pheno]
     # Filter out phenotypes that appear in any annotation for the same PMID
     alt_phenos = [
-        p for p in alt_phenos
-        if (variant.lower(), drug.lower(), p.lower()) not in known
+        p for p in alt_phenos if (variant.lower(), drug.lower(), p.lower()) not in known
     ]
     if alt_phenos:
         ap = rng.choice(alt_phenos)
@@ -375,8 +391,7 @@ def _stat_available(sp: dict, field: str) -> bool:
         )
     if field == "Ratio Stat":
         return bool(
-            sp.get("Ratio Stat", "").strip()
-            and sp.get("Ratio Stat Type", "").strip()
+            sp.get("Ratio Stat", "").strip() and sp.get("Ratio Stat Type", "").strip()
         )
     return bool(sp.get(field, "").strip())
 
@@ -435,7 +450,9 @@ def with_options(question: str, reasoning_type: str) -> str:
 
 
 def _read_paper(
-    pmcid: str, pmcid_paper_map: dict[str, Path], include_text: bool,
+    pmcid: str,
+    pmcid_paper_map: dict[str, Path],
+    include_text: bool,
 ) -> str | None:
     if not include_text:
         return None
@@ -454,9 +471,9 @@ def _read_paper(
 
 
 def enumerate_a(
-    all_anns: list[tuple[dict, str]], sp_index: dict[str, list[dict]],
+    all_anns: list[tuple[dict, str]],
+    sp_index: dict[str, list[dict]],
     pmid_to_pmcid: dict[str, str],
-
 ) -> list[tuple]:
     candidates = []
     for ann, source in all_anns:
@@ -476,7 +493,9 @@ def enumerate_a(
 
 
 def enumerate_b(
-    all_anns: list[tuple[dict, str]], pools: dict, rng: random.Random,
+    all_anns: list[tuple[dict, str]],
+    pools: dict,
+    rng: random.Random,
     pmid_to_pmcid: dict[str, str],
     pmid_entities: dict[str, set[tuple[str, str, str]]] | None = None,
 ) -> list[tuple]:
@@ -497,7 +516,8 @@ def enumerate_b(
 
 
 def enumerate_c(
-    summaries: list[dict], evidence_index: dict[str, list[dict]],
+    summaries: list[dict],
+    evidence_index: dict[str, list[dict]],
 ) -> list[tuple]:
     candidates = []
     for s in summaries:
@@ -516,7 +536,8 @@ def enumerate_c(
 
 
 def enumerate_d(
-    all_anns: list[tuple[dict, str]], sp_index: dict[str, list[dict]],
+    all_anns: list[tuple[dict, str]],
+    sp_index: dict[str, list[dict]],
 ) -> list[tuple]:
     candidates = []
     for ann, source in all_anns:
@@ -533,7 +554,13 @@ def enumerate_d(
         has_risk = side_eff and ("risk of" in side_eff or "likelihood of" in side_eff)
         has_monotonic_pk = pd_pk and any(
             t in pd_pk
-            for t in ("metabolism", "clearance", "exposure", "concentration", "response")
+            for t in (
+                "metabolism",
+                "clearance",
+                "exposure",
+                "concentration",
+                "response",
+            )
         )
         if not (has_risk or has_monotonic_pk):
             continue
@@ -593,7 +620,10 @@ def _build_association_desc(ann: dict) -> str:
 
 
 def _build_stat_q(
-    sp: dict, field: str, pmcid: str, ann: dict,
+    sp: dict,
+    field: str,
+    pmcid: str,
+    ann: dict,
 ) -> tuple[str, str | int | float, list[str]]:
     desc = _build_association_desc(ann)
     if field == "P Value":
@@ -673,7 +703,10 @@ def _build_eval(sp: dict, field: str, turn_num: int, rng: random.Random) -> Turn
             reasoning_type="objective_evaluation",
             question=f"Does the confidence interval for the {rs_type} exclude the null value of 1.0?",
             answer=excludes,
-            answer_source_fields=["Confidence Interval Start", "Confidence Interval Stop"],
+            answer_source_fields=[
+                "Confidence Interval Start",
+                "Confidence Interval Stop",
+            ],
             evidence_required=True,
             evidence_granularity="db_record",
         )
@@ -862,9 +895,7 @@ def build_chain_c(cand: tuple, chain_id: str, rng: random.Random) -> QuestionCha
     tags = ["aggregation_reasoning"]
 
     if with_turn4:
-        ev_types = sorted(
-            {r.get("Evidence Type", "").strip() for r in ev_rows} - {""}
-        )
+        ev_types = sorted({r.get("Evidence Type", "").strip() for r in ev_rows} - {""})
         type_map = {
             "Variant Drug Annotation": "clinical association",
             "Variant Phenotype Annotation": "clinical association",
@@ -1040,7 +1071,8 @@ def build_chain_e(cand: tuple, chain_id: str, rng: random.Random) -> QuestionCha
 
 
 def allocate_targets(
-    counts: dict[str, int], total_target: int,
+    counts: dict[str, int],
+    total_target: int,
 ) -> dict[str, int]:
     targets: dict[str, int] = {}
     shortfall = 0
@@ -1114,13 +1146,17 @@ def generate_all_chains(
         else:
             selected = cands[:]
             while len(selected) < target_n:
-                selected.extend(rng.choices(cands, k=min(target_n - len(selected), len(cands))))
+                selected.extend(
+                    rng.choices(cands, k=min(target_n - len(selected), len(cands)))
+                )
             selected = selected[:target_n]
 
         for c in selected:
             cid = f"chain_{chain_counter:06d}"
             if needs_paper:
-                chain = builder(c, cid, rng, pmcid_paper_map, include_text, pmid_to_pmcid)
+                chain = builder(
+                    c, cid, rng, pmcid_paper_map, include_text, pmid_to_pmcid
+                )
             else:
                 chain = builder(c, cid, rng)
             chains.append(chain)
@@ -1158,24 +1194,35 @@ def validate_chains(chains: list[QuestionChain]) -> None:
         if c.chain_family == "B_claim\u2192presence_absence":
             for t in c.turns:
                 if t.reasoning_type == "statistical_extraction":
-                    errors.append(f"{c.chain_id}: Family B has statistical_extraction turn")
+                    errors.append(
+                        f"{c.chain_id}: Family B has statistical_extraction turn"
+                    )
 
         # Evaluation turns must have source fields
         for t in c.turns:
-            if t.reasoning_type in ("objective_evaluation", "counterfactual_evaluation"):
+            if t.reasoning_type in (
+                "objective_evaluation",
+                "counterfactual_evaluation",
+            ):
                 if not t.answer_source_fields:
-                    errors.append(f"{c.chain_id} turn {t.turn}: eval with no source fields")
+                    errors.append(
+                        f"{c.chain_id} turn {t.turn}: eval with no source fields"
+                    )
 
         # Negative chains
         if c.has_negative:
             neg_found = any(t.negative_type is not None for t in c.turns)
             if not neg_found:
-                errors.append(f"{c.chain_id}: has_negative=True but no negative_type in turns")
+                errors.append(
+                    f"{c.chain_id}: has_negative=True but no negative_type in turns"
+                )
 
         # PMCID required for document grounding
         for t in c.turns:
             if t.evidence_granularity == "document" and not c.pmcid:
-                errors.append(f"{c.chain_id} turn {t.turn}: document grounding but no PMCID")
+                errors.append(
+                    f"{c.chain_id} turn {t.turn}: document grounding but no PMCID"
+                )
 
     if errors:
         msg = f"Validation failed with {len(errors)} errors:\n" + "\n".join(errors[:20])
@@ -1214,7 +1261,9 @@ def compute_stats(chains: list[QuestionChain]) -> dict[str, Any]:
             k: round(v / total * 100, 2) for k, v in cap_counter.most_common()
         },
         "uses_full_text_count": uses_full_text_count,
-        "uses_full_text_percent": round(uses_full_text_count / total * 100, 2) if total else 0,
+        "uses_full_text_percent": round(uses_full_text_count / total * 100, 2)
+        if total
+        else 0,
     }
 
 
@@ -1252,7 +1301,9 @@ def save_output(
     print(f"\nCapability tags (% of chains):")
     for k, v in stats["capability_tag_percent"].items():
         print(f"  {k}: {v}%")
-    print(f"\nUses full text: {stats['uses_full_text_count']:,} ({stats['uses_full_text_percent']}%)")
+    print(
+        f"\nUses full text: {stats['uses_full_text_count']:,} ({stats['uses_full_text_percent']}%)"
+    )
     print(f"{'=' * 60}\n")
 
 

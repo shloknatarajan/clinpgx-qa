@@ -204,9 +204,7 @@ def load_study_parameters_index(tsv_path: str | Path) -> dict[str, list[dict]]:
         ann_id = row["Variant Annotation ID"].strip()
         if ann_id:
             index[ann_id].append(row)
-    logger.info(
-        f"Indexed {len(rows)} study parameters across {len(index)} annotations"
-    )
+    logger.info(f"Indexed {len(rows)} study parameters across {len(index)} annotations")
     return index
 
 
@@ -426,9 +424,7 @@ def _derive_eval_answer(sp_row: dict, pair: dict) -> bool | None:
     return None
 
 
-def build_turns_2_3(
-    ann: dict, sp_row: dict, rng: random.Random
-) -> list[Turn]:
+def build_turns_2_3(ann: dict, sp_row: dict, rng: random.Random) -> list[Turn]:
     """Build Turns 2 and 3 from a study_parameters row.
 
     Returns 0, 1, or 2 turns depending on data availability.
@@ -449,7 +445,9 @@ def build_turns_2_3(
     pair = rng.choice(eligible_pairs)
 
     # Build Turn 2: statistical extraction
-    ratio_stat_type = sp_row.get("Ratio Stat Type", "effect size").strip() or "effect size"
+    ratio_stat_type = (
+        sp_row.get("Ratio Stat Type", "effect size").strip() or "effect size"
+    )
     q_template = rng.choice(pair["questions"])
     question_2 = q_template.format(
         pmid=pmid,

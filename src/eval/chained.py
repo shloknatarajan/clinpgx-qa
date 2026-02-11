@@ -81,9 +81,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
             ]
 
             if context:
-                context_prefix = (
-                    f"## Paper (PMCID {chain['pmcid']})\n\n{context}\n\n"
-                )
+                context_prefix = f"## Paper (PMCID {chain['pmcid']})\n\n{context}\n\n"
             else:
                 context_prefix = ""
 
@@ -110,13 +108,15 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
 
                 messages.append({"role": "assistant", "content": response})
 
-                turn_records.append({
-                    "turn": turn["turn"],
-                    "reasoning_type": turn["reasoning_type"],
-                    "question": question,
-                    "answer": turn["answer"],
-                    "response": response,
-                })
+                turn_records.append(
+                    {
+                        "turn": turn["turn"],
+                        "reasoning_type": turn["reasoning_type"],
+                        "question": question,
+                        "answer": turn["answer"],
+                        "response": response,
+                    }
+                )
 
             record = {
                 "chain_id": chain["chain_id"],
@@ -130,7 +130,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
             out_f.flush()
 
             if (ci + 1) % 10 == 0 or (ci + 1) == len(chains):
-                logger.info(f"  [{ci+1}/{len(chains)}]")
+                logger.info(f"  [{ci + 1}/{len(chains)}]")
 
     logger.info(f"Responses saved to {responses_path}")
     return responses_path
@@ -180,7 +180,8 @@ def _extract_numbers(text: str) -> list[float]:
     results: list[float] = []
     # Scientific notation: 1.3x10^-5, 1.3x10-5 (after superscript conversion)
     for m in re.finditer(
-        r"(-?\d+\.?\d*)\s*[xX]\s*10\s*\^?\s*\(?\s*(-?\d+)\s*\)?", text,
+        r"(-?\d+\.?\d*)\s*[xX]\s*10\s*\^?\s*\(?\s*(-?\d+)\s*\)?",
+        text,
     ):
         try:
             results.append(float(m.group(1)) * 10 ** int(m.group(2)))
@@ -211,7 +212,7 @@ def _parse_inequality(gt_str: str) -> tuple[str | None, float | None]:
     if not m:
         return None, None
     op = m.group(1)
-    nums = _extract_numbers(gt_str[m.end():])
+    nums = _extract_numbers(gt_str[m.end() :])
     if not nums:
         return None, None
     return op, nums[0]
@@ -326,9 +327,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
         scored_turns: list[dict] = []
 
         for t in chain["turns"]:
-            is_correct = score_turn(
-                t["reasoning_type"], t["response"], t["answer"]
-            )
+            is_correct = score_turn(t["reasoning_type"], t["response"], t["answer"])
             turn_correct += int(is_correct)
             turn_total += 1
             if not is_correct:
@@ -337,15 +336,17 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
             scored_turns.append({**t, "correct": is_correct})
 
         chain_correct += int(chain_all_correct)
-        results.append({
-            "chain_id": chain["chain_id"],
-            "chain_family": chain["chain_family"],
-            "pmcid": chain.get("pmcid"),
-            "num_turns": chain["num_turns"],
-            "model": chain["model"],
-            "all_correct": chain_all_correct,
-            "turns": scored_turns,
-        })
+        results.append(
+            {
+                "chain_id": chain["chain_id"],
+                "chain_family": chain["chain_family"],
+                "pmcid": chain.get("pmcid"),
+                "num_turns": chain["num_turns"],
+                "model": chain["model"],
+                "all_correct": chain_all_correct,
+                "turns": scored_turns,
+            }
+        )
 
     # Build summary text
     model = chains[0]["model"] if chains else "unknown"
@@ -356,14 +357,19 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     lines.append("=" * 70)
     lines.append(
         f"Chained Results  |  model={model}  |  "
-        f"turns: {turn_correct}/{turn_total} ({turn_correct/turn_total:.1%})  |  "
-        f"chains: {chain_correct}/{num_chains} ({chain_correct/num_chains:.1%})"
+        f"turns: {turn_correct}/{turn_total} ({turn_correct / turn_total:.1%})  |  "
+        f"chains: {chain_correct}/{num_chains} ({chain_correct / num_chains:.1%})"
     )
     lines.append("=" * 70)
 
     # By chain_family
     family_stats: dict[str, dict[str, int]] = defaultdict(
-        lambda: {"turn_correct": 0, "turn_total": 0, "chain_correct": 0, "chain_total": 0}
+        lambda: {
+            "turn_correct": 0,
+            "turn_total": 0,
+            "chain_correct": 0,
+            "chain_total": 0,
+        }
     )
     for r in results:
         fam = r["chain_family"]
@@ -376,7 +382,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     lines.append("")
     lines.append("By chain_family:")
     lines.append(f"  {'Family':<35} {'Turn Acc':>10} {'Chain Acc':>10}")
-    lines.append(f"  {'-'*35} {'-'*10} {'-'*10}")
+    lines.append(f"  {'-' * 35} {'-' * 10} {'-' * 10}")
     for fam in sorted(family_stats):
         s = family_stats[fam]
         tacc = s["turn_correct"] / s["turn_total"] if s["turn_total"] else 0
@@ -395,7 +401,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     lines.append("")
     lines.append("By reasoning_type:")
     lines.append(f"  {'Type':<40} {'Correct':>8} {'Total':>8} {'Accuracy':>10}")
-    lines.append(f"  {'-'*40} {'-'*8} {'-'*8} {'-'*10}")
+    lines.append(f"  {'-' * 40} {'-' * 8} {'-' * 8} {'-' * 10}")
     for rt in sorted(rt_stats):
         s = rt_stats[rt]
         acc = s["correct"] / s["total"] if s["total"] else 0
@@ -413,7 +419,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     lines.append("")
     lines.append("By turn number:")
     lines.append(f"  {'Turn':>6} {'Correct':>8} {'Total':>8} {'Accuracy':>10}")
-    lines.append(f"  {'-'*6} {'-'*8} {'-'*8} {'-'*10}")
+    lines.append(f"  {'-' * 6} {'-' * 8} {'-' * 8} {'-' * 10}")
     for tn in sorted(tn_stats):
         s = tn_stats[tn]
         acc = s["correct"] / s["total"] if s["total"] else 0
@@ -463,14 +469,17 @@ def main() -> None:
         help="Path to chained questions JSONL",
     )
     gen_p.add_argument(
-        "--limit", type=int, default=0,
+        "--limit",
+        type=int,
+        default=0,
         help="Limit number of chains (0 = all)",
     )
 
     # score
     score_p = subparsers.add_parser("score", help="Score saved responses")
     score_p.add_argument(
-        "--responses-path", required=True,
+        "--responses-path",
+        required=True,
         help="Path to responses JSONL from generate step",
     )
 

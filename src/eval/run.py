@@ -51,7 +51,9 @@ def main() -> None:
         help=f"LiteLLM model identifier (default: {DEFAULT_MODEL})",
     )
     parser.add_argument(
-        "--limit", type=int, default=0,
+        "--limit",
+        type=int,
+        default=0,
         help="Limit number of items per dataset (0 = all)",
     )
     parser.add_argument(
@@ -61,7 +63,8 @@ def main() -> None:
         help="Which dataset to evaluate (default: all)",
     )
     parser.add_argument(
-        "--score-only", action="store_true",
+        "--score-only",
+        action="store_true",
         help="Skip generation, only score existing responses",
     )
     parser.add_argument(
