@@ -3,7 +3,14 @@
     "allow": [
       "Bash(wc:*)",
       "Bash(python3:*)",
-      "Bash(export PATH=\"$HOME/.pixi/bin:$PATH\")"
+      "Bash(export PATH=\"$HOME/.pixi/bin:$PATH\")",
+      "Bash(grep:*)",
+      "Bash(python -c:*)",
+      "Bash(python:*)",
+      "Bash(python src/eval/yes_no.py:*)",
+      "Bash(python src/eval/yes_no.py score:*)",
+      "Bash(find:*)",
+      "Bash(pixi:*)"
     ]
   }
 }

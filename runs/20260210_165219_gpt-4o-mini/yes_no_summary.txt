@@ -1,0 +1,16 @@
+
+======================================================================
+Yes/No Results  |  model=gpt-4o-mini  |  4/10 (40.0%)
+======================================================================
+
+By flip_type:
+  flip_type             Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  association_flip            1        3     33.3%
+  direction_flip              1        3     33.3%
+  original                    2        4     50.0%
+
+  Parse failures: 2/10 (20.0%)
+  Questions without paper context: 7/10 (70.0%)
+
+Eval results saved to runs/20260210_165219_gpt-4o-mini/yes_no_eval_results.jsonl

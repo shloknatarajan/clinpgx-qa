@@ -1,0 +1,14 @@
+
+======================================================================
+Yes/No Results  |  model=gpt-4o  |  39/50 (78.0%)
+======================================================================
+
+By flip_type:
+  flip_type             Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  association_flip           14       18     77.8%
+  direction_flip             13       14     92.9%
+  original                   12       18     66.7%
+  Questions without paper context: 27/50 (54.0%)
+
+Eval results saved to runs/20260211_010642_gpt-4o/yes_no_eval_results.jsonl

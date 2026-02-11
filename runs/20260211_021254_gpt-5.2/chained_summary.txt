@@ -1,0 +1,28 @@
+
+======================================================================
+Chained Results  |  model=gpt-5.2  |  turns: 34/40 (85.0%)  |  chains: 7/10 (70.0%)
+======================================================================
+
+By chain_family:
+  Family                                Turn Acc  Chain Acc
+  ----------------------------------- ---------- ----------
+  A_claim→modality→stat→eval              85.0%     70.0%
+
+By reasoning_type:
+  Type                                      Correct    Total   Accuracy
+  ---------------------------------------- -------- -------- ----------
+  claim_verification                              9       10     90.0%
+  counterfactual_evaluation                       1        1    100.0%
+  evidence_provenance_localization                9       10     90.0%
+  objective_evaluation                            7        9     77.8%
+  statistical_extraction                          8       10     80.0%
+
+By turn number:
+    Turn  Correct    Total   Accuracy
+  ------ -------- -------- ----------
+       1        9       10     90.0%
+       2        9       10     90.0%
+       3        8       10     80.0%
+       4        8       10     80.0%
+
+Eval results saved to runs/20260211_021254_gpt-5.2/chained_eval_results.jsonl

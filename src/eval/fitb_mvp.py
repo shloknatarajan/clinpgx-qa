@@ -28,7 +28,7 @@ load_dotenv()
 
 PROMPT_TEMPLATE = (
     "Fill in the blank in the following pharmacogenomics statement.\n"
-    'Respond with ONLY the missing value, nothing else.\n\n'
+    "Respond with ONLY the missing value, nothing else.\n\n"
     '"{blanked_sentence}"'
 )
 
@@ -139,16 +139,24 @@ def main() -> None:
         results.append(result)
 
         if (i + 1) % 25 == 0 or (i + 1) == len(questions):
-            logger.info(f"  [{i+1}/{len(questions)}] running accuracy: {correct}/{total} ({correct/total:.1%})")
+            logger.info(
+                f"  [{i + 1}/{len(questions)}] running accuracy: {correct}/{total} ({correct / total:.1%})"
+            )
 
     # --- Step 5-6: Summary table ---
     print("\n" + "=" * 70)
-    print(f"FITB MVP Results  |  model={args.model}  |  {correct}/{total} ({correct/total:.1%})")
+    print(
+        f"FITB MVP Results  |  model={args.model}  |  {correct}/{total} ({correct / total:.1%})"
+    )
     print("=" * 70)
 
     # Per annotation type
-    type_stats: dict[str, dict[str, int]] = defaultdict(lambda: {"correct": 0, "total": 0})
-    field_stats: dict[str, dict[str, int]] = defaultdict(lambda: {"correct": 0, "total": 0})
+    type_stats: dict[str, dict[str, int]] = defaultdict(
+        lambda: {"correct": 0, "total": 0}
+    )
+    field_stats: dict[str, dict[str, int]] = defaultdict(
+        lambda: {"correct": 0, "total": 0}
+    )
 
     for r in results:
         type_stats[r["annotation_type"]]["total"] += 1
@@ -158,7 +166,7 @@ def main() -> None:
 
     print("\nBy annotation type:")
     print(f"  {'Type':<20} {'Correct':>8} {'Total':>8} {'Accuracy':>10}")
-    print(f"  {'-'*20} {'-'*8} {'-'*8} {'-'*10}")
+    print(f"  {'-' * 20} {'-' * 8} {'-' * 8} {'-' * 10}")
     for t in sorted(type_stats):
         s = type_stats[t]
         acc = s["correct"] / s["total"] if s["total"] else 0
@@ -166,7 +174,7 @@ def main() -> None:
 
     print("\nBy blanked field:")
     print(f"  {'Field':<20} {'Correct':>8} {'Total':>8} {'Accuracy':>10}")
-    print(f"  {'-'*20} {'-'*8} {'-'*8} {'-'*10}")
+    print(f"  {'-' * 20} {'-' * 8} {'-' * 8} {'-' * 10}")
     for field in sorted(field_stats):
         s = field_stats[field]
         acc = s["correct"] / s["total"] if s["total"] else 0

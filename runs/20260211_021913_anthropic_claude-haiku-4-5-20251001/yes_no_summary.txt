@@ -1,0 +1,15 @@
+
+======================================================================
+Yes/No Results  |  model=anthropic/claude-haiku-4-5-20251001  |  3/5 (60.0%)
+======================================================================
+
+By flip_type:
+  flip_type             Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  association_flip            1        2     50.0%
+  direction_flip              1        1    100.0%
+  original                    1        2     50.0%
+
+  Parse failures: 1/5 (20.0%)
+
+Eval results saved to runs/20260211_021913_anthropic_claude-haiku-4-5-20251001/yes_no_eval_results.jsonl
