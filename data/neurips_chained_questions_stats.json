@@ -1,26 +1,26 @@
 {
-  "total_chains": 47153,
+  "total_chains": 100,
   "distribution_by_chain_family": {
-    "A_claim→modality→stat→eval": 36142,
-    "B_claim→presence_absence": 11011
+    "A_claim→modality→stat→eval": 75,
+    "B_claim→presence_absence": 25
   },
   "distribution_by_num_turns": {
-    "2": 11011,
-    "4": 36142
+    "2": 25,
+    "4": 75
   },
   "negative_type_breakdown": {
-    "not_reported_drug_swap": 2517,
-    "not_reported_variant_swap": 3037,
-    "not_reported_phenotype_swap": 5457
+    "not_reported_phenotype_swap": 14,
+    "not_reported_variant_swap": 4,
+    "not_reported_drug_swap": 7
   },
   "capability_tag_percent": {
     "claim_verification": 100.0,
     "evidence_provenance": 100.0,
-    "numeric_extraction": 76.65,
-    "objective_statistical_reasoning": 69.03,
-    "negation_scope": 23.35,
-    "counterfactual_reasoning": 7.61
+    "numeric_extraction": 75.0,
+    "objective_statistical_reasoning": 65.0,
+    "negation_scope": 25.0,
+    "counterfactual_reasoning": 10.0
   },
-  "uses_full_text_count": 47153,
+  "uses_full_text_count": 100,
   "uses_full_text_percent": 100.0
 }

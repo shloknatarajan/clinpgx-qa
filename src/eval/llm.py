@@ -1,10 +1,20 @@
 """Reusable LLM calling utilities and paper-loading helpers."""
 
-import re
 from pathlib import Path
 
 import litellm
 from loguru import logger
+
+from src.utils.paper_map import build_pmcid_paper_map
+
+
+_REASONING_PREFIXES = ("o1", "o3", "o4", "gpt-5")
+
+
+def _is_reasoning_model(model: str) -> bool:
+    """Check if a model is a reasoning model that needs higher token limits."""
+    name = model.lower()
+    return any(name.startswith(p) or name.startswith(f"openai/{p}") for p in _REASONING_PREFIXES)
 
 
 def call_llm(
@@ -14,35 +24,28 @@ def call_llm(
     max_tokens: int = 256,
 ) -> str:
     """Send messages to any model via litellm and return stripped response text."""
+    # Reasoning models use internal chain-of-thought tokens that count against
+    # max_tokens, so we need a much higher limit.
+    effective_max = 16_000 if _is_reasoning_model(model) else max_tokens
     response = litellm.completion(
         model=model,
         messages=messages,
         temperature=temperature,
-        max_tokens=max_tokens,
+        max_tokens=effective_max,
+        drop_params=True,
     )
     return response.choices[0].message.content.strip()
 
 
 def build_paper_index(papers_dir: str = "data/papers") -> dict[str, str]:
-    """Scan papers/*.md, extract PMID from metadata, return {pmid: file_path}."""
-    index: dict[str, str] = {}
-    papers_path = Path(papers_dir)
-    if not papers_path.exists():
-        logger.warning(f"Papers directory not found: {papers_dir}")
-        return index
-
-    for md_file in papers_path.glob("*.md"):
-        text = md_file.read_text()
-        match = re.search(r"\*\*PMID:\*\*\s*(\d+)", text)
-        if match:
-            index[match.group(1)] = str(md_file)
-    logger.info(f"Built paper index: {len(index)} papers")
-    return index
+    """Return {pmcid: file_path} keyed by PMCID (extracted from filename)."""
+    pmcid_map = build_pmcid_paper_map(papers_dir)
+    return {pmcid: str(path) for pmcid, path in pmcid_map.items()}
 
 
-def load_paper(pmid: str, index: dict[str, str]) -> str | None:
-    """Load paper markdown text for a given PMID using the pre-built index."""
-    path = index.get(pmid)
+def load_paper(pmcid: str, index: dict[str, str]) -> str | None:
+    """Load paper markdown text for a given PMCID using the pre-built index."""
+    path = index.get(pmcid)
     if path is None:
         return None
     return Path(path).read_text()

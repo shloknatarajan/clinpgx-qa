@@ -14,13 +14,18 @@ import argparse
 import csv
 import json
 import random
-import re
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Literal
 
+_project_root = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(_project_root))
+
 from loguru import logger
 from pydantic import BaseModel
+
+from src.utils.paper_map import build_pmcid_paper_map, build_pmid_to_pmcid
 
 # ═════════════════════════════════════════════════════════════════════════════
 # Type Aliases & Constants
@@ -89,7 +94,7 @@ class Turn(BaseModel):
 class QuestionChain(BaseModel):
     chain_id: str
     chain_family: ChainFamily
-    pmid: str | None = None
+    pmcid: str | None = None
     variant_annotation_id: str | None = None
     study_parameters_id: str | None = None
     summary_annotation_id: str | None = None
@@ -122,22 +127,11 @@ def build_index(rows: list[dict], key: str) -> dict[str, list[dict]]:
     return dict(idx)
 
 
-def build_pmid_paper_map(papers_dir: Path) -> dict[str, Path]:
-    mapping: dict[str, Path] = {}
-    if not papers_dir.exists():
-        logger.warning(f"Papers directory not found: {papers_dir}")
-        return mapping
-    pmid_pat = re.compile(r"\*\*PMID:\*\*\s*(\d+)")
-    for md in sorted(papers_dir.glob("*.md")):
-        try:
-            head = md.read_text(encoding="utf-8")[:2000]
-            m = pmid_pat.search(head)
-            if m:
-                mapping[m.group(1)] = md
-        except Exception:
-            continue
-    logger.info(f"Mapped {len(mapping):,} PMIDs to paper files")
-    return mapping
+def build_paper_maps(papers_dir: Path) -> tuple[dict[str, str], dict[str, Path]]:
+    """Return (pmid_to_pmcid, pmcid_paper_map) for the given papers directory."""
+    pmid_to_pmcid = build_pmid_to_pmcid(papers_dir)
+    pmcid_paper_map = build_pmcid_paper_map(papers_dir)
+    return pmid_to_pmcid, pmcid_paper_map
 
 
 def load_all_data(base: Path) -> dict[str, Any]:
@@ -271,8 +265,25 @@ def build_swap_pools(
     }
 
 
+def _build_pmid_entities(
+    all_anns: list[tuple[dict, str]],
+) -> dict[str, set[tuple[str, str, str]]]:
+    """Build PMID → set of (variant, drug, phenotype) tuples for overlap checking."""
+    pmid_entities: dict[str, set[tuple[str, str, str]]] = defaultdict(set)
+    for ann, _ in all_anns:
+        pmid = ann.get("PMID", "").strip()
+        variant = ann.get("Variant/Haplotypes", "").strip().lower()
+        drug = ann.get("Drug(s)", "").strip().lower()
+        pheno = ann.get("Phenotype Category", "").strip().lower()
+        if pmid:
+            pmid_entities[pmid].add((variant, drug, pheno))
+    return dict(pmid_entities)
+
+
 def make_negative(
     ann: dict, source: str, pools: dict, rng: random.Random,
+    pmid_entities: dict[str, set[tuple[str, str, str]]] | None = None,
+    pmid_to_pmcid: dict[str, str] | None = None,
 ) -> tuple[str, NegativeTypeLit] | None:
     gene = ann.get("Gene", "").strip()
     pheno = ann.get("Phenotype Category", "").strip()
@@ -280,6 +291,10 @@ def make_negative(
     drug = ann.get("Drug(s)", "").strip()
     pmid = ann.get("PMID", "").strip()
     sentence = ann.get("Sentence", "").strip()
+    # Use PMCID for generated text if mapping available
+    paper_ref = pmid_to_pmcid[pmid] if pmid_to_pmcid and pmid in pmid_to_pmcid else pmid
+
+    known = pmid_entities.get(pmid, set()) if pmid_entities else set()
 
     options: list[tuple[str, NegativeTypeLit]] = []
 
@@ -294,12 +309,17 @@ def make_negative(
                 and a.get("PMID", "").strip() != pmid
             }
         )
+        # Filter out variants that appear in any annotation for the same PMID
+        alts = [
+            v for v in alts
+            if (v.lower(), drug.lower(), pheno.lower()) not in known
+        ]
         if alts:
             alt = rng.choice(alts)
             if variant and variant in sentence:
                 neg = sentence.replace(variant, alt, 1)
             else:
-                neg = f"In PMID {pmid}, {alt} is associated with {pheno} outcomes for {drug}."
+                neg = f"In {paper_ref}, {alt} is associated with {pheno} outcomes for {drug}."
             options.append((neg, "not_reported_variant_swap"))
 
     # Drug swap
@@ -312,19 +332,29 @@ def make_negative(
                 if a["Drug(s)"].strip() and a["Drug(s)"].strip() != drug
             }
         )
+        # Filter out drugs that appear in any annotation for the same PMID
+        alt_drugs = [
+            d for d in alt_drugs
+            if (variant.lower(), d.lower(), pheno.lower()) not in known
+        ]
         if alt_drugs:
             ad = rng.choice(alt_drugs)
             if drug and drug in sentence:
                 neg = sentence.replace(drug, ad, 1)
             else:
-                neg = f"In PMID {pmid}, {variant} is associated with {pheno} outcomes for {ad}."
+                neg = f"In {paper_ref}, {variant} is associated with {pheno} outcomes for {ad}."
             options.append((neg, "not_reported_drug_swap"))
 
     # Phenotype swap
     alt_phenos = [p for p in pools["phenotypes"] if p != pheno]
+    # Filter out phenotypes that appear in any annotation for the same PMID
+    alt_phenos = [
+        p for p in alt_phenos
+        if (variant.lower(), drug.lower(), p.lower()) not in known
+    ]
     if alt_phenos:
         ap = rng.choice(alt_phenos)
-        neg = f"In PMID {pmid}, {variant} is associated with {ap} outcomes for {drug}."
+        neg = f"In {paper_ref}, {variant} is associated with {ap} outcomes for {drug}."
         options.append((neg, "not_reported_phenotype_swap"))
 
     if not options:
@@ -368,7 +398,14 @@ def _eval_possible(sp: dict, field: str) -> bool:
 def _get_label(ann: dict) -> str:
     is_assoc = ann.get("Is/Is Not associated", "").strip().lower()
     sig = ann.get("Significance", "").strip().lower()
-    if "not associated" in is_assoc or sig == "no":
+    # When the annotation describes a non-association, the sentence says
+    # "X is NOT associated with Y" and the paper confirms this null finding,
+    # so the paper SUPPORTS the claim.
+    if "not associated" in is_assoc:
+        return "supported"
+    # When the sentence claims a positive association but the paper's
+    # significance field says "no", the paper contradicts the claim.
+    if sig == "no":
         return "contradicted"
     return "supported"
 
@@ -398,11 +435,11 @@ def with_options(question: str, reasoning_type: str) -> str:
 
 
 def _read_paper(
-    pmid: str, paper_map: dict[str, Path], include_text: bool,
+    pmcid: str, pmcid_paper_map: dict[str, Path], include_text: bool,
 ) -> str | None:
     if not include_text:
         return None
-    p = paper_map.get(pmid)
+    p = pmcid_paper_map.get(pmcid)
     if p is None:
         return None
     try:
@@ -418,7 +455,7 @@ def _read_paper(
 
 def enumerate_a(
     all_anns: list[tuple[dict, str]], sp_index: dict[str, list[dict]],
-    paper_map: dict[str, Path],
+    pmid_to_pmcid: dict[str, str],
 
 ) -> list[tuple]:
     candidates = []
@@ -428,7 +465,7 @@ def enumerate_a(
         pmid = ann.get("PMID", "").strip()
         if not (ann_id and sentence and pmid):
             continue
-        if pmid not in paper_map: 
+        if pmid not in pmid_to_pmcid:
             continue
         for sp in sp_index.get(ann_id, []):
             for field in EVAL_STAT_FIELDS:
@@ -440,7 +477,8 @@ def enumerate_a(
 
 def enumerate_b(
     all_anns: list[tuple[dict, str]], pools: dict, rng: random.Random,
-    paper_map: dict[str, Path],
+    pmid_to_pmcid: dict[str, str],
+    pmid_entities: dict[str, set[tuple[str, str, str]]] | None = None,
 ) -> list[tuple]:
     candidates = []
     for ann, source in all_anns:
@@ -448,9 +486,9 @@ def enumerate_b(
         pmid = ann.get("PMID", "").strip()
         if not (sentence and pmid):
             continue
-        if pmid not in paper_map: 
+        if pmid not in pmid_to_pmcid:
             continue
-        result = make_negative(ann, source, pools, rng)
+        result = make_negative(ann, source, pools, rng, pmid_entities, pmid_to_pmcid)
         if result is not None:
             neg_sent, neg_type = result
             candidates.append((ann, source, neg_sent, neg_type))
@@ -533,19 +571,41 @@ def enumerate_e(
 # ═════════════════════════════════════════════════════════════════════════════
 
 
+def _build_association_desc(ann: dict) -> str:
+    """Build a short natural-language description of the association from annotation fields."""
+    variant = ann.get("Variant/Haplotypes", "").strip()
+    drug = ann.get("Drug(s)", "").strip()
+    phenotype = ann.get("Phenotype Category", "").strip()
+    population = ann.get("Population Phenotypes or diseases", "").strip()
+
+    parts = []
+    if variant:
+        parts.append(variant)
+    target = population or phenotype
+    if drug and target:
+        parts.append(f"{drug} in {target}")
+    elif drug:
+        parts.append(drug)
+    elif target:
+        parts.append(target)
+
+    return " and ".join(parts) if parts else "this association"
+
+
 def _build_stat_q(
-    sp: dict, field: str, pmid: str, sp_id: str,
+    sp: dict, field: str, pmcid: str, ann: dict,
 ) -> tuple[str, str | int | float, list[str]]:
+    desc = _build_association_desc(ann)
     if field == "P Value":
         return (
-            f"What p-value is reported in Study Parameters {sp_id} (PMID {pmid}) for this association?",
+            f"For the study of {desc} (PMCID {pmcid}), what p-value was reported for this association?",
             sp["P Value"].strip(),
             ["P Value"],
         )
     if field == "Ratio Stat":
         rs_type = sp["Ratio Stat Type"].strip()
         return (
-            f"What {rs_type} is reported in Study Parameters {sp_id} (PMID {pmid})?",
+            f"For the study of {desc} (PMCID {pmcid}), what {rs_type} was reported?",
             sp["Ratio Stat"].strip(),
             ["Ratio Stat", "Ratio Stat Type"],
         )
@@ -553,7 +613,7 @@ def _build_stat_q(
         cs = sp["Confidence Interval Start"].strip()
         ce = sp["Confidence Interval Stop"].strip()
         return (
-            f"What confidence interval is reported in Study Parameters {sp_id} (PMID {pmid})?",
+            f"For the study of {desc} (PMCID {pmcid}), what confidence interval was reported?",
             f"{cs}\u2013{ce}",
             ["Confidence Interval Start", "Confidence Interval Stop"],
         )
@@ -561,7 +621,7 @@ def _build_stat_q(
         raw = sp["Study Cases"].strip()
         val = safe_int(raw)
         return (
-            f"How many cases are reported in Study Parameters {sp_id} (PMID {pmid})?",
+            f"How many cases were included in the study of {desc} (PMCID {pmcid})?",
             val if val is not None else raw,
             ["Study Cases"],
         )
@@ -569,7 +629,7 @@ def _build_stat_q(
         raw = sp["Study Controls"].strip()
         val = safe_int(raw)
         return (
-            f"How many controls are reported in Study Parameters {sp_id} (PMID {pmid})?",
+            f"How many controls were included in the study of {desc} (PMCID {pmcid})?",
             val if val is not None else raw,
             ["Study Controls"],
         )
@@ -637,16 +697,18 @@ def build_chain_a(
     rng: random.Random,
     paper_map: dict[str, Path],
     include_text: bool,
+    pmid_to_pmcid: dict[str, str] | None = None,
 ) -> QuestionChain:
     ann, source, sp, field = cand
     pmid = ann["PMID"].strip()
+    pmcid = pmid_to_pmcid[pmid] if pmid_to_pmcid else pmid
     ann_id = ann["Variant Annotation ID"].strip()
     sp_id = sp["Study Parameters ID"].strip()
     sentence = ann["Sentence"].strip()
     label = _get_label(ann)
     modality = _get_modality(source)
 
-    t1_q = f"Based on PMID {pmid}, is the following pharmacogenomic claim supported or contradicted: {sentence}"
+    t1_q = f"Based on PMCID {pmcid}, is the following pharmacogenomic claim supported or contradicted: {sentence}"
     t1 = Turn(
         turn=1,
         reasoning_type="claim_verification",
@@ -667,7 +729,7 @@ def build_chain_a(
         evidence_required=False,
         evidence_granularity="modality",
     )
-    q3, a3, src3 = _build_stat_q(sp, field, pmid, sp_id)
+    q3, a3, src3 = _build_stat_q(sp, field, pmcid, ann)
     t3 = Turn(
         turn=3,
         reasoning_type="statistical_extraction",
@@ -690,7 +752,7 @@ def build_chain_a(
     return QuestionChain(
         chain_id=chain_id,
         chain_family="A_claim\u2192modality\u2192stat\u2192eval",
-        pmid=pmid,
+        pmcid=pmcid,
         variant_annotation_id=ann_id,
         study_parameters_id=sp_id,
         source_tables=[source, "study_parameters"],
@@ -698,7 +760,7 @@ def build_chain_a(
         num_turns=4,
         has_negative=False,
         turns=[t1, t2, t3, t4],
-        context=_read_paper(pmid, paper_map, include_text),
+        context=_read_paper(pmcid, paper_map, include_text),
     )
 
 
@@ -708,13 +770,15 @@ def build_chain_b(
     rng: random.Random,
     paper_map: dict[str, Path],
     include_text: bool,
+    pmid_to_pmcid: dict[str, str] | None = None,
 ) -> QuestionChain:
     ann, source, neg_sentence, neg_type = cand
     pmid = ann["PMID"].strip()
+    pmcid = pmid_to_pmcid[pmid] if pmid_to_pmcid else pmid
     ann_id = ann.get("Variant Annotation ID", "").strip()
 
     t1_q = (
-        f"Based on PMID {pmid}, is the following pharmacogenomic claim "
+        f"Based on PMCID {pmcid}, is the following pharmacogenomic claim "
         f"supported, contradicted, or not reported: {neg_sentence}"
     )
     t1 = Turn(
@@ -726,9 +790,9 @@ def build_chain_b(
         evidence_required=True,
         evidence_granularity="document",
         negative_type=neg_type,
-        metadata={"Variant Annotation ID": ann_id, "original_pmid": pmid},
+        metadata={"Variant Annotation ID": ann_id, "original_pmcid": pmcid},
     )
-    t2_q = f"Does PMID {pmid} report any quantitative statistic (p-value/OR/CI) for this claim?"
+    t2_q = f"Does PMCID {pmcid} report any quantitative statistic (p-value/OR/CI) for this claim?"
     t2 = Turn(
         turn=2,
         reasoning_type="evidence_provenance_localization",
@@ -742,14 +806,14 @@ def build_chain_b(
     return QuestionChain(
         chain_id=chain_id,
         chain_family="B_claim\u2192presence_absence",
-        pmid=pmid,
+        pmcid=pmcid,
         variant_annotation_id=ann_id,
         source_tables=[source],
         capability_tags=["claim_verification", "evidence_provenance", "negation_scope"],
         num_turns=2,
         has_negative=True,
         turns=[t1, t2],
-        context=_read_paper(pmid, paper_map, include_text),
+        context=_read_paper(pmcid, paper_map, include_text),
     )
 
 
@@ -839,9 +903,11 @@ def build_chain_d(
     rng: random.Random,
     paper_map: dict[str, Path],
     include_text: bool,
+    pmid_to_pmcid: dict[str, str] | None = None,
 ) -> QuestionChain:
     ann, source, sp = cand
     pmid = ann["PMID"].strip()
+    pmcid = pmid_to_pmcid[pmid] if pmid_to_pmcid else pmid
     ann_id = ann["Variant Annotation ID"].strip()
     sp_id = sp["Study Parameters ID"].strip()
     direction = ann["Direction of effect"].strip().lower()
@@ -851,7 +917,7 @@ def build_chain_d(
     t1 = Turn(
         turn=1,
         reasoning_type="statistical_extraction",
-        question=f"What {rs_type} is reported in Study Parameters {sp_id} (PMID {pmid})?",
+        question=f"For the study of {_build_association_desc(ann)} (PMCID {pmcid}), what {rs_type} was reported?",
         answer=f"{rs_val} ({rs_type})",
         answer_source_fields=["Ratio Stat", "Ratio Stat Type"],
         evidence_required=True,
@@ -861,7 +927,7 @@ def build_chain_d(
     t2 = Turn(
         turn=2,
         reasoning_type="statistical_extraction",
-        question=f"What direction of effect is annotated for this association in PMID {pmid}?",
+        question=f"What direction of effect is annotated for this association in PMCID {pmcid}?",
         answer=direction,
         answer_source_fields=["Direction of effect"],
         evidence_required=True,
@@ -892,7 +958,7 @@ def build_chain_d(
     return QuestionChain(
         chain_id=chain_id,
         chain_family="D_cross_field_consistency",
-        pmid=pmid,
+        pmcid=pmcid,
         variant_annotation_id=ann_id,
         study_parameters_id=sp_id,
         source_tables=[source, "study_parameters"],
@@ -900,7 +966,7 @@ def build_chain_d(
         num_turns=3,
         has_negative=False,
         turns=[t1, t2, t3],
-        context=_read_paper(pmid, paper_map, include_text),
+        context=_read_paper(pmcid, paper_map, include_text),
     )
 
 
@@ -1001,7 +1067,8 @@ def generate_all_chains(
     seed: int,
     target_chains: int,
     include_text: bool,
-    paper_map: dict[str, Path],
+    pmcid_paper_map: dict[str, Path],
+    pmid_to_pmcid: dict[str, str],
     include_summary: bool = True,
     include_temporal: bool = True,
 ) -> list[QuestionChain]:
@@ -1014,10 +1081,11 @@ def generate_all_chains(
     history_index = data["history_index"]
 
     pools = build_swap_pools(all_anns, sp_index)
+    pmid_entities = _build_pmid_entities(all_anns)
 
     logger.info("Enumerating candidates...")
-    cands_a = enumerate_a(all_anns, sp_index, paper_map)
-    cands_b = enumerate_b(all_anns, pools, rng, paper_map)
+    cands_a = enumerate_a(all_anns, sp_index, pmid_to_pmcid)
+    cands_b = enumerate_b(all_anns, pools, rng, pmid_to_pmcid, pmid_entities)
     cands_c = enumerate_c(summaries, evidence_index) if include_summary else []
     cands_d = enumerate_d(all_anns, sp_index)
     cands_e = enumerate_e(summaries, history_index, rng) if include_temporal else []
@@ -1052,7 +1120,7 @@ def generate_all_chains(
         for c in selected:
             cid = f"chain_{chain_counter:06d}"
             if needs_paper:
-                chain = builder(c, cid, rng, paper_map, include_text)
+                chain = builder(c, cid, rng, pmcid_paper_map, include_text, pmid_to_pmcid)
             else:
                 chain = builder(c, cid, rng)
             chains.append(chain)
@@ -1104,10 +1172,10 @@ def validate_chains(chains: list[QuestionChain]) -> None:
             if not neg_found:
                 errors.append(f"{c.chain_id}: has_negative=True but no negative_type in turns")
 
-        # PMID required for document grounding
+        # PMCID required for document grounding
         for t in c.turns:
-            if t.evidence_granularity == "document" and not c.pmid:
-                errors.append(f"{c.chain_id} turn {t.turn}: document grounding but no PMID")
+            if t.evidence_granularity == "document" and not c.pmcid:
+                errors.append(f"{c.chain_id} turn {t.turn}: document grounding but no PMCID")
 
     if errors:
         msg = f"Validation failed with {len(errors)} errors:\n" + "\n".join(errors[:20])
@@ -1225,14 +1293,15 @@ def main() -> None:
     args = parser.parse_args()
 
     data = load_all_data(Path(args.data_dir))
-    paper_map = build_pmid_paper_map(Path(args.papers_dir))
+    pmid_to_pmcid, pmcid_paper_map = build_paper_maps(Path(args.papers_dir))
 
     chains = generate_all_chains(
         data=data,
         seed=args.seed,
         target_chains=args.target_chains,
         include_text=args.include_full_text,
-        paper_map=paper_map,
+        pmcid_paper_map=pmcid_paper_map,
+        pmid_to_pmcid=pmid_to_pmcid,
         include_summary=args.include_summary,
         include_temporal=args.include_temporal,
     )

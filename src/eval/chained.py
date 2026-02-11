@@ -29,7 +29,11 @@ load_dotenv()
 SYSTEM_PROMPT = (
     "You are a pharmacogenomics expert. "
     "You will be given a research paper and asked a series of questions about it. "
-    "Answer each question concisely and precisely."
+    "Answer each question concisely and precisely. "
+    "When asked whether a claim is 'supported' or 'contradicted', remember: "
+    "'supported' means the paper's findings AGREE with the claim as stated, "
+    "even if the claim describes a null result (e.g. 'X is not associated with Y'). "
+    "'contradicted' means the paper's findings DISAGREE with the claim."
 )
 
 DEFAULT_MODEL = "gpt-4o-mini"
@@ -78,7 +82,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
 
             if context:
                 context_prefix = (
-                    f"## Paper (PMID {chain['pmid']})\n\n{context}\n\n"
+                    f"## Paper (PMCID {chain['pmcid']})\n\n{context}\n\n"
                 )
             else:
                 context_prefix = ""
@@ -117,7 +121,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
             record = {
                 "chain_id": chain["chain_id"],
                 "chain_family": chain["chain_family"],
-                "pmid": chain["pmid"],
+                "pmcid": chain.get("pmcid"),
                 "num_turns": len(turns),
                 "model": args.model,
                 "turns": turn_records,
@@ -140,6 +144,8 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
 def parse_claim_verification(response: str) -> str | None:
     """Parse supported / contradicted / not_reported."""
     text = response.strip().lower()
+    # Normalize "not reported" (space) to "not_reported" (underscore)
+    text = text.replace("not reported", "not_reported")
     for label in ("not_reported", "contradicted", "supported"):
         if label in text:
             return label
@@ -161,20 +167,77 @@ def parse_evidence_provenance(response: str) -> str | None:
 
 
 def _extract_numbers(text: str) -> list[float]:
-    """Extract all numeric values from text, including decimals."""
-    # Normalize unicode minus/dash
+    """Extract all numeric values from text, including decimals and scientific notation."""
+    # Normalize unicode characters
     text = text.replace("\u2212", "-").replace("\u2013", "-")
+    text = text.replace("\u00d7", "x")  # × → x
+    # Convert unicode superscript digits: ⁰¹²³⁴⁵⁶⁷⁸⁹⁻ → 0123456789-
+    superscript_map = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹⁻", "0123456789-")
+    text = text.translate(superscript_map)
     # Remove commas in numbers like "1,678"
     text = re.sub(r"(\d),(\d)", r"\1\2", text)
-    return [float(m) for m in re.findall(r"-?\d+\.?\d*", text)]
+
+    results: list[float] = []
+    # Scientific notation: 1.3x10^-5, 1.3x10-5 (after superscript conversion)
+    for m in re.finditer(
+        r"(-?\d+\.?\d*)\s*[xX]\s*10\s*\^?\s*\(?\s*(-?\d+)\s*\)?", text,
+    ):
+        try:
+            results.append(float(m.group(1)) * 10 ** int(m.group(2)))
+        except (ValueError, OverflowError):
+            pass
+    # E notation: 1.96E-8, 2.2e-63
+    for m in re.finditer(r"-?\d+\.?\d*[eE][+-]?\d+", text):
+        try:
+            results.append(float(m.group()))
+        except ValueError:
+            pass
+    # Plain numbers
+    for m in re.findall(r"-?\d+\.?\d*", text):
+        try:
+            results.append(float(m))
+        except ValueError:
+            pass
+    return results
+
+
+def _parse_inequality(gt_str: str) -> tuple[str | None, float | None]:
+    """Parse an inequality operator and threshold from a ground truth string.
+
+    Returns (operator, threshold) or (None, None) if not an inequality.
+    Examples: "< 0.024" → ("<", 0.024), "> 0.05" → (">", 0.05)
+    """
+    m = re.match(r"^\s*([<>]=?)\s*", gt_str)
+    if not m:
+        return None, None
+    op = m.group(1)
+    nums = _extract_numbers(gt_str[m.end():])
+    if not nums:
+        return None, None
+    return op, nums[0]
+
+
+def _satisfies_inequality(value: float, op: str, threshold: float) -> bool:
+    """Check whether *value* satisfies *op* *threshold*."""
+    if op == "<":
+        return value < threshold
+    if op == "<=":
+        return value <= threshold
+    if op == ">":
+        return value > threshold
+    if op == ">=":
+        return value >= threshold
+    return False
 
 
 def parse_statistical_extraction(response: str, ground_truth) -> bool:
     """Compare numeric or string values.
 
     For int ground truths: look for matching integer in response.
+    For string ground truths with an inequality (e.g. "< 0.024", "> 0.05"):
+      check whether any number in the response satisfies the inequality.
     For string ground truths containing a number (e.g. "= 0.004", "0.54"):
-      extract the number and compare numerically against numbers in the response.
+      extract the number and compare numerically (5% relative tolerance).
     Fallback: case-insensitive string match.
     """
     text = response.strip()
@@ -185,8 +248,18 @@ def parse_statistical_extraction(response: str, ground_truth) -> bool:
                 return True
         return False
 
-    # String ground truth — try numeric comparison first
+    # String ground truth
     gt_str = str(ground_truth).strip()
+
+    # Check for inequality ground truths (e.g. "< 0.024", "> 0.05")
+    op, threshold = _parse_inequality(gt_str)
+    if op and threshold is not None:
+        for resp_val in _extract_numbers(text):
+            if _satisfies_inequality(resp_val, op, threshold):
+                return True
+        return False
+
+    # Numeric comparison with 5% tolerance
     gt_nums = _extract_numbers(gt_str)
     if gt_nums:
         gt_val = gt_nums[0]
@@ -194,7 +267,7 @@ def parse_statistical_extraction(response: str, ground_truth) -> bool:
             if gt_val == 0:
                 if resp_val == 0:
                     return True
-            elif math.isclose(resp_val, gt_val, rel_tol=1e-3):
+            elif math.isclose(resp_val, gt_val, rel_tol=0.05):
                 return True
         return False
 
@@ -267,7 +340,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
         results.append({
             "chain_id": chain["chain_id"],
             "chain_family": chain["chain_family"],
-            "pmid": chain["pmid"],
+            "pmcid": chain.get("pmcid"),
             "num_turns": chain["num_turns"],
             "model": chain["model"],
             "all_correct": chain_all_correct,

@@ -1,0 +1,26 @@
+{
+  "total_chains": 20,
+  "distribution_by_chain_family": {
+    "B_claim→presence_absence": 5,
+    "A_claim→modality→stat→eval": 15
+  },
+  "distribution_by_num_turns": {
+    "2": 5,
+    "4": 15
+  },
+  "negative_type_breakdown": {
+    "not_reported_variant_swap": 1,
+    "not_reported_phenotype_swap": 2,
+    "not_reported_drug_swap": 2
+  },
+  "capability_tag_percent": {
+    "claim_verification": 100.0,
+    "evidence_provenance": 100.0,
+    "numeric_extraction": 75.0,
+    "objective_statistical_reasoning": 70.0,
+    "negation_scope": 25.0,
+    "counterfactual_reasoning": 5.0
+  },
+  "uses_full_text_count": 20,
+  "uses_full_text_percent": 100.0
+}

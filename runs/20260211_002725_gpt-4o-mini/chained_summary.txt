@@ -1,0 +1,29 @@
+
+======================================================================
+Chained Results  |  model=gpt-4o-mini  |  turns: 136/184 (73.9%)  |  chains: 19/50 (38.0%)
+======================================================================
+
+By chain_family:
+  Family                                Turn Acc  Chain Acc
+  ----------------------------------- ---------- ----------
+  A_claim→modality→stat→eval              74.4%     33.3%
+  B_claim→presence_absence                68.8%     62.5%
+
+By reasoning_type:
+  Type                                      Correct    Total   Accuracy
+  ---------------------------------------- -------- -------- ----------
+  claim_verification                             36       50     72.0%
+  counterfactual_evaluation                       2        4     50.0%
+  evidence_provenance_localization               47       50     94.0%
+  objective_evaluation                           30       38     78.9%
+  statistical_extraction                         21       42     50.0%
+
+By turn number:
+    Turn  Correct    Total   Accuracy
+  ------ -------- -------- ----------
+       1       36       50     72.0%
+       2       47       50     94.0%
+       3       21       42     50.0%
+       4       32       42     76.2%
+
+Eval results saved to runs/20260211_002725_gpt-4o-mini/chained_eval_results.jsonl

@@ -8,7 +8,9 @@
       "Bash(python -c:*)",
       "Bash(python:*)",
       "Bash(python src/eval/yes_no.py:*)",
-      "Bash(python src/eval/yes_no.py score:*)"
+      "Bash(python src/eval/yes_no.py score:*)",
+      "Bash(find:*)",
+      "Bash(pixi:*)"
     ]
   }
 }

@@ -69,19 +69,21 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
 
     with open(responses_path, "w") as out_f:
         for i, q in enumerate(questions):
-            pmid = q["pmid"]
-            paper_text = load_paper(pmid, paper_index)
+            pmcid = q["pmcid"]
+            paper_text = load_paper(pmcid, paper_index)
 
             if paper_text:
                 user_content = (
-                    f"## Paper (PMID {pmid})\n\n{paper_text}\n\n"
+                    f"## Paper (PMCID {pmcid})\n\n{paper_text}\n\n"
                     f"## Question\n\n{q['question']}\n\n"
-                    "Answer with exactly 'true' or 'false'."
+                    "Respond with ONLY the single word 'true' or 'false'. "
+                    "Do not include any explanation or reasoning."
                 )
             else:
                 user_content = (
                     f"{q['question']}\n\n"
-                    "Answer with exactly 'true' or 'false'."
+                    "Respond with ONLY the single word 'true' or 'false'. "
+                    "Do not include any explanation or reasoning."
                 )
 
             messages = [
@@ -97,7 +99,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
 
             record = {
                 "variant_annotation_id": q["variant_annotation_id"],
-                "pmid": pmid,
+                "pmcid": pmcid,
                 "question": q["question"],
                 "answer": q["answer"],
                 "flip_type": q["flip_type"],

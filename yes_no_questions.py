@@ -9,7 +9,7 @@ For each annotation, generates:
 
 Output format: JSONL with fields:
 - variant_annotation_id: The unique annotation ID
-- pmid: PubMed ID
+- pmcid: PubMed Central ID
 - question: The full question string
 - answer: true or false
 - flip_type: "original", "association_flip", or "direction_flip"
@@ -25,10 +25,12 @@ from pathlib import Path
 from loguru import logger
 from pydantic import BaseModel
 
+from src.utils.paper_map import build_pmid_to_pmcid
+
 
 class TrueFalseQuestion(BaseModel):
     variant_annotation_id: str
-    pmid: str
+    pmcid: str
     question: str
     answer: bool
     flip_type: str
@@ -84,17 +86,20 @@ def flip_direction(sentence: str, direction: str) -> str | None:
     return None
 
 
-def make_question(pmid: str, statement: str) -> str:
+def make_question(pmcid: str, statement: str) -> str:
     return (
-        f"Based on the PubMed Article with ID {pmid} "
+        f"Based on the PubMed Central article {pmcid}, "
         f"is this statement true or false: {statement}"
     )
 
 
-def generate_questions(annotations: list[dict]) -> list[TrueFalseQuestion]:
+def generate_questions(
+    annotations: list[dict], pmid_to_pmcid: dict[str, str],
+) -> list[TrueFalseQuestion]:
     """Generate true/false questions from annotations by flipping categories."""
     questions = []
     skipped = 0
+    filtered_no_paper = 0
 
     for ann in annotations:
         annotation_id = ann.get("Variant Annotation ID", "").strip()
@@ -107,12 +112,17 @@ def generate_questions(annotations: list[dict]) -> list[TrueFalseQuestion]:
             skipped += 1
             continue
 
+        pmcid = pmid_to_pmcid.get(pmid)
+        if pmcid is None:
+            filtered_no_paper += 1
+            continue
+
         # TRUE question: original sentence
         questions.append(
             TrueFalseQuestion(
                 variant_annotation_id=annotation_id,
-                pmid=pmid,
-                question=make_question(pmid, sentence),
+                pmcid=pmcid,
+                question=make_question(pmcid, sentence),
                 answer=True,
                 flip_type="original",
                 original_sentence=sentence,
@@ -126,8 +136,8 @@ def generate_questions(annotations: list[dict]) -> list[TrueFalseQuestion]:
                 questions.append(
                     TrueFalseQuestion(
                         variant_annotation_id=annotation_id,
-                        pmid=pmid,
-                        question=make_question(pmid, flipped_assoc),
+                        pmcid=pmcid,
+                        question=make_question(pmcid, flipped_assoc),
                         answer=False,
                         flip_type="association_flip",
                         original_sentence=sentence,
@@ -144,8 +154,8 @@ def generate_questions(annotations: list[dict]) -> list[TrueFalseQuestion]:
                 questions.append(
                     TrueFalseQuestion(
                         variant_annotation_id=annotation_id,
-                        pmid=pmid,
-                        question=make_question(pmid, flipped_dir),
+                        pmcid=pmcid,
+                        question=make_question(pmcid, flipped_dir),
                         answer=False,
                         flip_type="direction_flip",
                         original_sentence=sentence,
@@ -154,6 +164,10 @@ def generate_questions(annotations: list[dict]) -> list[TrueFalseQuestion]:
 
     if skipped:
         logger.warning(f"Skipped {skipped} annotations with missing sentence or PMID")
+    if filtered_no_paper:
+        logger.warning(
+            f"Filtered {filtered_no_paper} annotations with no matching paper file"
+        )
 
     return questions
 
@@ -173,9 +187,11 @@ def save_questions(questions: list[TrueFalseQuestion], output_path: str | Path):
 def main():
     tsv_path = Path("data/raw/variantAnnotations/var_drug_ann.tsv")
     output_path = Path("data/yes_no_questions.jsonl")
+    papers_dir = Path("data/papers")
 
     annotations = load_var_drug_ann(tsv_path)
-    questions = generate_questions(annotations)
+    pmid_to_pmcid = build_pmid_to_pmcid(papers_dir)
+    questions = generate_questions(annotations, pmid_to_pmcid)
 
     true_count = sum(1 for q in questions if q.answer)
     false_count = sum(1 for q in questions if not q.answer)
