@@ -4,6 +4,13 @@ from pathlib import Path
 
 import litellm
 from loguru import logger
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+    before_sleep_log,
+)
 
 from src.utils.paper_map import build_pmcid_paper_map
 
@@ -20,6 +27,14 @@ def _is_reasoning_model(model: str) -> bool:
     )
 
 
+@retry(
+    retry=retry_if_exception_type(
+        (litellm.RateLimitError, litellm.exceptions.APIConnectionError)
+    ),
+    wait=wait_exponential(min=2, max=120),
+    stop=stop_after_attempt(8),
+    before_sleep=before_sleep_log(logger, "WARNING"),
+)
 def call_llm(
     messages: list[dict],
     model: str,
