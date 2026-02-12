@@ -26,4 +26,72 @@ By turn number:
        3       19       38     50.0%
        4       31       38     81.6%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000028  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: The annotation represents **clinical_association**.
+  Ground truth:   clinical_association
+
+  [2] chain=chain_000029  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs776746 and tacrolimus in Disease:Kidney Transplantation (PMID 23278282), what p-value was reported for this association?
+  Model response: The p-value reported for the association of rs776746 (CYP3A5 polymorphism) and tacrolimus concentrations in the study was 0.003.
+  Ground truth:   < 0.024
+
+  [3] chain=chain_000021  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: The annotation represents a clinical association.
+  Ground truth:   clinical_association
+
+  [4] chain=chain_000037  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 28838926, is the following pharmacogenomic claim supported or contradicted: Allele A is associated with decreased metabolism of clopidogrel, enalapril and sacubitril in HEK cells as compared to allele G. Answer one of: supported, contradicted.
+  Model response: The claim is supported. The study identifies several nonsynonymous single nucleotide polymorphisms (nsSNPs) that are associated with decreased metabolism of clopidogrel, enalapril, and sacubitril in transfected HEK cells, indicating that specific alleles can affect the metabolic activity of CES1.
+  Ground truth:   supported
+
+  [5] chain=chain_000022  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study controls? Answer true or false.
+  Model response: True.
+  Ground truth:   True
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000035  turn=3  type=statistical_extraction
+  Prompt:
+    How many controls were included in the study of rs7661530 and Ace Inhibitors, Plain in Other (PMID 26169577)?
+  Model response: In the study of rs7661530 and ACE inhibitors in the "Other" group, there were 123 controls included.
+  Ground truth:   5485
+
+  [2] chain=chain_000017  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 23651024, is the following pharmacogenomic claim supported or contradicted: Genotypes CC + CT are associated with increased dose of methadone in people with Heroin Dependence as compared to genotype TT. Answer one of: supported, contradicted.
+  Model response: The claim is supported. The study indicates that carriers of two C alleles (homozygotes) of the BDNF SNP rs10835210 require relatively higher methadone doses compared to heterozygotes (CT) or non-carriers (TT).
+  Ground truth:   contradicted
+
+  [3] chain=chain_000005  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs10499563 and tacrolimus in Other:Kidney Transplantation (PMID 32153387), what confidence interval was reported?
+  Model response: The confidence interval reported for the odds ratio of the IL6 -6331C/C genotype compared to T/T genotype in relation to acute kidney rejection was 95% confidence interval (1.7 to 25.8).
+  Ground truth:   0.9–6.9
+
+  [4] chain=chain_000044  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of CYP2C9*1, CYP2C9*2 and warfarin in Dosage (PMID 27182616), what p-value was reported for this association?
+  Model response: The p-value reported for the association between the mean daily ideal warfarin dose in patients with the wild-type CYP2C9*2 allele and the mean daily administered dose was <0.001.
+  Ground truth:   = 0.193
+
+  [5] chain=chain_000047  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs699664 and warfarin in Efficacy, Toxicity (PMID 28049362), what p-value was reported for this association?
+  Model response: The study reported a p-value of .64 for the association of rs699664 (GGCX 8016G>A) with warfarin dose requirement, indicating no significant association.
+  Ground truth:   = 0.5110
+
 Eval results saved to runs/20260211_000245_gpt-4o-mini/chained_eval_results.jsonl

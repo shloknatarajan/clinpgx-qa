@@ -1,0 +1,133 @@
+
+======================================================================
+Chained Results  |  model=gpt-4o  |  turns: 258/350 (73.7%)  |  chains: 39/100 (39.0%)
+======================================================================
+
+By chain_family:
+  Family                                Turn Acc  Chain Acc
+  ----------------------------------- ---------- ----------
+  A_claim→modality→stat→eval              75.3%     32.0%
+  B_claim→presence_absence                64.0%     60.0%
+
+By reasoning_type:
+  Type                                      Correct    Total   Accuracy
+  ---------------------------------------- -------- -------- ----------
+  claim_verification                             65      100     65.0%
+  counterfactual_evaluation                       7       10     70.0%
+  evidence_provenance_localization               90      100     90.0%
+  objective_evaluation                           54       65     83.1%
+  statistical_extraction                         42       75     56.0%
+
+By turn number:
+    Turn  Correct    Total   Accuracy
+  ------ -------- -------- ----------
+       1       65      100     65.0%
+       2       90      100     90.0%
+       3       42       75     56.0%
+       4       61       75     81.3%
+
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000030  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs3786362 and capecitabine in Other:Colorectal Neoplasms (PMCID PMC8291172), what OR was reported?
+  Model response: The reported odds ratio (OR) for rs3786362 in relation to capecitabine-induced hand-foot syndrome in colorectal neoplasms was 0.38 (95% CI, 0.21 to 0.70).
+  Ground truth:   0.38
+
+  [2] chain=chain_000096  turn=2  type=evidence_provenance_localization
+  Prompt:
+    Does PMCID PMC12331468 report any quantitative statistic (p-value/OR/CI) for this claim?
+  Model response: No, PMCID PMC12331468 does not report any quantitative statistic (p-value/OR/CI) for the claim regarding rs1695's association with toxicity outcomes for mercaptopurine and methotrexate.
+  Ground truth:   no
+
+  [3] chain=chain_000030  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: Clinical_association.
+  Ground truth:   clinical_association
+
+  [4] chain=chain_000022  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC3798385)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC3798385, is the following pharmacogenomic claim supported or contradicted: Genotype CG is associated with increased risk of Neurotoxicity Syndromes when treated with carboplatin, docetaxel and paclitaxel in women with Ovarian Neoplasms as compared to genotypes CC + GG. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   supported
+
+  [5] chain=chain_000028  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC11050844)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC11050844, is the following pharmacogenomic claim supported or contradicted: Allele C is associated with increased likelihood of primary graft failure or Kidney Tubular Necrosis, Acute when treated with mycophenolic acid and tacrolimus in people with Kidney Transplantation as compared to allele T. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   supported
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000009  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC2850440)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC2850440, is the following pharmacogenomic claim supported or contradicted: Allele G is not associated with increased risk of Crohn Disease. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+  Ground truth:   supported
+
+  [2] chain=chain_000092  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC4206576)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC4206576, is the following pharmacogenomic claim supported, contradicted, or not reported: In PMC4206576, rs940052 is associated with Dosage, Toxicity outcomes for radiotherapy. Answer one of: supported, contradicted, not_reported.
+  Model response: Supported.
+  Ground truth:   not_reported
+
+  [3] chain=chain_000044  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC12308240)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC12308240, is the following pharmacogenomic claim supported or contradicted: Allele A is associated with increased likelihood of Cardiotoxicity when treated with daunorubicin or doxorubicin in children with Neoplasms as compared to allele C. Answer one of: supported, contradicted.
+  Model response: The paper does not provide specific information about an "Allele A" or "Allele C" in relation to increased likelihood of cardiotoxicity when treated with daunorubicin or doxorubicin in children with neoplasms. The paper discusses various genetic variants associated with anthracycline-induced cardiotoxicity, but it does not mention these specific alleles. Therefore, based on the information provided in the paper, the claim is neither supported nor contradicted. However, since the question requires a definitive answer, I would say: contradicted.
+  Ground truth:   supported
+
+  [4] chain=chain_000084  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: False. Since the paper does not provide a specific p-value for the association of rs118192175 with caffeine or halothane sensitivity, we cannot determine statistical significance at alpha = 0.05.
+  Ground truth:   True
+
+  [5] chain=chain_000043  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC11062152)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC11062152, is the following pharmacogenomic claim supported, contradicted, or not reported: In PMC11062152, UGT1A1*1, UGT1A1*6, UGT1A1*28 is associated with Dosage, Efficacy outcomes for fluorouracil, irinotecan, leucovorin. Answer one of: supported, contradicted, not_reported.
+  Model response: supported
+  Ground truth:   not_reported
+
+Eval results saved to runs/20260211_120345_gpt-4o/chained_eval_results.jsonl

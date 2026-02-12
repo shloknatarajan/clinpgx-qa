@@ -26,4 +26,42 @@ By turn number:
        3        0       75      0.0%
        4        0       75      0.0%
 
+----------------------------------------------------------------------
+Example CORRECT turns (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000093  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: 
+  Ground truth:   clinical_association
+
+  [2] chain=chain_000000  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: 
+  Ground truth:   clinical_association
+
+  [3] chain=chain_000063  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: 
+  Ground truth:   clinical_association
+
+  [4] chain=chain_000085  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of CYP2D6 poor metabolizer and tamoxifen in Disease:Breast Neoplasms (PMID 28730340), what confidence interval was reported?
+  Model response: 
+  Ground truth:   0.33–1.4
+
+  [5] chain=chain_000096  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: 
+  Ground truth:   False
+
 Eval results saved to runs/20260210_204814_gpt-4o-mini/chained_eval_results.jsonl

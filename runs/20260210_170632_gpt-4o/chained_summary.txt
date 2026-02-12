@@ -1,29 +1,97 @@
 
 ======================================================================
-Chained Results  |  model=gpt-4o  |  turns: 274/362 (75.7%)  |  chains: 41/100 (41.0%)
+Chained Results  |  model=gpt-4o  |  turns: 278/362 (76.8%)  |  chains: 43/100 (43.0%)
 ======================================================================
 
 By chain_family:
   Family                                Turn Acc  Chain Acc
   ----------------------------------- ---------- ----------
-  A_claim→modality→stat→eval              74.1%     30.9%
-  B_claim→presence_absence                89.5%     84.2%
+  A_claim→modality→stat→eval              75.0%     32.1%
+  B_claim→presence_absence                92.1%     89.5%
 
 By reasoning_type:
   Type                                      Correct    Total   Accuracy
   ---------------------------------------- -------- -------- ----------
-  claim_verification                             73      100     73.0%
+  claim_verification                             74      100     74.0%
   counterfactual_evaluation                       6        8     75.0%
   evidence_provenance_localization               98      100     98.0%
   objective_evaluation                           66       73     90.4%
-  statistical_extraction                         31       81     38.3%
+  statistical_extraction                         34       81     42.0%
 
 By turn number:
     Turn  Correct    Total   Accuracy
   ------ -------- -------- ----------
-       1       73      100     73.0%
+       1       74      100     74.0%
        2       98      100     98.0%
-       3       31       81     38.3%
+       3       34       81     42.0%
        4       72       81     88.9%
+
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000058  turn=3  type=statistical_extraction
+  Prompt:
+    What p-value is reported in Study Parameters 1450807044 (PMID 30648747) for this association?
+  Model response: The p-value reported for this association is 2.3E-08.
+  Ground truth:   = 2.3e-8
+
+  [2] chain=chain_000086  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 18535201, is the following pharmacogenomic claim supported, contradicted, or not reported: In PMID 18535201, rs216013 is associated with Efficacy, Metabolism/PK outcomes for warfarin. Answer one of: supported, contradicted, not_reported.
+  Model response: Not_reported.
+  Ground truth:   not_reported
+
+  [3] chain=chain_000025  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study controls? Answer true or false.
+  Model response: True.
+  Ground truth:   True
+
+  [4] chain=chain_000009  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 28283692, is the following pharmacogenomic claim supported or contradicted: Allele T is not associated with dose of selumetinib in healthy individuals as compared to allele C. Answer one of: supported, contradicted.
+  Model response: The paper does not provide specific information about an "Allele T" or "Allele C" in relation to the dose of selumetinib. The pharmacogenetic analysis in the study focused on genetic variants in the *CYP2C19*, *UGT1A1*, and *ABCG2* genes, and found no association between these polymorphisms and selumetinib pharmacokinetics. Therefore, the claim about "Allele T" and "Allele C" is neither supported nor contradicted by the paper, as it is not addressed.
+  Ground truth:   contradicted
+
+  [5] chain=chain_000090  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 29036176, is the following pharmacogenomic claim supported or contradicted: Allele G is not associated with risk of drug-induced liver injury when treated with isoniazid in people with Tuberculosis as compared to allele A. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+  Ground truth:   contradicted
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000021  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 28283692, is the following pharmacogenomic claim supported or contradicted: UGT1A1 *28 is not associated with increased metabolism of selumetinib in healthy individuals as compared to UGT1A1 *1. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   contradicted
+
+  [2] chain=chain_000023  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases are reported in Study Parameters 1452473026 (PMID 37306344)?
+  Model response: There are 118 evaluable participants reported in the study.
+  Ground truth:   32
+
+  [3] chain=chain_000049  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases are reported in Study Parameters 1452267320 (PMID 37794799)?
+  Model response: The study with the identifier 1452267320 reports 256 cases.
+  Ground truth:   283
+
+  [4] chain=chain_000044  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 26067485, is the following pharmacogenomic claim supported or contradicted: CYP3A4 *22 is not associated with trough concentration of tacrolimus in people with Kidney Transplantation. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   contradicted
+
+  [5] chain=chain_000078  turn=3  type=statistical_extraction
+  Prompt:
+    What p-value is reported in Study Parameters 1184233501 (PMID 24498053) for this association?
+  Model response: The p-value reported for the association in Study Parameters 1184233501 is 6×10^-6.
+  Ground truth:   = 0.529
 
 Eval results saved to runs/20260210_170632_gpt-4o/chained_eval_results.jsonl

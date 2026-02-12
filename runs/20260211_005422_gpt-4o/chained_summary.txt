@@ -26,4 +26,72 @@ By turn number:
        3       27       42     64.3%
        4       34       42     81.0%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000035  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: Clinical_association.
+  Ground truth:   clinical_association
+
+  [2] chain=chain_000002  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: Clinical_association.
+  Ground truth:   clinical_association
+
+  [3] chain=chain_000011  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs10264272 and tacrolimus in Disease:Kidney Transplantation, Disease:Transplantation (PMID 29318894), what p-value was reported for this association?
+  Model response: The p-value reported for the association of rs10264272 with tacrolimus in the context of Kidney Transplantation and Transplantation was 0.269.
+  Ground truth:   = 0.269
+
+  [4] chain=chain_000002  turn=4  type=counterfactual_evaluation
+  Prompt:
+    Would this association remain significant at alpha = 0.01? Answer true or false.
+  Model response: False.
+  Ground truth:   False
+
+  [5] chain=chain_000029  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 34910759, is the following pharmacogenomic claim supported or contradicted: Allele G is not associated with dose of methadone in people with Opioid-Related Disorders as compared to allele A. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   supported
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000047  turn=4  type=counterfactual_evaluation
+  Prompt:
+    Would this association remain significant at alpha = 0.01? Answer true or false.
+  Model response: The paper does not provide a specific p-value for the association, so it is not possible to determine if the association would remain significant at alpha = 0.01. Therefore, the answer is false.
+  Ground truth:   True
+
+  [2] chain=chain_000007  turn=3  type=statistical_extraction
+  Prompt:
+    How many controls were included in the study of rs17577 and bevacizumab in Disease:Breast Neoplasms (PMID 28045923)?
+  Model response: The paper does not mention rs17577 specifically. It discusses various SNPs in angiogenesis-related genes and their association with pathologic complete response to bevacizumab in breast cancer patients. The study included 34 subjects who received bevacizumab in addition to chemotherapy and 29 subjects who did not, but it does not specify the number of controls for rs17577. Therefore, the number of controls for rs17577 is not provided in the paper.
+  Ground truth:   33
+
+  [3] chain=chain_000033  turn=4  type=counterfactual_evaluation
+  Prompt:
+    Would this association remain significant at alpha = 0.01? Answer true or false.
+  Model response: True.
+  Ground truth:   False
+
+  [4] chain=chain_000035  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 23860526, is the following pharmacogenomic claim supported or contradicted: Genotype CC is not associated with response to cyclophosphamide in people with Prostatic Neoplasms as compared to genotypes CG + GG. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+  Ground truth:   supported
+
+  [5] chain=chain_000042  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs3787728 and doxorubicin in Other:Hepatocellular Carcinoma (PMID 40405401), what p-value was reported for this association?
+  Model response: The p-value reported for the association of rs3787728 with overall survival (OS) was 0.04, and for progression-free survival (PFS), it was 0.054.
+  Ground truth:   = 0.045
+
 Eval results saved to runs/20260211_005422_gpt-4o/chained_eval_results.jsonl

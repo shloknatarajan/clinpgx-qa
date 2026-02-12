@@ -25,4 +25,84 @@ By turn number:
        3        7       10     70.0%
        4        7       10     70.0%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000002  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2298771 and carbamazepine in Disease:Epilepsy (PMCID PMC4640545), what p-value was reported for this association?
+  Model response: The p-value reported for the association between rs2298771 (SCN1A c.3184A>G) and carbamazepine in epilepsy was not explicitly stated in the paper. However, it was mentioned that no significant impact was observed for this SNP on carbamazepine metabolism or pharmacokinetics.
+  Ground truth:   > 0.05
+
+  [2] chain=chain_000006  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: False.
+  Ground truth:   False
+
+  [3] chain=chain_000003  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs8099917 and peginterferon alfa-2a, peginterferon alfa-2b, ribavirin in Disease:Hepatitis C virus infection (PMCID PMC4177494), what OR was reported?
+  Model response: The reported odds ratio (OR) for the rs8099917 G allele as a predictor of null-response was 7.9, with a 95% confidence interval of 1.99-31.18.
+  Ground truth:   7.9
+
+  [4] chain=chain_000005  turn=3  type=statistical_extraction
+  Prompt:
+    How many controls were included in the study of rs13242038 and heroin in Other (PMCID PMC3909071)?
+  Model response: 619 controls were included in the study of rs13242038 and heroin.
+  Ground truth:   619
+
+  [5] chain=chain_000001  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: Clinical_association.
+  Ground truth:   clinical_association
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000004  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: True.
+  Ground truth:   False
+
+  [2] chain=chain_000007  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5207665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5207665, is the following pharmacogenomic claim supported or contradicted: Allele A is not associated with response to bevacizumab in women with Breast Neoplasms as compared to allele G. Answer one of: supported, contradicted.
+  Model response: The paper does not provide specific information about an "Allele A" or "Allele G" in relation to response to bevacizumab in women with breast neoplasms. The study discusses various SNPs and their associations with pathologic complete response (pCR) to bevacizumab, but it does not specify alleles in the manner described in the claim. Therefore, based on the information provided in the paper, the claim cannot be directly evaluated as supported or contradicted. However, if we consider the general findings, the paper does identify specific SNPs associated with pCR, suggesting that certain alleles do have an association with response to bevacizumab. Without specific reference to "Allele A" and "Allele G," the claim remains unaddressed. Thus, the claim is neither supported nor contradicted by the paper.
+  Ground truth:   supported
+
+  [3] chain=chain_000007  turn=3  type=statistical_extraction
+  Prompt:
+    How many controls were included in the study of rs17577 and bevacizumab in Disease:Breast Neoplasms (PMCID PMC5207665)?
+  Model response: The paper does not mention rs17577 specifically. It discusses various SNPs in relation to pathologic complete response (pCR) to bevacizumab in breast cancer patients, but rs17577 is not listed among them. Therefore, there is no information provided about controls for rs17577 in this study.
+  Ground truth:   33
+
+  [4] chain=chain_000004  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC7351433)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC7351433, is the following pharmacogenomic claim supported or contradicted: Allele G is not associated with concentrations of methotrexate in children with Precursor Cell Lymphoblastic Leukemia-Lymphoma as compared to allele T. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+  Ground truth:   supported
+
+  [5] chain=chain_000007  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study controls? Answer true or false.
+  Model response: False.
+  Ground truth:   True
+
 Eval results saved to runs/20260211_012415_gpt-4o/chained_eval_results.jsonl

@@ -26,4 +26,72 @@ By turn number:
        3       21       42     50.0%
        4       32       42     76.2%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000040  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases were included in the study of HLA-B*44:02, HLA-B*44:03 and trichloroethylene in Toxicity (PMID 18007983)?
+  Model response: The study included 113 cases with TCE-induced hypersensitivity dermatitis. Among these, HLA-B*44 alleles were present in 6.2% (7 out of 113) of the patients.
+  Ground truth:   113
+
+  [2] chain=chain_000045  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: False. The confidence interval for the OR (0.93-1.59) includes the null value of 1.0.
+  Ground truth:   False
+
+  [3] chain=chain_000002  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: The annotation represents a clinical association.
+  Ground truth:   clinical_association
+
+  [4] chain=chain_000003  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: Clinical association.
+  Ground truth:   clinical_association
+
+  [5] chain=chain_000042  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: True.
+  Ground truth:   True
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000007  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study controls? Answer true or false.
+  Model response: **False.** The study does not provide a specific number of controls for rs17577, and it does not indicate that the dataset meets the minimum of N ≥ 30 for study controls.
+  Ground truth:   True
+
+  [2] chain=chain_000018  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: True. The confidence interval (0.16–0.82) for the OR does not include the null value of 1.0.
+  Ground truth:   False
+
+  [3] chain=chain_000004  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: True.
+  Ground truth:   False
+
+  [4] chain=chain_000001  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: False. The confidence intervals for the odds ratios (ORs) reported in the study do not include the null value of 1.0 for the associations mentioned. However, since HLA-A*31:03 was not associated with any outcomes in the study, there is no specific OR or confidence interval for that allele.
+  Ground truth:   True
+
+  [5] chain=chain_000010  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 28255319, is the following pharmacogenomic claim supported or contradicted: Genotypes AG + GG are associated with increased platelet reactivity when treated with aspirin and clopidogrel as compared to genotype AA. Answer one of: supported, contradicted.
+  Model response: The claim is contradicted. The study specifically discusses the effects of CYP2C19 and P2Y12 polymorphisms on platelet reactivity, but does not mention genotypes AG + GG in relation to increased platelet reactivity compared to genotype AA. Instead, it highlights that CYP2C19*2 and P2Y12 mutations are associated with high on-treatment platelet reactivity (HTPR), while CYP2C19*17 is associated with improved platelet reactivity.
+  Ground truth:   supported
+
 Eval results saved to runs/20260211_002725_gpt-4o-mini/chained_eval_results.jsonl

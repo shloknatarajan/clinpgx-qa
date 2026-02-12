@@ -12,4 +12,152 @@ By flip_type:
 
   Parse failures: 4946/5000 (98.9%)
 
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=original  pmcid=PMC11730665
+  Prompt:
+    ## Paper (PMCID PMC11730665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC11730665, is this statement true or false: Genotype CG is associated with increased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: true
+  Ground truth:   True
+
+  [2] flip_type=direction_flip  pmcid=PMC12080641
+  Prompt:
+    ## Paper (PMCID PMC12080641)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC12080641, is this statement true or false: CYP2C19 intermediate metabolizer is associated with decreased response to fluoxetine in people with Major Depressive Disorder as compared to CYP2C19 normal metabolizer.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [3] flip_type=association_flip  pmcid=PMC3093392
+  Prompt:
+    ## Paper (PMCID PMC3093392)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC3093392, is this statement true or false: CYP3A5 *3/*3 is associated with dose of methadone in people with Opioid-Related Disorders as compared to CYP3A5 *1/*1 + *1/*3.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [4] flip_type=direction_flip  pmcid=PMC7655626
+  Prompt:
+    ## Paper (PMCID PMC7655626)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC7655626, is this statement true or false: NAT2 slow acetylator is associated with decreased concentrations of efavirenz in people with HIV Infections.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [5] flip_type=direction_flip  pmcid=PMC12080641
+  Prompt:
+    ## Paper (PMCID PMC12080641)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC12080641, is this statement true or false: CYP2C19 ultrarapid metabolizer is associated with increased response to paroxetine in people with Major Depressive Disorder as compared to CYP2C19 normal metabolizer.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=association_flip  pmcid=PMC8822703
+  Prompt:
+    ## Paper (PMCID PMC8822703)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC8822703, is this statement true or false: Genotype CC is not associated with decreased concentrations of hydroxychloroquine in people with Arthritis, Rheumatoid or Lupus Erythematosus, Systemic as compared to genotypes CT + TT.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   False
+
+  [2] flip_type=original  pmcid=PMC3320544
+  Prompt:
+    ## Paper (PMCID PMC3320544)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC3320544, is this statement true or false: Genotypes CT + TT are not associated with increased response to hydrochlorothiazide in people with Hypertension as compared to genotype CC.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   True
+
+  [3] flip_type=direction_flip  pmcid=PMC4168388
+  Prompt:
+    ## Paper (PMCID PMC4168388)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC4168388, is this statement true or false: CYP2D6 *1/*1xN + *1xN/*1xN (assigned as ultrarapid metabolizer phenotype) is associated with decreased clearance of donepezil in people with Alzheimer Disease.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   False
+
+  [4] flip_type=association_flip  pmcid=PMC6742943
+  Prompt:
+    ## Paper (PMCID PMC6742943)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC6742943, is this statement true or false: Genotypes CC + CT are not associated with decreased response to atenolol or metoprolol in people with Hypertension as compared to genotype TT.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   False
+
+  [5] flip_type=association_flip  pmcid=PMC5903228
+  Prompt:
+    ## Paper (PMCID PMC5903228)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC5903228, is this statement true or false: Allele G is associated with dose of allopurinol in people with Gout as compared to allele A.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   False
+
 Eval results saved to runs/20260211_023809_anthropic_claude-opus-4-6/yes_no_eval_results.jsonl

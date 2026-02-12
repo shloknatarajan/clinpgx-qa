@@ -10,6 +10,7 @@ import argparse
 import json
 import math
 import os
+import random
 import re
 import sys
 from collections import defaultdict
@@ -424,6 +425,57 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
         s = tn_stats[tn]
         acc = s["correct"] / s["total"] if s["total"] else 0
         lines.append(f"  {tn:>6} {s['correct']:>8} {s['total']:>8} {acc:>9.1%}")
+
+    # Example turns (5 correct, 5 incorrect, randomly chosen)
+    all_turns_flat = []
+    for r in results:
+        for t in r["turns"]:
+            all_turns_flat.append(
+                {
+                    "chain_id": r["chain_id"],
+                    "chain_family": r["chain_family"],
+                    "pmcid": r.get("pmcid"),
+                    "turn": t["turn"],
+                    "reasoning_type": t["reasoning_type"],
+                    "question": t["question"],
+                    "response": t["response"],
+                    "answer": t["answer"],
+                    "correct": t["correct"],
+                }
+            )
+
+    correct_examples = [t for t in all_turns_flat if t["correct"]]
+    incorrect_examples = [t for t in all_turns_flat if not t["correct"]]
+    random.shuffle(correct_examples)
+    random.shuffle(incorrect_examples)
+
+    def _format_chain_prompt(t: dict) -> str:
+        if t["turn"] == 1 and t["pmcid"]:
+            return (
+                f"## Paper (PMCID {t['pmcid']})\n\n<paper>\n\n"
+                f"## Question\n\n{t['question']}"
+            )
+        return t["question"]
+
+    for label, examples in [
+        ("CORRECT", correct_examples[:5]),
+        ("INCORRECT", incorrect_examples[:5]),
+    ]:
+        lines.append("")
+        lines.append("-" * 70)
+        lines.append(f"Example {label} turns ({len(examples)} randomly chosen)")
+        lines.append("-" * 70)
+        for i, t in enumerate(examples, 1):
+            lines.append("")
+            lines.append(
+                f"  [{i}] chain={t['chain_id']}  turn={t['turn']}  "
+                f"type={t['reasoning_type']}"
+            )
+            lines.append(f"  Prompt:")
+            for pline in _format_chain_prompt(t).splitlines():
+                lines.append(f"    {pline}")
+            lines.append(f"  Model response: {t['response']}")
+            lines.append(f"  Ground truth:   {t['answer']}")
 
     # Determine output dir
     if output_dir is None:

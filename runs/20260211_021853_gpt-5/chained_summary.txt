@@ -25,4 +25,48 @@ By turn number:
        3        0       10      0.0%
        4        0       10      0.0%
 
+----------------------------------------------------------------------
+Example CORRECT turns (1 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000004  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: clinical_association
+  Ground truth:   clinical_association
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000005  turn=3  type=statistical_extraction
+  Prompt:
+    How many controls were included in the study of rs13242038 and heroin in Other (PMCID PMC3909071)?
+  Model response: 
+  Ground truth:   619
+
+  [2] chain=chain_000008  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: 
+  Ground truth:   clinical_association
+
+  [3] chain=chain_000009  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: 
+  Ground truth:   False
+
+  [4] chain=chain_000003  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: 
+  Ground truth:   clinical_association
+
+  [5] chain=chain_000009  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: 
+  Ground truth:   clinical_association
+
 Eval results saved to runs/20260211_021853_gpt-5/chained_eval_results.jsonl

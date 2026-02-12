@@ -1,0 +1,102 @@
+
+======================================================================
+Chained Results  |  model=gpt-4o-mini  |  turns: 27/36 (75.0%)  |  chains: 4/9 (44.4%)
+======================================================================
+
+By chain_family:
+  Family                                Turn Acc  Chain Acc
+  ----------------------------------- ---------- ----------
+  A_claim→modality→stat→eval              75.0%     44.4%
+
+By reasoning_type:
+  Type                                      Correct    Total   Accuracy
+  ---------------------------------------- -------- -------- ----------
+  claim_verification                              8        9     88.9%
+  counterfactual_evaluation                       1        1    100.0%
+  evidence_provenance_localization                9        9    100.0%
+  objective_evaluation                            4        8     50.0%
+  statistical_extraction                          5        9     55.6%
+
+By turn number:
+    Turn  Correct    Total   Accuracy
+  ------ -------- -------- ----------
+       1        8        9     88.9%
+       2        9        9    100.0%
+       3        5        9     55.6%
+       4        5        9     55.6%
+
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000004  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: Clinical association.
+  Ground truth:   clinical_association
+
+  [2] chain=chain_000003  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: True. The confidence interval for the OR (95% CI: 1.99-31.18) does not include the null value of 1.0.
+  Ground truth:   True
+
+  [3] chain=chain_000003  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: The annotation represents a clinical association.
+  Ground truth:   clinical_association
+
+  [4] chain=chain_000006  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs776746 and everolimus in Disease:Breast Neoplasms (PMCID PMC5519037), what p-value was reported for this association?
+  Model response: The study did not report a p-value for the association of rs776746 (CYP3A5) with everolimus concentrations in breast neoplasms, as it found no significant differences for CYP3A5*1 carriers. Therefore, no specific p-value is provided for this association in the paper.
+  Ground truth:   > 0.05
+
+  [5] chain=chain_000001  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: The annotation represents **clinical_association**.
+  Ground truth:   clinical_association
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000001  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: **False.** The confidence interval for the odds ratio (OR) associated with HLA-A*31:03 was not reported in the study, and therefore, it cannot be determined whether it excludes the null value of 1.0. Additionally, HLA-A*31:03 was not identified as significantly associated with the outcomes in the study.
+  Ground truth:   True
+
+  [2] chain=chain_000001  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC11732454)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC11732454, is the following pharmacogenomic claim supported or contradicted: HLA-A *31:03 is associated with decreased likelihood of Stevens-Johnson Syndrome when treated with carbamazepine, lamotrigine or phenytoin. Answer one of: supported, contradicted.
+  Model response: The claim is **contradicted**. The study does not support the association of HLA-A *31:03* with a decreased likelihood of Stevens-Johnson Syndrome (SJS) when treated with carbamazepine, lamotrigine, or phenytoin.
+  Ground truth:   supported
+
+  [3] chain=chain_000007  turn=3  type=statistical_extraction
+  Prompt:
+    How many controls were included in the study of rs17577 and bevacizumab in Disease:Breast Neoplasms (PMCID PMC5207665)?
+  Model response: The study did not include controls specifically for rs17577 in the context of bevacizumab and breast neoplasms. The paper mentions healthy, cancer-free subjects as controls, but it does not specify the number of controls for rs17577. Therefore, the exact number of controls for that specific SNP is not provided in the study.
+  Ground truth:   33
+
+  [4] chain=chain_000001  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of HLA-A*31:03 and carbamazepine, lamotrigine, phenytoin in Toxicity (PMCID PMC11732454), what confidence interval was reported?
+  Model response: The study did not report a confidence interval for HLA-A*31:03 in relation to carbamazepine, lamotrigine, or phenytoin in the context of toxicity. The specific allele HLA-A*31:03 was not mentioned in the results regarding significant associations with adverse reactions.
+  Ground truth:   0.13–0.27
+
+  [5] chain=chain_000000  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2231142 and gemcitabine in Disease:Non-Small Cell Lung Carcinoma (PMCID PMC5948914), what p-value was reported for this association?
+  Model response: The reported p-value for the association of rs2231142 (ABCG2 Q141K) with patient outcome in Non-Small Cell Lung Carcinoma treated with gemcitabine is **0.007**.
+  Ground truth:   = 0.080
+
+Eval results saved to /Users/shloknatarajan/stanford/research/daneshjou/clinpgx-qa/runs/20260211_112154_gpt-4o-mini/chained_eval_results.jsonl

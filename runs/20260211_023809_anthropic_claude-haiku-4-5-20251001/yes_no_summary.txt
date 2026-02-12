@@ -12,4 +12,152 @@ By flip_type:
 
   Parse failures: 4912/5000 (98.2%)
 
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=original  pmcid=PMC11949125
+  Prompt:
+    ## Paper (PMCID PMC11949125)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC11949125, is this statement true or false: CYP3A5 *1/*1 is associated with increased clearance of lurbinectedin in people with Neoplasms as compared to CYP3A5 *1/*3 + *3/*3.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: true
+  Ground truth:   True
+
+  [2] flip_type=direction_flip  pmcid=PMC12080641
+  Prompt:
+    ## Paper (PMCID PMC12080641)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC12080641, is this statement true or false: CYP2C19 intermediate metabolizer is associated with decreased response to fluoxetine in people with Major Depressive Disorder as compared to CYP2C19 normal metabolizer.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [3] flip_type=direction_flip  pmcid=PMC11730665
+  Prompt:
+    ## Paper (PMCID PMC11730665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC11730665, is this statement true or false: Genotype AA is associated with increased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [4] flip_type=original  pmcid=PMC11730665
+  Prompt:
+    ## Paper (PMCID PMC11730665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC11730665, is this statement true or false: Genotype GG is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: true
+  Ground truth:   True
+
+  [5] flip_type=association_flip  pmcid=PMC3093392
+  Prompt:
+    ## Paper (PMCID PMC3093392)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC3093392, is this statement true or false: CYP3A5 *3/*3 is associated with response to methadone in people with Opioid-Related Disorders as compared to CYP3A5 *1/*1 + *1/*3.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=association_flip  pmcid=PMC5898372
+  Prompt:
+    ## Paper (PMCID PMC5898372)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC5898372, is this statement true or false: Allele T is associated with response to sulfonamides, urea derivatives in people with Diabetes Mellitus as compared to allele C.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   False
+
+  [2] flip_type=direction_flip  pmcid=PMC7377539
+  Prompt:
+    ## Paper (PMCID PMC7377539)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC7377539, is this statement true or false: Genotype CC is associated with decreased clinical benefit to duloxetine in men with Alcoholism and Depressive Disorder as compared to genotype CT.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   False
+
+  [3] flip_type=original  pmcid=PMC7260086
+  Prompt:
+    ## Paper (PMCID PMC7260086)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC7260086, is this statement true or false: Allele G is not associated with response to butorphanol in healthy individuals as compared to allele A.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   True
+
+  [4] flip_type=original  pmcid=PMC11023817
+  Prompt:
+    ## Paper (PMCID PMC11023817)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC11023817, is this statement true or false: CYP2B6 *6 is associated with increased exposure to bupropion in people with Depressive Disorder, Major.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   True
+
+  [5] flip_type=association_flip  pmcid=PMC3749354
+  Prompt:
+    ## Paper (PMCID PMC3749354)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC3749354, is this statement true or false: Genotypes GG + GT is not associated with decreased response to Dipeptidyl peptidase 4 (DPP-4) inhibitors in people with Diabetes Mellitus, Type 2 as compared to genotype TT.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   False
+
 Eval results saved to runs/20260211_023809_anthropic_claude-haiku-4-5-20251001/yes_no_eval_results.jsonl

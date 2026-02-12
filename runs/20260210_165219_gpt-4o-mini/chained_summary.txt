@@ -1,18 +1,18 @@
 
 ======================================================================
-Chained Results  |  model=gpt-4o-mini  |  turns: 24/38 (63.2%)  |  chains: 2/10 (20.0%)
+Chained Results  |  model=gpt-4o-mini  |  turns: 25/38 (65.8%)  |  chains: 3/10 (30.0%)
 ======================================================================
 
 By chain_family:
   Family                                Turn Acc  Chain Acc
   ----------------------------------- ---------- ----------
   A_claim→modality→stat→eval              63.9%     22.2%
-  B_claim→presence_absence                50.0%      0.0%
+  B_claim→presence_absence               100.0%    100.0%
 
 By reasoning_type:
   Type                                      Correct    Total   Accuracy
   ---------------------------------------- -------- -------- ----------
-  claim_verification                              4       10     40.0%
+  claim_verification                              5       10     50.0%
   evidence_provenance_localization                9       10     90.0%
   objective_evaluation                            7        9     77.8%
   statistical_extraction                          4        9     44.4%
@@ -20,9 +20,77 @@ By reasoning_type:
 By turn number:
     Turn  Correct    Total   Accuracy
   ------ -------- -------- ----------
-       1        4       10     40.0%
+       1        5       10     50.0%
        2        9       10     90.0%
        3        4        9     44.4%
        4        7        9     77.8%
+
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000001  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study cases? Answer true or false.
+  Model response: True.
+  Ground truth:   True
+
+  [2] chain=chain_000002  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: The annotation represents a clinical association.
+  Ground truth:   clinical_association
+
+  [3] chain=chain_000005  turn=2  type=evidence_provenance_localization
+  Prompt:
+    Does PMID 27747906 report any quantitative statistic (p-value/OR/CI) for this claim?
+  Model response: No, PMID 27747906 does not report any quantitative statistics (p-value, odds ratio, or confidence interval) specifically for the claim regarding genotypes AG + GG not being associated with recurrence-free survival when treated with HDL cholesterol in women with breast neoplasms. The study focuses on the association of specific SNPs in the CYP19A1 gene with cancer recurrence, but does not provide data for the mentioned genotypes or treatment.
+  Ground truth:   no
+
+  [4] chain=chain_000008  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 24498053, is the following pharmacogenomic claim supported or contradicted: Allele T is associated with increased risk of Heroin Dependence when exposed to heroin as compared to allele C. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   supported
+
+  [5] chain=chain_000004  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study cases? Answer true or false.
+  Model response: True.
+  Ground truth:   True
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000006  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 29100455, is the following pharmacogenomic claim supported or contradicted: Allele G is not associated with likelihood of Leukopenia and Neutropenia when treated with cyclophosphamide, epirubicin and fluorouracil in women with Breast Neoplasms as compared to allele A. Answer one of: supported, contradicted.
+  Model response: The claim is supported. The study found that none of the SNPs, including those associated with allele G, were predictive for leukopenia or neutropenia during treatment with docetaxel/gemcitabine, and specifically noted that genetic variance in the PIGB gene did not correlate with hematotoxicity after FEC chemotherapy.
+  Ground truth:   contradicted
+
+  [2] chain=chain_000007  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: True.
+  Ground truth:   False
+
+  [3] chain=chain_000003  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 32504053, is the following pharmacogenomic claim supported or contradicted: Allele T is not associated with risk of Hypoglycemia when treated with glibenclamide, glimepiride or glipizide in people with Diabetes Mellitus, Type 2 as compared to allele C. Answer one of: supported, contradicted.
+  Model response: The claim is supported. The study found no evidence of association between the *CYP2C9* reduced function alleles and the risk of hypoglycemia in patients treated with sulfonylureas, including glibenclamide, glimepiride, or glipizide.
+  Ground truth:   contradicted
+
+  [4] chain=chain_000001  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 20450993, is the following pharmacogenomic claim supported or contradicted: Genotype TT is associated with increased bone mineral density as compared to genotypes CC + CT. Answer one of: supported, contradicted.
+  Model response: The claim is contradicted. The study indicates that the TT genotype (associated with the rs12503796 polymorphism) results in decreased expression of FGFBP1 and inhibits the upregulation of the gene by testosterone, which suggests that this genotype would not be associated with increased bone mineral density compared to the CC + CT genotypes.
+  Ground truth:   supported
+
+  [5] chain=chain_000001  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: The annotation represents a functional assay.
+  Ground truth:   clinical_association
 
 Eval results saved to runs/20260210_165219_gpt-4o-mini/chained_eval_results.jsonl

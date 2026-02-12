@@ -9,6 +9,7 @@ Usage:
 import argparse
 import json
 import os
+import random
 import sys
 from collections import defaultdict
 from datetime import datetime
@@ -203,6 +204,43 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
             f"  Questions without paper context: {no_paper}/{total} "
             f"({no_paper / total:.1%})"
         )
+
+    # Example questions (5 correct, 5 incorrect, randomly chosen)
+    correct_examples = [r for r in results if r["correct"]]
+    incorrect_examples = [r for r in results if not r["correct"]]
+    random.shuffle(correct_examples)
+    random.shuffle(incorrect_examples)
+
+    def _format_yes_no_prompt(r: dict) -> str:
+        if r["had_paper_context"]:
+            return (
+                f"## Paper (PMCID {r['pmcid']})\n\n<paper>\n\n"
+                f"## Question\n\n{r['question']}\n\n"
+                "Respond with ONLY the single word 'true' or 'false'. "
+                "Do not include any explanation or reasoning."
+            )
+        return (
+            f"{r['question']}\n\n"
+            "Respond with ONLY the single word 'true' or 'false'. "
+            "Do not include any explanation or reasoning."
+        )
+
+    for label, examples in [
+        ("CORRECT", correct_examples[:5]),
+        ("INCORRECT", incorrect_examples[:5]),
+    ]:
+        lines.append("")
+        lines.append("-" * 70)
+        lines.append(f"Example {label} answers ({len(examples)} randomly chosen)")
+        lines.append("-" * 70)
+        for i, r in enumerate(examples, 1):
+            lines.append("")
+            lines.append(f"  [{i}] flip_type={r['flip_type']}  pmcid={r['pmcid']}")
+            lines.append(f"  Prompt:")
+            for pline in _format_yes_no_prompt(r).splitlines():
+                lines.append(f"    {pline}")
+            lines.append(f"  Model response: {r['response']}")
+            lines.append(f"  Ground truth:   {r['answer']}")
 
     # Determine output dir
     if output_dir is None:

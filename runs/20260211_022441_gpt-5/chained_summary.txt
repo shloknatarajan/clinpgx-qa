@@ -1,0 +1,102 @@
+
+======================================================================
+Chained Results  |  model=gpt-5  |  turns: 12/16 (75.0%)  |  chains: 2/4 (50.0%)
+======================================================================
+
+By chain_family:
+  Family                                Turn Acc  Chain Acc
+  ----------------------------------- ---------- ----------
+  A_claim→modality→stat→eval              75.0%     50.0%
+
+By reasoning_type:
+  Type                                      Correct    Total   Accuracy
+  ---------------------------------------- -------- -------- ----------
+  claim_verification                              2        4     50.0%
+  counterfactual_evaluation                       1        1    100.0%
+  evidence_provenance_localization                4        4    100.0%
+  objective_evaluation                            2        3     66.7%
+  statistical_extraction                          3        4     75.0%
+
+By turn number:
+    Turn  Correct    Total   Accuracy
+  ------ -------- -------- ----------
+       1        2        4     50.0%
+       2        4        4    100.0%
+       3        3        4     75.0%
+       4        3        4     75.0%
+
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000002  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2298771 and carbamazepine in Disease:Epilepsy (PMCID PMC4640545), what p-value was reported for this association?
+  Model response: 0.97
+  Ground truth:   > 0.05
+
+  [2] chain=chain_000003  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: clinical_association
+  Ground truth:   clinical_association
+
+  [3] chain=chain_000002  turn=4  type=counterfactual_evaluation
+  Prompt:
+    Would this association remain significant at alpha = 0.01? Answer true or false.
+  Model response: false
+  Ground truth:   False
+
+  [4] chain=chain_000001  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of HLA-A*31:03 and carbamazepine, lamotrigine, phenytoin in Toxicity (PMCID PMC11732454), what confidence interval was reported?
+  Model response: 0.13–0.27
+  Ground truth:   0.13–0.27
+
+  [5] chain=chain_000000  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: clinical_association
+  Ground truth:   clinical_association
+
+----------------------------------------------------------------------
+Example INCORRECT turns (4 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000000  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5948914)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5948914, is the following pharmacogenomic claim supported or contradicted: Genotypes GT + TT are not associated with overall survival when treated with gemcitabine in people with Carcinoma, Non-Small-Cell Lung as compared to genotype GG. Answer one of: supported, contradicted.
+  Model response: contradicted
+  Ground truth:   supported
+
+  [2] chain=chain_000001  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC11732454)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC11732454, is the following pharmacogenomic claim supported or contradicted: HLA-A *31:03 is associated with decreased likelihood of Stevens-Johnson Syndrome when treated with carbamazepine, lamotrigine or phenytoin. Answer one of: supported, contradicted.
+  Model response: contradicted
+  Ground truth:   supported
+
+  [3] chain=chain_000000  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2231142 and gemcitabine in Disease:Non-Small Cell Lung Carcinoma (PMCID PMC5948914), what p-value was reported for this association?
+  Model response: 0.007
+  Ground truth:   = 0.080
+
+  [4] chain=chain_000000  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: true
+  Ground truth:   False
+
+Eval results saved to runs/20260211_022441_gpt-5/chained_eval_results.jsonl

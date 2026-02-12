@@ -25,4 +25,94 @@ By turn number:
        3        8       10     80.0%
        4        8       10     80.0%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000001  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC11732454)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC11732454, is the following pharmacogenomic claim supported or contradicted: HLA-A *31:03 is associated with decreased likelihood of Stevens-Johnson Syndrome when treated with carbamazepine, lamotrigine or phenytoin. Answer one of: supported, contradicted.
+  Model response: supported
+  Ground truth:   supported
+
+  [2] chain=chain_000000  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2231142 and gemcitabine in Disease:Non-Small Cell Lung Carcinoma (PMCID PMC5948914), what p-value was reported for this association?
+  Model response: For **rs2231142 (ABCG2 Q141K)** in **NSCLC** treated with **gemcitabine-based chemotherapy**, the reported p-value for the survival association was:
+
+- **Progression-free survival (PFS), multivariate (adjusted): p = 0.007** (CA/AA vs CC; Table 2)
+
+(For reference, **overall survival (OS)** multivariate adjusted **p = 0.080**.)
+  Ground truth:   = 0.080
+
+  [3] chain=chain_000006  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5519037)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5519037, is the following pharmacogenomic claim supported or contradicted: Genotypes CT + TT are not associated with concentrations of everolimus in women with Breast Neoplasms as compared to genotype CC. Answer one of: supported, contradicted.
+  Model response: supported
+  Ground truth:   supported
+
+  [4] chain=chain_000005  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: clinical_association
+  Ground truth:   clinical_association
+
+  [5] chain=chain_000002  turn=4  type=counterfactual_evaluation
+  Prompt:
+    Would this association remain significant at alpha = 0.01? Answer true or false.
+  Model response: false
+  Ground truth:   False
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000000  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: true
+  Ground truth:   False
+
+  [2] chain=chain_000007  turn=3  type=statistical_extraction
+  Prompt:
+    How many controls were included in the study of rs17577 and bevacizumab in Disease:Breast Neoplasms (PMCID PMC5207665)?
+  Model response: 0
+  Ground truth:   33
+
+  [3] chain=chain_000007  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5207665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5207665, is the following pharmacogenomic claim supported or contradicted: Allele A is not associated with response to bevacizumab in women with Breast Neoplasms as compared to allele G. Answer one of: supported, contradicted.
+  Model response: **Contradicted.** In this paper, the *ANGPT2* SNP **rs2515462** (minor allele **A** vs major allele **G**) showed a significant association with pathologic complete response (pCR) to bevacizumab-containing neoadjuvant therapy (adjusted OR 4.31, raw *P* = 0.011), indicating allele **A** *is* associated with response compared to allele **G**.
+  Ground truth:   supported
+
+  [4] chain=chain_000008  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases were included in the study of G6PD deficiency and trimethoprim in Toxicity (PMCID PMC1689719)?
+  Model response: 2 cases
+  Ground truth:   8
+
+  [5] chain=chain_000008  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: functional_assay
+  Ground truth:   clinical_association
+
 Eval results saved to runs/20260211_021254_gpt-5.2/chained_eval_results.jsonl

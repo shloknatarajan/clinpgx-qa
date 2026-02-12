@@ -26,4 +26,72 @@ By turn number:
        3       27       42     64.3%
        4       33       42     78.6%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000035  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2010963 and cyclophosphamide in Disease:Prostatic Neoplasms (PMID 23860526), what p-value was reported for this association?
+  Model response: The reported p-value for the association between rs2010963 (−634G/C) and response to cyclophosphamide in prostatic neoplasms was 0.0485.
+  Ground truth:   = 0.0485
+
+  [2] chain=chain_000003  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: True.
+  Ground truth:   True
+
+  [3] chain=chain_000003  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs8099917 and peginterferon alfa-2a, peginterferon alfa-2b, ribavirin in Disease:Hepatitis C virus infection (PMID 25278709), what OR was reported?
+  Model response: The reported odds ratio (OR) for the rs8099917 G allele as a predictor of null-response was 7.9, with a 95% confidence interval of 1.99-31.18.
+  Ground truth:   7.9
+
+  [4] chain=chain_000042  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 40405401, is the following pharmacogenomic claim supported or contradicted: Genotypes CT + TT is associated with decreased likelihood of Progression-free survival and overall survival when treated with doxorubicin in people with Hepatocellular Carcinoma as compared to genotype CC. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   supported
+
+  [5] chain=chain_000041  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of HLA-A*31:01 and carbamazepine in Toxicity (PMID 31066027), what confidence interval was reported?
+  Model response: The confidence interval reported for the association of HLA-A*31:01 with carbamazepine-induced drug-induced liver injury (DILI) was 95% CI 2.47–23.67.
+  Ground truth:   2.47–23.67
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000045  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 25744370, is the following pharmacogenomic claim supported or contradicted: Allele T is associated with increased risk of Heroin Dependence due to heroin as compared to allele C. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+  Ground truth:   supported
+
+  [2] chain=chain_000032  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 27977335, is the following pharmacogenomic claim supported, contradicted, or not reported: In PMID 27977335, rs3766246 is associated with Toxicity outcomes for morphine. Answer one of: supported, contradicted, not_reported.
+  Model response: The claim is supported. The paper reports that the *FAAH* variant rs3766246 is associated with morphine-related adverse outcomes, specifically with the hypercapnic ventilatory response (HCVR), which is an indicator of morphine-induced respiratory depression, a toxicity outcome.
+  Ground truth:   not_reported
+
+  [3] chain=chain_000026  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs201279313 and atenolol, hydrochlorothiazide, metoprolol in Disease:Hypertension (PMID 26729753), what p-value was reported for this association?
+  Model response: The p-value reported for the association of rs201279313 with blood pressure response to atenolol, hydrochlorothiazide, and metoprolol in hypertension was 2.5*10^-8 in the 3-group meta-analysis.
+  Ground truth:   = 1.10E-07
+
+  [4] chain=chain_000047  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of CYP2D6*1, CYP2D6*2, CYP2D6*17 and debrisoquine in Metabolism/PK (PMID 8971426), what p-value was reported for this association?
+  Model response: The paper does not report a specific p-value for the association between CYP2D6*1, CYP2D6*2, CYP2D6*17, and debrisoquine metabolism.
+  Ground truth:   < 0.001
+
+  [5] chain=chain_000018  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: True.
+  Ground truth:   False
+
 Eval results saved to runs/20260211_010043_gpt-4o/chained_eval_results.jsonl

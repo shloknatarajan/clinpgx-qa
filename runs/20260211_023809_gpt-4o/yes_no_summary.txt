@@ -10,4 +10,152 @@ By flip_type:
   direction_flip           1163     1239     93.9%
   original                 1172     1881     62.3%
 
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=direction_flip  pmcid=PMC4169411
+  Prompt:
+    ## Paper (PMCID PMC4169411)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC4169411, is this statement true or false: Genotype (CCGCGCCACTTGGCCTGCCTCCGTCCCG)2/(CCGCGCCACTTGGCCTGCCTCCGTCCCG)2 is associated with decreased response to fluorouracil, leucovorin and oxaliplatin in people with Esophageal Neoplasms and Stomach Neoplasms as compared to genotype (CCGCGCCACTTGGCCTGCCTCCGTCCCG)2/(CCGCGCCACTTGGCCTGCCTCCGTCCCG)3.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [2] flip_type=direction_flip  pmcid=PMC5963414
+  Prompt:
+    ## Paper (PMCID PMC5963414)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC5963414, is this statement true or false: Genotype ACATACACACTCAGACACACATACCATGCA/ACATACACACTCAGACACACATACCATGCA is associated with decreased response to levodopa and methylphenidate in people with Parkinson Disease as compared to genotypes ACATACACACTCAGACACACATACCATGCA/del + del/del.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [3] flip_type=direction_flip  pmcid=PMC8742641
+  Prompt:
+    ## Paper (PMCID PMC8742641)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC8742641, is this statement true or false: Allele G is associated with increased metabolism of nicotine as compared to allele A.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [4] flip_type=direction_flip  pmcid=PMC6361127
+  Prompt:
+    ## Paper (PMCID PMC6361127)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC6361127, is this statement true or false: UGT1A1 *1/*60 + *60/*60 is associated with increased metabolism of Belinostat in people with Neoplasms.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: False
+  Ground truth:   False
+
+  [5] flip_type=direction_flip  pmcid=PMC12071444
+  Prompt:
+    ## Paper (PMCID PMC12071444)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC12071444, is this statement true or false: Genotype TT is associated with increased clinical benefit to methotrexate in people with Rheumatoid arthritis as compared to genotypes CC + CT.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=original  pmcid=PMC12114030
+  Prompt:
+    ## Paper (PMCID PMC12114030)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC12114030, is this statement true or false: Genotype TT is associated with decreased concentrations of 3-aminoisobutyrate as compared to genotype CC.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   True
+
+  [2] flip_type=direction_flip  pmcid=PMC10880038
+  Prompt:
+    ## Paper (PMCID PMC10880038)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC10880038, is this statement true or false: Genotypes AG + GG is associated with decreased clearance of cyclosporine in men with Kidney Transplantation as compared to genotype AA.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: true
+  Ground truth:   False
+
+  [3] flip_type=original  pmcid=PMC5074472
+  Prompt:
+    ## Paper (PMCID PMC5074472)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC5074472, is this statement true or false: CYP2C19 *2 + *3 (assigned as intermediate metabolizer and poor metabolizer phenotype) are associated with decreased metabolism of bupropion in women with Pregnancy as compared to CYP2C19 *17 (assigned as normal metabolizer phenotype) .
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   True
+
+  [4] flip_type=original  pmcid=PMC6855320
+  Prompt:
+    ## Paper (PMCID PMC6855320)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC6855320, is this statement true or false: Genotypes CC + CT are associated with increased response to esomeprazole in children with eosinophilic esophagitis as compared to genotype TT.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   True
+
+  [5] flip_type=original  pmcid=PMC4928097
+  Prompt:
+    ## Paper (PMCID PMC4928097)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC4928097, is this statement true or false: HLA-DRB1 *04:01 is associated with increased response to adalimumab, etanercept or infliximab in people with Arthritis, Rheumatoid.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   True
+
 Eval results saved to runs/20260211_023809_gpt-4o/yes_no_eval_results.jsonl

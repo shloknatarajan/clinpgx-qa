@@ -12,4 +12,152 @@ By flip_type:
 
   Parse failures: 4950/5000 (99.0%)
 
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=direction_flip  pmcid=PMC11730665
+  Prompt:
+    ## Paper (PMCID PMC11730665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC11730665, is this statement true or false: Genotype GG is associated with increased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [2] flip_type=original  pmcid=PMC7655626
+  Prompt:
+    ## Paper (PMCID PMC7655626)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC7655626, is this statement true or false: NAT2 slow acetylator is associated with increased concentrations of rifapentine in people with HIV Infections.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: true
+  Ground truth:   True
+
+  [3] flip_type=association_flip  pmcid=PMC11730665
+  Prompt:
+    ## Paper (PMCID PMC11730665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC11730665, is this statement true or false: Genotype TT is not associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [4] flip_type=direction_flip  pmcid=PMC7655626
+  Prompt:
+    ## Paper (PMCID PMC7655626)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC7655626, is this statement true or false: CYP2B6 poor metabolizer is associated with decreased concentrations of efavirenz in people with HIV Infections.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [5] flip_type=original  pmcid=PMC11730665
+  Prompt:
+    ## Paper (PMCID PMC11730665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC11730665, is this statement true or false: Genotype GG is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: true
+  Ground truth:   True
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=original  pmcid=PMC8915292
+  Prompt:
+    ## Paper (PMCID PMC8915292)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC8915292, is this statement true or false: Genotypes AA + AG is not associated with decreased concentrations of AR-C124910XX or ticagrelor in healthy individuals as compared to genotype GG.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   True
+
+  [2] flip_type=association_flip  pmcid=PMC5057355
+  Prompt:
+    ## Paper (PMCID PMC5057355)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC5057355, is this statement true or false: CYP2C19 *1/*2 + *1/*3 is not associated with increased concentrations of voriconazole in healthy individuals as compared to CYP2C19 *1/*1.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   False
+
+  [3] flip_type=original  pmcid=PMC3100476
+  Prompt:
+    ## Paper (PMCID PMC3100476)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC3100476, is this statement true or false: Allele A is not associated with clearance of olanzapine in people with Schizophrenia as compared to allele G.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   True
+
+  [4] flip_type=association_flip  pmcid=PMC6142943
+  Prompt:
+    ## Paper (PMCID PMC6142943)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC6142943, is this statement true or false: Allele A is associated with response to bevacizumab and ranibizumab in people with as compared to allele C.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   False
+
+  [5] flip_type=original  pmcid=PMC4872310
+  Prompt:
+    ## Paper (PMCID PMC4872310)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC4872310, is this statement true or false: UGT1A1 *1/*28 is associated with decreased dose of irinotecan in people with Colorectal Neoplasms as compared to UGT1A1 *1/*1.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: 
+  Ground truth:   True
+
 Eval results saved to runs/20260211_023809_anthropic_claude-sonnet-4-5-20250929/yes_no_eval_results.jsonl

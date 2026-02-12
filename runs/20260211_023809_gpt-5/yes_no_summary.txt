@@ -1,0 +1,161 @@
+
+======================================================================
+Yes/No Results  |  model=gpt-5  |  1530/1793 (85.3%)
+======================================================================
+
+By flip_type:
+  flip_type             Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  association_flip          573      666     86.0%
+  direction_flip            435      461     94.4%
+  original                  522      666     78.4%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=association_flip  pmcid=PMC5877743
+  Prompt:
+    ## Paper (PMCID PMC5877743)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC5877743, is this statement true or false: CYP3A5 *3/*3 is associated with metabolism of everolimus in people with Kidney Transplantation as compared to CYP3A5 *1/*1 + *1/*3.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [2] flip_type=association_flip  pmcid=PMC2879959
+  Prompt:
+    ## Paper (PMCID PMC2879959)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC2879959, is this statement true or false: CYP2C19 *1/*1 + *1/*17 is not associated with increased metabolism of pantoprazole in children as compared to CYP2C19 *1/*2 + *2/*17.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+  [3] flip_type=original  pmcid=PMC3291838
+  Prompt:
+    ## Paper (PMCID PMC3291838)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC3291838, is this statement true or false: CYP2C9 *1/*2 + *2/*2 + *2/*3 + *1/*3 + *3/*3 are not associated with decreased dose of phenprocoumon as compared to CYP2C9 *1/*1.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: true
+  Ground truth:   True
+
+  [4] flip_type=original  pmcid=PMC3273458
+  Prompt:
+    ## Paper (PMCID PMC3273458)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC3273458, is this statement true or false: Genotype TT is associated with increased response to peginterferon alfa-2b and ribavirin in people with Hepatitis C, Hepatitis C, HIV Infections and HIV Infections as compared to genotypes GG + GT.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: true
+  Ground truth:   True
+
+  [5] flip_type=association_flip  pmcid=PMC4533232
+  Prompt:
+    ## Paper (PMCID PMC4533232)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC4533232, is this statement true or false: CYP3A5 *1/*3 is not associated with decreased dose-adjusted trough concentrations of tacrolimus in people with Kidney Transplantation as compared to CYP3A5 *3/*3.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   False
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] flip_type=original  pmcid=PMC4598210
+  Prompt:
+    ## Paper (PMCID PMC4598210)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC4598210, is this statement true or false: NAT2 slow acetylator is associated with decreased concentrations of isoniazid in people with Tuberculosis as compared to NAT2 rapid acetylator.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   True
+
+  [2] flip_type=original  pmcid=PMC8742641
+  Prompt:
+    ## Paper (PMCID PMC8742641)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC8742641, is this statement true or false: Allele T is associated with decreased metabolism of nicotine as compared to allele C.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   True
+
+  [3] flip_type=association_flip  pmcid=PMC3698861
+  Prompt:
+    ## Paper (PMCID PMC3698861)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC3698861, is this statement true or false: CYP2A6 *1/*46 + *46/*46 are not associated with increased metabolism of nicotine as compared to CYP2A6 *1/*1.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: true
+  Ground truth:   False
+
+  [4] flip_type=original  pmcid=PMC8742641
+  Prompt:
+    ## Paper (PMCID PMC8742641)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC8742641, is this statement true or false: Allele T is associated with decreased metabolism of nicotine as compared to allele C.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   True
+
+  [5] flip_type=original  pmcid=PMC8887949
+  Prompt:
+    ## Paper (PMCID PMC8887949)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on the PubMed Central article PMC8887949, is this statement true or false: Genotypes AG + GG is associated with decreased clinical benefit to cytarabine in children with Leukemia, Myeloid, Acute as compared to genotype AA.
+    
+    Respond with ONLY the single word 'true' or 'false'. Do not include any explanation or reasoning.
+  Model response: false
+  Ground truth:   True
+
+Eval results saved to runs/20260211_023809_gpt-5/yes_no_eval_results.jsonl

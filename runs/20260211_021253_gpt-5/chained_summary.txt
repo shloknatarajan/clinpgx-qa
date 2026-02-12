@@ -25,4 +25,48 @@ By turn number:
        3        0       10      0.0%
        4        0       10      0.0%
 
+----------------------------------------------------------------------
+Example CORRECT turns (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000007  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study controls? Answer true or false.
+  Model response: 
+  Ground truth:   True
+
+  [2] chain=chain_000004  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: 
+  Ground truth:   False
+
+  [3] chain=chain_000000  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2231142 and gemcitabine in Disease:Non-Small Cell Lung Carcinoma (PMCID PMC5948914), what p-value was reported for this association?
+  Model response: 
+  Ground truth:   = 0.080
+
+  [4] chain=chain_000000  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: 
+  Ground truth:   False
+
+  [5] chain=chain_000002  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC4640545)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC4640545, is the following pharmacogenomic claim supported or contradicted: Genotype CC is not associated with metabolism of carbamazepine in people with Epilepsy as compared to genotypes CT + TT. Answer one of: supported, contradicted.
+  Model response: 
+  Ground truth:   supported
+
 Eval results saved to runs/20260211_021253_gpt-5/chained_eval_results.jsonl

@@ -25,4 +25,96 @@ By turn number:
        3        7       10     70.0%
        4        7       10     70.0%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000005  turn=3  type=statistical_extraction
+  Prompt:
+    How many controls were included in the study of rs13242038 and heroin in Other (PMCID PMC3909071)?
+  Model response: 619 controls were included in the study of rs13242038 and heroin.
+  Ground truth:   619
+
+  [2] chain=chain_000002  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2298771 and carbamazepine in Disease:Epilepsy (PMCID PMC4640545), what p-value was reported for this association?
+  Model response: The p-value reported for the association of rs2298771 (SCN1A c.3184A>G) with carbamazepine metabolism in epilepsy was not significant, as indicated by the results showing no impact on CBZ pharmacokinetics. Specific p-values for this SNP were not provided in the context of significant associations.
+  Ground truth:   > 0.05
+
+  [3] chain=chain_000008  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study cases? Answer true or false.
+  Model response: False.
+  Ground truth:   False
+
+  [4] chain=chain_000006  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs776746 and everolimus in Disease:Breast Neoplasms (PMCID PMC5519037), what p-value was reported for this association?
+  Model response: The study reported no significant differences for the association of rs776746 with everolimus concentrations, and therefore, no specific p-value was provided for this association.
+  Ground truth:   > 0.05
+
+  [5] chain=chain_000000  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: Clinical_association.
+  Ground truth:   clinical_association
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000007  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5207665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5207665, is the following pharmacogenomic claim supported or contradicted: Allele A is not associated with response to bevacizumab in women with Breast Neoplasms as compared to allele G. Answer one of: supported, contradicted.
+  Model response: The paper does not provide specific information about an "Allele A" or "Allele G" in relation to response to bevacizumab in women with breast neoplasms. The study discusses various SNPs and their associations with pathologic complete response (pCR) to bevacizumab, but it does not mention a specific comparison between "Allele A" and "Allele G." Therefore, based on the information provided in the paper, the claim cannot be directly evaluated as supported or contradicted.
+  Ground truth:   supported
+
+  [2] chain=chain_000008  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases were included in the study of G6PD deficiency and trimethoprim in Toxicity (PMCID PMC1689719)?
+  Model response: The study in PMCID PMC1689719 does not include any cases specifically related to G6PD deficiency and trimethoprim. The paper does not mention trimethoprim in its investigation of drug-induced hemolysis in G6PD deficiency.
+  Ground truth:   8
+
+  [3] chain=chain_000006  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5519037)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5519037, is the following pharmacogenomic claim supported or contradicted: Genotypes CT + TT are not associated with concentrations of everolimus in women with Breast Neoplasms as compared to genotype CC. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+  Ground truth:   supported
+
+  [4] chain=chain_000004  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC7351433)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC7351433, is the following pharmacogenomic claim supported or contradicted: Allele G is not associated with concentrations of methotrexate in children with Precursor Cell Lymphoblastic Leukemia-Lymphoma as compared to allele T. Answer one of: supported, contradicted.
+  Model response: The claim is contradicted. The paper reports that the MTHFR rs1801133 TT genotype (which involves allele T) is associated with higher plasma methotrexate levels compared to the CC genotype (which involves allele G).
+  Ground truth:   supported
+
+  [5] chain=chain_000009  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC2850440)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC2850440, is the following pharmacogenomic claim supported or contradicted: Allele G is not associated with increased risk of Crohn Disease. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+  Ground truth:   supported
+
 Eval results saved to runs/20260211_021252_gpt-4o/chained_eval_results.jsonl

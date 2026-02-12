@@ -26,4 +26,72 @@ By turn number:
        3       27       42     64.3%
        4       33       42     78.6%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000030  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: Clinical_association.
+  Ground truth:   clinical_association
+
+  [2] chain=chain_000023  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study cases? Answer true or false.
+  Model response: True.
+  Ground truth:   True
+
+  [3] chain=chain_000048  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases were included in the study of rs9282564 and methotrexate in Metabolism/PK (PMID 27566582)?
+  Model response: The study included 59 patients.
+  Ground truth:   59
+
+  [4] chain=chain_000023  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases were included in the study of rs1800497 and methylphenidate in Other:Attention Deficit Disorder with Hyperactivity, Other:Fetal Alcohol Syndrome (PMID 35457347)?
+  Model response: The study included 114 cases of children with ADHD symptoms, which were analyzed for the rs1800497 polymorphism in relation to methylphenidate treatment.
+  Ground truth:   114
+
+  [5] chain=chain_000013  turn=2  type=evidence_provenance_localization
+  Prompt:
+    Does PMID 34158603 report any quantitative statistic (p-value/OR/CI) for this claim?
+  Model response: No, PMID 34158603 does not report any quantitative statistic (p-value/OR/CI) for the claim regarding rs74569896's association with Efficacy, Toxicity, Metabolism/PK outcomes for aspirin, clopidogrel.
+  Ground truth:   no
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000047  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of CYP2D6*1, CYP2D6*2, CYP2D6*17 and debrisoquine in Metabolism/PK (PMID 8971426), what p-value was reported for this association?
+  Model response: The paper does not explicitly report a p-value for the association between CYP2D6*17 and debrisoquine metabolism.
+  Ground truth:   < 0.001
+
+  [2] chain=chain_000007  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study controls? Answer true or false.
+  Model response: False.
+  Ground truth:   True
+
+  [3] chain=chain_000010  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2046934 and aspirin, clopidogrel in Efficacy (PMID 28255319), what confidence interval was reported?
+  Model response: The study does not report a specific confidence interval for rs2046934 in relation to aspirin and clopidogrel efficacy. The paper discusses the association of P2Y12 polymorphisms, including rs2046934, with clinical outcomes and platelet reactivity, but it does not provide a specific confidence interval for this SNP in the context of aspirin and clopidogrel efficacy.
+  Ground truth:   1.64–3.53
+
+  [4] chain=chain_000033  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 37198710, is the following pharmacogenomic claim supported or contradicted: Allele G is associated with increased likelihood of transplant rejection when treated with tacrolimus in children with Kidney Transplantation as compared to allele A. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+  Ground truth:   supported
+
+  [5] chain=chain_000024  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 36833383, is the following pharmacogenomic claim supported, contradicted, or not reported: In PMID 36833383, rs4149056 is associated with PD, Metabolism/PK outcomes for atorvastatin, simvastatin. Answer one of: supported, contradicted, not_reported.
+  Model response: Contradicted
+  Ground truth:   not_reported
+
 Eval results saved to runs/20260211_004616_gpt-4o/chained_eval_results.jsonl

@@ -25,4 +25,106 @@ By turn number:
        3        8       10     80.0%
        4        8       10     80.0%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000009  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: False.
+  Ground truth:   False
+
+  [2] chain=chain_000006  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: false
+  Ground truth:   False
+
+  [3] chain=chain_000002  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2298771 and carbamazepine in Disease:Epilepsy (PMCID PMC4640545), what p-value was reported for this association?
+  Model response: For the association between rs2298771 (SCN1A c.3184A>G) and carbamazepine in Disease:Epilepsy, the reported p-value in PMCID PMC4640545 is **not significant**. Specifically, Table 3 shows p-values of 0.96 (AG vs AA), 0.85 (GG vs AA), and 0.97 (AG+GG vs AA) for the association with drug resistance, and Table 2/Results text state no significant association with pharmacokinetics. Thus, the reported p-value for this association is **0.96**.
+  Ground truth:   > 0.05
+
+  [4] chain=chain_000005  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: clinical_association
+  Ground truth:   clinical_association
+
+  [5] chain=chain_000006  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: clinical_association
+  Ground truth:   clinical_association
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000000  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5948914)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5948914, is the following pharmacogenomic claim supported or contradicted: Genotypes GT + TT are not associated with overall survival when treated with gemcitabine in people with Carcinoma, Non-Small-Cell Lung as compared to genotype GG. Answer one of: supported, contradicted.
+  Model response: **Supported.**
+
+In the context of this paper (PMCID PMC5948914), the only SNPs with a GG/GT/TT genotype pattern among the six tested are SLC29A3 S158F (rs780668, genotypes CC/CT/TT) and possibly others, but the claim refers to a general "GT + TT" vs "GG" comparison.
+
+For SLC29A3 S158F (rs780668), the paper reports that the CT/TT genotypes (i.e., carriers of the T allele) are associated with **increased overall survival** compared to the CC genotype (see Table 2 and Results: "SLC29A3 S158F (c.473C > T, rs780668) was found to be associated with increased OS. Patients with CT/TT genotype were shown to have longer median OS compared to CC genotype... HR 0.49 (95% CI 0.27-0.88), adjusted P = 0.017").
+
+Therefore, the claim that "GT + TT are not associated with overall survival when treated with gemcitabine in people with Carcinoma, Non-Small-Cell Lung as compared to genotype GG" is **contradicted**
+  Ground truth:   supported
+
+  [2] chain=chain_000008  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases were included in the study of G6PD deficiency and trimethoprim in Toxicity (PMCID PMC1689719)?
+  Model response: The study included **six** cases (subjects) with G6PD deficiency in the assessment of trimethoprim toxicity. This is stated in the Results section:  
+> "Trimethoprim (100 mg twice daily for three days) was given to six subjects. There was no evidence of increased haemolysis in any of them."
+  Ground truth:   8
+
+  [3] chain=chain_000008  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: functional_assay
+  Ground truth:   clinical_association
+
+  [4] chain=chain_000007  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5207665)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5207665, is the following pharmacogenomic claim supported or contradicted: Allele A is not associated with response to bevacizumab in women with Breast Neoplasms as compared to allele G. Answer one of: supported, contradicted.
+  Model response: To determine whether the claim "Allele A is not associated with response to bevacizumab in women with Breast Neoplasms as compared to allele G" is supported or contradicted by the findings in PMCID PMC5207665, we need to check if any SNPs with alleles A and G were found to be associated with pathologic complete response (pCR) to bevacizumab.
+
+From Table 4 and the Results section, several SNPs in angiogenesis-related genes (including ANGPT1, ANGPT2, FGF2, MMP9, TEK, and VEGFA) were found to be associated with pCR (P < 0.05). For example:
+
+- ANGPT2 rs2515462: alleles A/G, AOR 4.31 (1.40–13.3), P = 0.011
+- FGF2 rs1960669: alleles T/G, AOR 0.12 (0.02–0.79), P = 0.027
+- VEGFA rs833068: alleles A/G, AOR 3.67 (1.16–11.60), P = 0.027
+- VEGFA rs833069:
+  Ground truth:   supported
+
+  [5] chain=chain_000002  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC4640545)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC4640545, is the following pharmacogenomic claim supported or contradicted: Genotype CC is not associated with metabolism of carbamazepine in people with Epilepsy as compared to genotypes CT + TT. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+
+The paper reports that for the EPHX1 c.337T>C SNP, carriers of the CC genotype showed significantly lower dose-adjusted plasma carbamazepine levels (CDRCBZ) compared to TT carriers (0.76±0.16 vs 0.94±0.49 μg/mL per mg/Kg; P<0.05), indicating an association between the CC genotype and altered carbamazepine metabolism. Therefore, the claim that genotype CC is not associated with metabolism of carbamazepine compared to CT + TT is contradicted by the findings.
+  Ground truth:   supported
+
 Eval results saved to runs/20260211_021703_gpt-4.1/chained_eval_results.jsonl

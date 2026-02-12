@@ -26,4 +26,72 @@ By turn number:
        3       27       42     64.3%
        4       32       42     76.2%
 
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000044  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: True.
+  Ground truth:   True
+
+  [2] chain=chain_000006  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: Clinical_association.
+  Ground truth:   clinical_association
+
+  [3] chain=chain_000029  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 34910759, is the following pharmacogenomic claim supported or contradicted: Allele G is not associated with dose of methadone in people with Opioid-Related Disorders as compared to allele A. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   supported
+
+  [4] chain=chain_000049  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs121918623 and antiepileptics in Other:Epilepsy (PMID 39974498), what p-value was reported for this association?
+  Model response: The p-value reported for the association between rs121918623 and antiepileptics in epilepsy was 1.00.
+  Ground truth:   = 1
+
+  [5] chain=chain_000021  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 22850190, is the following pharmacogenomic claim supported or contradicted: Allele T is not associated with risk of Hypersensitivity when treated with sulfamethoxazole / trimethoprim in people with Infection. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   supported
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000007  turn=1  type=claim_verification
+  Prompt:
+    Based on PMID 28045923, is the following pharmacogenomic claim supported or contradicted: Allele A is not associated with response to bevacizumab in women with Breast Neoplasms as compared to allele G. Answer one of: supported, contradicted.
+  Model response: The paper does not provide specific information about an "Allele A" and "Allele G" in relation to response to bevacizumab in women with breast neoplasms. The study discusses various SNPs and their associations with pathologic complete response (pCR) to bevacizumab, but it does not specify alleles in the manner described in the claim. Therefore, based on the information provided in the paper, the claim cannot be directly evaluated as supported or contradicted.
+  Ground truth:   supported
+
+  [2] chain=chain_000010  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2046934 and aspirin, clopidogrel in Efficacy (PMID 28255319), what confidence interval was reported?
+  Model response: The study does not report a specific confidence interval for the association of rs2046934 with aspirin and clopidogrel efficacy. The paper discusses the association of P2Y12 polymorphisms, including rs2046934, with clinical outcomes and platelet reactivity, but it does not provide a specific confidence interval for this SNP in relation to aspirin and clopidogrel efficacy.
+  Ground truth:   1.64–3.53
+
+  [3] chain=chain_000000  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: True.
+  Ground truth:   False
+
+  [4] chain=chain_000047  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of CYP2D6*1, CYP2D6*2, CYP2D6*17 and debrisoquine in Metabolism/PK (PMID 8971426), what p-value was reported for this association?
+  Model response: The paper does not report a specific p-value for the association between CYP2D6*1, CYP2D6*2, CYP2D6*17, and debrisoquine metabolism.
+  Ground truth:   < 0.001
+
+  [5] chain=chain_000026  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs201279313 and atenolol, hydrochlorothiazide, metoprolol in Disease:Hypertension (PMID 26729753), what p-value was reported for this association?
+  Model response: The p-value reported for the association of rs201279313 with blood pressure response to atenolol, hydrochlorothiazide, and metoprolol in the meta-analysis was 2.5*10^-8.
+  Ground truth:   = 1.10E-07
+
 Eval results saved to runs/20260211_010642_gpt-4o/chained_eval_results.jsonl
