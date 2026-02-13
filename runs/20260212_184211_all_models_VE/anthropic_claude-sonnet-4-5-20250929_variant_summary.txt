@@ -1,0 +1,59 @@
+
+======================================================================
+Variant Extraction Results  |  model=anthropic/claude-sonnet-4-5-20250929  |  Recall=0.600
+======================================================================
+
+  Articles scored: 5/5
+  Parse failures:  0/5
+
+By variant type:
+  Type                TP     FN     Recall
+  --------------- ------ ------ ----------
+  phenotype            3      2     0.600
+  rsID                 9      1     0.900
+  --------------- ------ ------ ----------
+  MICRO-AVG           12      3     0.800
+
+  Macro-avg Recall: 0.600
+
+----------------------------------------------------------------------
+Example WORST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC11921366  Recall=0.000
+  Title: Novel LZTR1 germline mutation as a mechanism of resistance to osimertinib in EGF
+  Ground truth (1): ['rs1411200130']
+  Predicted (0): []
+  Missed: ['rs1411200130']
+
+  [2] pmcid=PMC7655626  Recall=0.000
+  Title: Pharmacogenetic Interactions of Rifapentine plus Isoniazid with Efavirenz or Nev
+  Ground truth (2): ['NAT2 slow acetylator', 'CYP2B6 poor metabolizer']
+  Predicted (42): ["{'type': 'metabolizer_phenotype', 'variant': 'CYP2B6 intermediate metabolizer'}", "{'type': 'metabolizer_phenotype', 'variant': 'CYP2B6 normal metabolizer'}", "{'type': 'metabolizer_phenotype', 'variant': 'CYP2B6 poor metabolizer'}", "{'type': 'metabolizer_phenotype', 'variant': 'CYP2B6 rapid metabolizer'}", "{'type': 'metabolizer_phenotype', 'variant': 'NAT2 intermediate acetylator'}"]
+  Missed: ['CYP2B6 poor metabolizer', 'NAT2 slow acetylator']
+
+  [3] pmcid=PMC11730665  Recall=1.000
+  Title: Comparative efficacy and safety of sitagliptin or gliclazide combined with metfo
+  Ground truth (8): ['rs1799853', 'rs4664443', 'rs7754840', 'rs3765467', 'rs2285676']
+  Predicted (17): ['CYP2C19*2', 'CYP2C19*3', 'CYP2C9*2', 'CYP2C9*3', 'rs1057910']
+
+----------------------------------------------------------------------
+Example BEST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC11730665  Recall=1.000
+  Title: Comparative efficacy and safety of sitagliptin or gliclazide combined with metfo
+  Ground truth (8): ['rs1799853', 'rs4664443', 'rs7754840', 'rs3765467', 'rs2285676']
+  Predicted (17): ['CYP2C19*2', 'CYP2C19*3', 'CYP2C9*2', 'CYP2C9*3', 'rs1057910']
+
+  [2] pmcid=PMC12080641  Recall=1.000
+  Title: Sociodemographic, clinical, and genetic factors associated with self-reported an
+  Ground truth (3): ['CYP2C19 ultrarapid metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 intermediate metabolizer']
+  Predicted (5): ['CYP2C19 intermediate metabolizer', 'CYP2C19 normal metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 rapid metabolizer', 'CYP2C19 ultrarapid metabolizer']
+
+  [3] pmcid=PMC6347826  Recall=1.000
+  Title: Effect of TCF7L2 polymorphism on pancreatic hormones after exenatide in type 2 d
+  Ground truth (1): ['rs7903146']
+  Predicted (1): ['rs7903146']
+
+Eval results saved to runs/20260212_184211_all_models_VE/anthropic_claude-sonnet-4-5-20250929_variant_eval_results.jsonl
