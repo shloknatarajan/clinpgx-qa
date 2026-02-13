@@ -1,11 +1,12 @@
 """
-Run yes/no evaluation across multiple models.
+Run evaluation across multiple models.
 
 Usage:
-    python run_all_models.py                  # all 6 models, 10k questions
-    python run_all_models.py --limit 100      # all 6 models, 100 questions
+    python run_all_models.py --limit 100                     # yes/no only (default)
+    python run_all_models.py --limit 100 --dataset chained   # chained only
+    python run_all_models.py --limit 100 --dataset all       # both pipelines
     python run_all_models.py --models gpt-4o anthropic/claude-opus-4-6
-    python run_all_models.py --workers 3      # run 3 models in parallel
+    python run_all_models.py --workers 3                     # run 3 models in parallel
 """
 
 import argparse
@@ -24,22 +25,31 @@ MODELS = [
     "gpt-5.2",
 ]
 
+PIPELINES = {
+    "yes_no": {
+        "script": "src/eval/yes_no.py",
+        "summary_marker": "Yes/No Results",
+    },
+    "chained": {
+        "script": "src/eval/chained.py",
+        "summary_marker": "Chained Results",
+    },
+}
 
-def run_model(model: str, limit: int) -> dict:
-    """Run generate + score for a single model. Returns result summary.
 
-    All output is captured and returned (not printed) so parallel runs
-    don't interleave on the terminal.
-    """
-    log_lines: list[str] = []
-    log_lines.append(f"\n{'=' * 70}")
-    log_lines.append(f"  Starting: {model}  |  limit={limit}")
-    log_lines.append(f"{'=' * 70}\n")
+def _run_pipeline(
+    model: str, limit: int, pipeline_name: str, log_lines: list[str]
+) -> dict:
+    """Run generate + score for a single pipeline. Returns result dict."""
+    cfg = PIPELINES[pipeline_name]
+    script = cfg["script"]
+
+    log_lines.append(f"  [{pipeline_name}] generating...")
 
     # Generate
     gen_cmd = [
         sys.executable,
-        "src/eval/yes_no.py",
+        script,
         "generate",
         "--model",
         model,
@@ -50,13 +60,11 @@ def run_model(model: str, limit: int) -> dict:
     log_lines.append(gen_result.stderr)
 
     if gen_result.returncode != 0:
-        log_lines.append(f"FAILED (generate): {model}")
-        log_lines.append(gen_result.stderr)
+        log_lines.append(f"  [{pipeline_name}] FAILED (generate): {model}")
         return {
-            "model": model,
+            "pipeline": pipeline_name,
             "status": "generate_failed",
             "error": gen_result.stderr,
-            "log": "\n".join(log_lines),
         }
 
     # Find the responses path from generate output
@@ -68,16 +76,17 @@ def run_model(model: str, limit: int) -> dict:
 
     if not responses_path:
         return {
-            "model": model,
+            "pipeline": pipeline_name,
             "status": "no_responses_path",
             "error": gen_result.stderr,
-            "log": "\n".join(log_lines),
         }
+
+    log_lines.append(f"  [{pipeline_name}] scoring...")
 
     # Score
     score_cmd = [
         sys.executable,
-        "src/eval/yes_no.py",
+        script,
         "score",
         "--responses-path",
         responses_path,
@@ -87,25 +96,49 @@ def run_model(model: str, limit: int) -> dict:
     log_lines.append(score_result.stdout)
 
     if score_result.returncode != 0:
-        log_lines.append(f"FAILED (score): {model}")
+        log_lines.append(f"  [{pipeline_name}] FAILED (score): {model}")
         return {
-            "model": model,
+            "pipeline": pipeline_name,
             "status": "score_failed",
             "error": score_result.stderr,
-            "log": "\n".join(log_lines),
         }
 
     return {
-        "model": model,
+        "pipeline": pipeline_name,
         "status": "ok",
         "responses_path": responses_path,
         "summary": score_result.stdout,
+    }
+
+
+def run_model(model: str, limit: int, pipelines: list[str]) -> dict:
+    """Run generate + score for all requested pipelines on a single model.
+
+    All output is captured and returned (not printed) so parallel runs
+    don't interleave on the terminal.
+    """
+    log_lines: list[str] = []
+    log_lines.append(f"\n{'=' * 70}")
+    log_lines.append(f"  Starting: {model}  |  limit={limit}  |  pipelines={pipelines}")
+    log_lines.append(f"{'=' * 70}\n")
+
+    pipeline_results = {}
+    for pipeline_name in pipelines:
+        result = _run_pipeline(model, limit, pipeline_name, log_lines)
+        pipeline_results[pipeline_name] = result
+
+    all_ok = all(r["status"] == "ok" for r in pipeline_results.values())
+
+    return {
+        "model": model,
+        "status": "ok" if all_ok else "partial_failure",
+        "pipelines": pipeline_results,
         "log": "\n".join(log_lines),
     }
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Run yes/no eval across models")
+    parser = argparse.ArgumentParser(description="Run eval across models")
     parser.add_argument(
         "--limit",
         type=int,
@@ -124,16 +157,31 @@ def main():
         default=len(MODELS),
         help="Max parallel workers (default: number of models)",
     )
+    parser.add_argument(
+        "--dataset",
+        choices=["yes_no", "chained", "all"],
+        default="yes_no",
+        help="Which pipeline(s) to run (default: yes_no)",
+    )
     args = parser.parse_args()
+
+    if args.dataset == "all":
+        pipelines = list(PIPELINES.keys())
+    else:
+        pipelines = [args.dataset]
 
     start = datetime.now()
     results: list[dict] = []
 
-    print(f"Running {len(args.models)} models with up to {args.workers} workers\n")
+    print(
+        f"Running {len(args.models)} models with up to {args.workers} workers"
+        f"  |  pipelines: {pipelines}\n"
+    )
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures = {
-            pool.submit(run_model, model, args.limit): model for model in args.models
+            pool.submit(run_model, model, args.limit, pipelines): model
+            for model in args.models
         }
 
         for future in as_completed(futures):
@@ -161,12 +209,16 @@ def main():
     for r in results:
         status = "OK" if r["status"] == "ok" else f"FAILED ({r['status']})"
         print(f"  {r['model']:<45} {status}")
-        if r["status"] == "ok" and r.get("summary"):
-            # Extract the accuracy line
-            for line in r["summary"].splitlines():
-                if "Yes/No Results" in line:
-                    print(f"    {line.strip()}")
-                    break
+        for pipeline_name in pipelines:
+            pr = r["pipelines"].get(pipeline_name, {})
+            if pr.get("status") == "ok" and pr.get("summary"):
+                marker = PIPELINES[pipeline_name]["summary_marker"]
+                for line in pr["summary"].splitlines():
+                    if marker in line:
+                        print(f"    {line.strip()}")
+                        break
+            elif pr.get("status") and pr["status"] != "ok":
+                print(f"    [{pipeline_name}] {pr['status']}")
 
     print()
 
