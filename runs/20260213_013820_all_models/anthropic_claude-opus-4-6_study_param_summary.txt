@@ -1,0 +1,85 @@
+
+======================================================================
+Study Param Results  |  model=anthropic/claude-opus-4-6  |  both: 1/10 (10.0%)
+======================================================================
+
+By field:
+  Field                 Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  p_value                     1       10     10.0%
+  significance                3       10     30.0%
+  both                        1       10     10.0%
+
+By question_type:
+  Type                         P-value    Signif.       Both    Total
+  ------------------------- ---------- ---------- ---------- --------
+  correct                       25.0%     75.0%     25.0%        4
+  modified_drug                  0.0%      0.0%      0.0%        3
+  modified_variant               0.0%      0.0%      0.0%        3
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        1       10     10.0%
+
+  JSON parse failures: 5/10 (50.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (1 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=correct  table=drug  pmcid=PMC11730665
+  Expected p_value:      = 0.053
+  Response p_value:      0.053
+  Expected significance: no
+  Response significance: no
+  Raw response: {"p_value": "0.053", "significance": "no"}
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=modified_drug  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      parse_error
+  Expected significance: not found
+  Response significance: parse_error
+  Raw response: Looking at the paper, I need to find the association for KCNJ11 rs2285676 and its p-value.
+
+From Table 6 and the results section on genetic polymorphisms:
+
+For KCNJ11 rs2285676 **CC** genotype (not GG
+
+  [2] type=modified_variant  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      parse_error
+  Expected significance: not found
+  Response significance: parse_error
+  Raw response: Looking at the paper, I need to find the association for rs3765467 in the DPP4 gene with sitagliptin efficacy where genotype TT is associated with decreased response.
+
+However, examining the paper car
+
+  [3] type=correct  table=drug  pmcid=PMC11730665
+  Expected p_value:      < 0.001
+  Response p_value:      <0.001
+  Expected significance: yes
+  Response significance: yes
+  Raw response: {"p_value": "<0.001", "significance": "yes"}
+
+  [4] type=modified_drug  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      <0.001
+  Expected significance: not found
+  Response significance: yes
+  Raw response: {"p_value": "<0.001", "significance": "yes"}
+
+  [5] type=modified_variant  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      parse_error
+  Expected significance: not found
+  Response significance: parse_error
+  Raw response: Looking at the paper, I need to find the association for rs2909451 in relation to the gene and drug mentioned.
+
+From the paper, rs2909451 is associated with the **DPP-4 gene** (not KCNJ11), and the **
+
+Eval results saved to runs/20260213_013820_all_models/anthropic_claude-opus-4-6_study_param_eval_results.jsonl

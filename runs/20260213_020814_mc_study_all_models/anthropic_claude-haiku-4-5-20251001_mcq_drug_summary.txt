@@ -1,0 +1,49 @@
+
+======================================================================
+Mcq Drug Results  |  model=anthropic/claude-haiku-4-5-20251001  |  10/10 (100.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  standard                        10       10    100.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       10       10    100.0%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=drug  pmcid=PMC11730665
+  Sentence: Genotype GG is associated with decreased response to ______ in people with Diabetes Mellitus, Type 2.
+  Options: a) linagliptin  b) vildagliptin  c) saxagliptin  d) sitagliptin
+  Expected: d  Got: d
+
+  [2] type=standard  table=drug  pmcid=PMC11730665
+  Sentence: Genotype CG is associated with increased response to ______ in people with Diabetes Mellitus, Type 2.
+  Options: a) linagliptin  b) saxagliptin  c) sitagliptin  d) vildagliptin
+  Expected: c  Got: c
+
+  [3] type=standard  table=drug  pmcid=PMC11730665
+  Sentence: Genotype TT is associated with decreased response to ______ in people with Diabetes Mellitus, Type 2.
+  Options: a) linagliptin  b) vildagliptin  c) saxagliptin  d) sitagliptin
+  Expected: d  Got: d
+
+  [4] type=standard  table=drug  pmcid=PMC11730665
+  Sentence: Genotype AG is associated with increased response to ______ in people with Diabetes Mellitus, Type 2.
+  Options: a) saxagliptin  b) linagliptin  c) sitagliptin  d) vildagliptin
+  Expected: c  Got: c
+
+  [5] type=standard  table=drug  pmcid=PMC11730665
+  Sentence: Genotype GG is associated with increased response to ______ in people with Diabetes Mellitus, Type 2.
+  Options: a) vildagliptin  b) saxagliptin  c) sitagliptin  d) linagliptin
+  Expected: c  Got: c
+
+----------------------------------------------------------------------
+Example INCORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+Eval results saved to runs/20260213_020814_mc_study_all_models/anthropic_claude-haiku-4-5-20251001_mcq_drug_eval_results.jsonl

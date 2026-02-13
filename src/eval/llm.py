@@ -16,15 +16,20 @@ from src.utils.paper_map import build_pmcid_paper_map
 
 
 _REASONING_PREFIXES = ("o1", "o3", "o4", "gpt-5")
+_REASONING_GEMINI_PREFIXES = ("gemini-2.5",)
 
 
 def _is_reasoning_model(model: str) -> bool:
     """Check if a model is a reasoning model that needs higher token limits."""
     name = model.lower()
-    return any(
+    if any(
         name.startswith(p) or name.startswith(f"openai/{p}")
         for p in _REASONING_PREFIXES
-    )
+    ):
+        return True
+    # Gemini thinking models (e.g. gemini/gemini-2.5-pro)
+    bare = name.removeprefix("gemini/")
+    return any(bare.startswith(p) for p in _REASONING_GEMINI_PREFIXES)
 
 
 @retry(

@@ -1,0 +1,50 @@
+
+======================================================================
+Mcq Variant Results  |  model=gpt-5.2  |  10/10 (100.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above                5        5    100.0%
+  standard                         5        5    100.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       10       10    100.0%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=drug  pmcid=PMC11730665
+  Sentence: ______ is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+  Options: a) rs2285676  b) rs7754840  c) None of the options  d) rs2290910
+  Expected: c  Got: c
+
+  [2] type=none_of_the_above  table=drug  pmcid=PMC11730665
+  Sentence: ______ is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+  Options: a) rs2285676  b) rs146644707  c) None of the options  d) rs7754840
+  Expected: c  Got: c
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC11730665
+  Sentence: ______ is associated with increased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+  Options: a) rs163184  b) rs795484  c) rs1799853  d) None of the options
+  Expected: d  Got: d
+
+  [4] type=standard  table=drug  pmcid=PMC11730665
+  Sentence: ______ is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+  Options: a) rs2290910  b) rs7754840  c) rs2285676  d) rs2909451
+  Expected: d  Got: d
+
+  [5] type=standard  table=drug  pmcid=PMC11730665
+  Sentence: ______ is associated with increased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+  Options: a) rs2285666  b) rs1799853  c) rs4664443  d) rs2285676
+  Expected: d  Got: d
+
+----------------------------------------------------------------------
+Example INCORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+Eval results saved to runs/20260213_013820_all_models/gpt-5.2_mcq_variant_eval_results.jsonl
