@@ -222,9 +222,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     total_scored = 0
     total_parse_failures = 0
 
-    type_stats: dict[str, dict[str, int]] = defaultdict(
-        lambda: {"tp": 0, "fn": 0}
-    )
+    type_stats: dict[str, dict[str, int]] = defaultdict(lambda: {"tp": 0, "fn": 0})
 
     for r in records:
         predicted_raw = parse_variant_list(r["response"])
@@ -253,7 +251,9 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
         tp = predicted_normalized & ground_truth_normalized
         fn = ground_truth_normalized - predicted_normalized
 
-        recall = len(tp) / len(ground_truth_normalized) if ground_truth_normalized else 1.0
+        recall = (
+            len(tp) / len(ground_truth_normalized) if ground_truth_normalized else 1.0
+        )
 
         total_recall_sum += recall
         total_scored += 1
@@ -286,8 +286,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     lines.append("")
     lines.append("=" * 70)
     lines.append(
-        f"Variant Extraction Results  |  model={model}  |  "
-        f"Recall={avg_recall:.3f}"
+        f"Variant Extraction Results  |  model={model}  |  Recall={avg_recall:.3f}"
     )
     lines.append("=" * 70)
 
@@ -336,7 +335,9 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
             lines.append("")
             lines.append(f"  [{i}] pmcid={r['pmcid']}  Recall={r['recall']:.3f}")
             lines.append(f"  Title: {r['article_title'][:80]}")
-            lines.append(f"  Ground truth ({len(r['ground_truth'])}): {r['ground_truth'][:5]}")
+            lines.append(
+                f"  Ground truth ({len(r['ground_truth'])}): {r['ground_truth'][:5]}"
+            )
             lines.append(f"  Predicted ({len(r['predicted'])}): {r['predicted'][:5]}")
             if r["false_negatives"]:
                 lines.append(f"  Missed: {r['false_negatives'][:5]}")

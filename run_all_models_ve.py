@@ -79,9 +79,7 @@ def run_model(model: str, limit: int, output_dir: Path) -> dict:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Run variant extraction across models"
-    )
+    parser = argparse.ArgumentParser(description="Run variant extraction across models")
     parser.add_argument(
         "--limit",
         type=int,
