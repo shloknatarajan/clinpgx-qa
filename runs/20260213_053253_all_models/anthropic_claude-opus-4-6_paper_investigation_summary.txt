@@ -1,0 +1,33 @@
+
+================================================================
+Paper Investigation Results  |  model=anthropic/claude-opus-4-6
+================================================================
+
+  Papers scored:        199
+  Papers skipped:       1  (no paper text or parse failure)
+
+  Avg Variant Recall:   0.783
+  Avg Question Acc:     0.442  (across recalled variants only)
+  Avg Paper Score:      0.411  (recall x question_acc)
+
+By pipeline breakdown:
+  Pipeline              Questions    Correct   Accuracy
+  -------------------- ---------- ---------- ----------
+  mcq_drug                    632        625     0.989
+  mcq_phenotype                60         60     1.000
+  mcq_variant                 784        663     0.846
+  study_param                 736        573     0.779
+  -------------------- ---------- ---------- ----------
+  TOTAL                      2212       1921     0.868
+
+WORST PAPERS (by paper_score):
+  [1] PMC11921366  recall=0.000  q_acc=0.000  score=0.000
+  [2] PMC3093392  recall=0.857  q_acc=0.000  score=0.000
+  [3] PMC11949125  recall=1.000  q_acc=0.000  score=0.000
+
+BEST PAPERS (by paper_score):
+  [1] PMC3673300  recall=1.000  q_acc=1.000  score=1.000
+  [2] PMC5306247  recall=1.000  q_acc=1.000  score=1.000
+  [3] PMC6092108  recall=1.000  q_acc=1.000  score=1.000
+
+Eval results saved to runs/20260213_053253_all_models/anthropic_claude-opus-4-6_paper_investigation_eval_results.jsonl
