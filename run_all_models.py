@@ -4,11 +4,13 @@ Run evaluation across multiple models.
 All outputs are saved to a single timestamped directory under runs/.
 
 Usage:
-    python run_all_models.py --limit 100                     # yes/no only (default)
-    python run_all_models.py --limit 100 --dataset chained   # chained only
-    python run_all_models.py --limit 100 --dataset all       # both pipelines
+    python run_all_models.py --limit 100                                # yes/no only (default)
+    python run_all_models.py --limit 100 --dataset chained              # chained only
+    python run_all_models.py --limit 100 --dataset all                  # all pipelines
+    python run_all_models.py --dataset variant_extraction               # variant extraction
+    python run_all_models.py --dataset paper_investigation              # paper investigation
     python run_all_models.py --models gpt-4o anthropic/claude-opus-4-6
-    python run_all_models.py --workers 3                     # run 3 models in parallel
+    python run_all_models.py --workers 3                                # run 3 models in parallel
 """
 
 import argparse
@@ -55,6 +57,14 @@ PIPELINES = {
     "mcq_phenotype": {
         "script": "src/eval/mcq_phenotype.py",
         "summary_marker": "Mcq Phenotype Results",
+    },
+    "variant_extraction": {
+        "script": "src/modules/variant_extraction/variant_extraction.py",
+        "summary_marker": "Variant Extraction Results",
+    },
+    "paper_investigation": {
+        "script": "src/modules/paper_investigation/paper_investigation.py",
+        "summary_marker": "Paper Investigation Results",
     },
 }
 
@@ -265,6 +275,8 @@ def main():
             "mcq_variant",
             "mcq_drug",
             "mcq_phenotype",
+            "variant_extraction",
+            "paper_investigation",
             "mc_study",
             "all",
         ],
