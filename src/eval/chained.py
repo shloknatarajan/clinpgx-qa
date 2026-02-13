@@ -106,7 +106,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
                 try:
                     response = call_llm(messages, args.model)
                 except Exception as e:
-                    logger.error(
+                    print(
                         f"LLM error on chain {chain['chain_id']} "
                         f"turn {turn['turn']}: {e}"
                     )

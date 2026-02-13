@@ -28,7 +28,7 @@ MODELS = [
     "anthropic/claude-sonnet-4-5-20250929",
     "anthropic/claude-haiku-4-5-20251001",
     "gpt-4o-mini",
-    "gpt-5",
+    # "gpt-5",
     "gpt-5.2",
 ]
 

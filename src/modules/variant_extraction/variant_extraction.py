@@ -126,11 +126,11 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
                 {"role": "user", "content": user_content},
             ]
 
+            pbar.set_postfix(pmcid=pmcid, status="calling LLM")
             try:
-                pbar.set_postfix(pmcid=pmcid, status="calling LLM")
                 response = call_llm(messages, args.model, max_tokens=2048)
             except Exception as e:
-                logger.error(f"LLM error on {pmcid}: {e}")
+                print(f"LLM error on {pmcid}: {e}")
                 response = ""
 
             predicted = parse_variant_list(response)

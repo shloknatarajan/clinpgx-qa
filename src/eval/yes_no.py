@@ -100,7 +100,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
             try:
                 response = call_llm(messages, args.model)
             except Exception as e:
-                logger.error(f"LLM error on question {i}: {e}")
+                print(f"LLM error on question {i}: {e}")
                 response = ""
 
             record = {
