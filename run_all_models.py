@@ -129,9 +129,7 @@ def _run_pipeline(
     }
 
 
-def run_model(
-    model: str, limit: int, pipelines: list[str], output_dir: Path
-) -> dict:
+def run_model(model: str, limit: int, pipelines: list[str], output_dir: Path) -> dict:
     """Run generate + score for all requested pipelines on a single model.
 
     All output is captured and returned (not printed) so parallel runs
