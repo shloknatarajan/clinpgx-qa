@@ -450,7 +450,9 @@ def generate_all_phenotype_mcqs(
         for key, count in sorted(notes_counter.items(), key=lambda x: -x[1]):
             logger.info(f"  {key}: {count}")
 
-    write_simplified_mcqs(tmp_path, answer_key="phenotype", seed=seed, start_id=60001, output_path=out)
+    write_simplified_mcqs(
+        tmp_path, answer_key="phenotype", seed=seed, start_id=60001, output_path=out
+    )
     tmp_path.unlink()
     return out
 

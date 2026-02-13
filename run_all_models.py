@@ -75,8 +75,13 @@ def _short_model(model: str) -> str:
     return model.rsplit("/", 1)[-1]
 
 
-def _stream_stderr(proc: subprocess.Popen, captured: list[str],
-                   pbar: tqdm | None, model: str, pipeline_name: str) -> None:
+def _stream_stderr(
+    proc: subprocess.Popen,
+    captured: list[str],
+    pbar: tqdm | None,
+    model: str,
+    pipeline_name: str,
+) -> None:
     """Read stderr from a subprocess line-by-line, logging progress in real time."""
     short = _short_model(model)
     for raw_line in proc.stderr:
@@ -117,7 +122,10 @@ def _run_pipeline(
         str(output_dir),
     ]
     gen_proc = subprocess.Popen(
-        gen_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+        gen_cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
     )
     gen_stderr: list[str] = []
     stderr_thread = threading.Thread(
@@ -191,7 +199,10 @@ def _run_pipeline(
 
 
 def run_model(
-    model: str, limit: int, pipelines: list[str], output_dir: Path,
+    model: str,
+    limit: int,
+    pipelines: list[str],
+    output_dir: Path,
     pbar: tqdm | None = None,
 ) -> dict:
     """Run generate + score for all requested pipelines on a single model.
@@ -204,7 +215,12 @@ def run_model(
     pipeline_results = {}
     for pipeline_name in pipelines:
         result = _run_pipeline(
-            model, limit, pipeline_name, output_dir, log_lines, pbar=pbar,
+            model,
+            limit,
+            pipeline_name,
+            output_dir,
+            log_lines,
+            pbar=pbar,
         )
         pipeline_results[pipeline_name] = result
         if pbar:
@@ -243,9 +259,14 @@ def main():
     parser.add_argument(
         "--dataset",
         choices=[
-            "yes_no", "chained", "study_param",
-            "mcq_variant", "mcq_drug", "mcq_phenotype",
-            "mc_study", "all",
+            "yes_no",
+            "chained",
+            "study_param",
+            "mcq_variant",
+            "mcq_drug",
+            "mcq_phenotype",
+            "mc_study",
+            "all",
         ],
         default="yes_no",
         help="Which pipeline(s) to run (default: yes_no)",
@@ -277,7 +298,12 @@ def main():
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures = {
             pool.submit(
-                run_model, model, args.limit, pipelines, run_dir, pbar,
+                run_model,
+                model,
+                args.limit,
+                pipelines,
+                run_dir,
+                pbar,
             ): model
             for model in args.models
         }

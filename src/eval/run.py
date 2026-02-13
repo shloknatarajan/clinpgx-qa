@@ -64,9 +64,14 @@ def main() -> None:
     parser.add_argument(
         "--dataset",
         choices=[
-            "yes_no", "chained", "study_param",
-            "mcq_variant", "mcq_drug", "mcq_phenotype",
-            "mc_study", "all",
+            "yes_no",
+            "chained",
+            "study_param",
+            "mcq_variant",
+            "mcq_drug",
+            "mcq_phenotype",
+            "mc_study",
+            "all",
         ],
         default="all",
         help="Which dataset to evaluate (default: all)",
@@ -160,7 +165,10 @@ def main() -> None:
             limit=args.limit,
         )
         responses_path = mcq_generate(
-            gen_args, output_dir=run_dir, pipeline_name="mcq_variant", mcq_type="variant"
+            gen_args,
+            output_dir=run_dir,
+            pipeline_name="mcq_variant",
+            mcq_type="variant",
         )
         mcq_score(
             Namespace(responses_path=str(responses_path)),
@@ -194,7 +202,10 @@ def main() -> None:
             limit=args.limit,
         )
         responses_path = mcq_generate(
-            gen_args, output_dir=run_dir, pipeline_name="mcq_phenotype", mcq_type="phenotype"
+            gen_args,
+            output_dir=run_dir,
+            pipeline_name="mcq_phenotype",
+            mcq_type="phenotype",
         )
         mcq_score(
             Namespace(responses_path=str(responses_path)),

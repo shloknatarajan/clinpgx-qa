@@ -52,7 +52,9 @@ class StudyParamQuestion(BaseModel):
     phenotype: str
     sentence: str
     # Question
-    question_type: str  # "correct" | "modified_variant" | "modified_drug" | "modified_phenotype"
+    question_type: (
+        str  # "correct" | "modified_variant" | "modified_drug" | "modified_phenotype"
+    )
     question_text: str
     # Modification metadata (empty for correct questions)
     modification_type: str  # "" | "variant" | "drug" | "phenotype"
@@ -94,7 +96,7 @@ def _build_question_text(
         parts.append(f"- Phenotype Category: {phenotype_category}")
     if phenotype:
         parts.append(f"- Phenotype: {phenotype}")
-    parts.append(f"- Association description: \"{sentence}\"")
+    parts.append(f'- Association description: "{sentence}"')
     parts.append(
         "\nWhat is the p-value reported for this specific association, "
         "and is the association statistically significant?\n"
@@ -142,7 +144,11 @@ def _swap_variant(
     # Bank fallback
     bank = index.get_variant_bank()
     paper_variants = {v.lower() for v in index.get_paper_variants(row.pmid)}
-    bank_candidates = [v for v in bank if v.strip().lower() != original and v.strip().lower() not in paper_variants]
+    bank_candidates = [
+        v
+        for v in bank
+        if v.strip().lower() != original and v.strip().lower() not in paper_variants
+    ]
     if bank_candidates:
         pick = rng.choice(bank_candidates)
         return (pick, "bank", "")
@@ -177,7 +183,11 @@ def _swap_drug(
     # Bank fallback
     bank = index.get_drug_bank()
     paper_drugs = {d.lower() for d in index.get_paper_drugs(row.pmid)}
-    bank_candidates = [d for d in bank if d.strip().lower() != original and d.strip().lower() not in paper_drugs]
+    bank_candidates = [
+        d
+        for d in bank
+        if d.strip().lower() != original and d.strip().lower() not in paper_drugs
+    ]
     if bank_candidates:
         pick = rng.choice(bank_candidates)
         return (pick, "bank", "")
@@ -212,7 +222,11 @@ def _swap_phenotype(
     # Bank fallback
     bank = index.get_phenotype_bank()
     paper_phenos = {p.lower() for p in index.get_paper_phenotypes(row.pmid)}
-    bank_candidates = [p for p in bank if p.strip().lower() != original and p.strip().lower() not in paper_phenos]
+    bank_candidates = [
+        p
+        for p in bank
+        if p.strip().lower() != original and p.strip().lower() not in paper_phenos
+    ]
     if bank_candidates:
         pick = rng.choice(bank_candidates)
         return (pick, "bank", "")
@@ -239,7 +253,9 @@ def generate_questions_for_row(
 
     # Ground truth values
     gt_p_value = row.p_value.strip() if row.p_value.strip() else NOT_FOUND
-    gt_significance = row.significance.strip() if row.significance.strip() else NOT_FOUND
+    gt_significance = (
+        row.significance.strip() if row.significance.strip() else NOT_FOUND
+    )
 
     # --- 1. Correct question ---
     questions.append(
@@ -455,7 +471,9 @@ def generate_all_study_param_questions(
     correct_without_pvalue = 0
 
     with open(out, "w") as f:
-        for row in tqdm(index.all_rows, desc="Generating study param questions", unit="row"):
+        for row in tqdm(
+            index.all_rows, desc="Generating study param questions", unit="row"
+        ):
             questions, qid = generate_questions_for_row(row, index, rng, qid)
             for q in questions:
                 f.write(json.dumps(_simplify(q)) + "\n")

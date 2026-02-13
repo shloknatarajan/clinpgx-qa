@@ -364,7 +364,9 @@ def generate_all_drug_mcqs(
         for key, count in sorted(notes_counter.items(), key=lambda x: -x[1]):
             logger.info(f"  {key}: {count}")
 
-    write_simplified_mcqs(tmp_path, answer_key="drug", seed=seed, start_id=30001, output_path=out)
+    write_simplified_mcqs(
+        tmp_path, answer_key="drug", seed=seed, start_id=30001, output_path=out
+    )
     tmp_path.unlink()
     return out
 

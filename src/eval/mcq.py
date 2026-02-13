@@ -137,7 +137,7 @@ def generate(
 
             question_text = (
                 f"Fill in the blank in the following sentence from the paper:\n\n"
-                f"\"{q['blanked_sentence']}\"\n\n"
+                f'"{q["blanked_sentence"]}"\n\n'
                 f"Options:\n{options_text}\n\n"
                 "Respond with ONLY a single letter (a, b, c, or d). "
                 "Do not include any explanation or reasoning."
@@ -407,6 +407,8 @@ def build_cli(
     args = parser.parse_args()
     if args.command == "generate":
         out_dir = Path(args.output_dir) if args.output_dir else None
-        generate(args, output_dir=out_dir, pipeline_name=pipeline_name, mcq_type=mcq_type)
+        generate(
+            args, output_dir=out_dir, pipeline_name=pipeline_name, mcq_type=mcq_type
+        )
     elif args.command == "score":
         score(args, pipeline_name=pipeline_name)
