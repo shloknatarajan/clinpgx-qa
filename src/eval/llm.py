@@ -15,7 +15,7 @@ from tenacity import (
 from src.utils.paper_map import build_pmcid_paper_map
 
 
-_REASONING_PREFIXES = ("o1", "o3", "o4", "gpt-5-")
+_REASONING_PREFIXES = ("o1", "o3", "o4", "gpt-5-", "gpt-5.")
 _REASONING_EXACT = {"gpt-5"}
 _REASONING_GEMINI_PREFIXES = ("gemini-2.5", "gemini-3")
 

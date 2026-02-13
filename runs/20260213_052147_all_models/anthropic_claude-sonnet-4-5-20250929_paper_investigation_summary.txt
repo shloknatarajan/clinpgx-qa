@@ -1,0 +1,23 @@
+
+================================================================
+Paper Investigation Results  |  model=anthropic/claude-sonnet-4-5-20250929
+================================================================
+
+  Papers scored:        0
+  Papers skipped:       1  (no paper text or parse failure)
+
+  Avg Variant Recall:   0.000
+  Avg Question Acc:     0.000  (across recalled variants only)
+  Avg Paper Score:      0.000  (recall x question_acc)
+
+By pipeline breakdown:
+  Pipeline              Questions    Correct   Accuracy
+  -------------------- ---------- ---------- ----------
+  -------------------- ---------- ---------- ----------
+  TOTAL                         0          0     0.000
+
+WORST PAPERS (by paper_score):
+
+BEST PAPERS (by paper_score):
+
+Eval results saved to runs/20260213_052147_all_models/anthropic_claude-sonnet-4-5-20250929_paper_investigation_eval_results.jsonl

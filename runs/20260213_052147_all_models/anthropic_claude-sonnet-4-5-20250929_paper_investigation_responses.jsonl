@@ -1,0 +1,1 @@
+{"pmcid": "PMC11730665", "model": "anthropic/claude-sonnet-4-5-20250929", "ground_truth_variants": ["rs1799853", "rs4664443", "rs7754840", "rs3765467", "rs2285676", "rs2909451", "rs6923761", "rs163184"], "predicted_variants": null, "recalled_variants": [], "variant_recall": null, "variant_results": {}, "paper_score": null}

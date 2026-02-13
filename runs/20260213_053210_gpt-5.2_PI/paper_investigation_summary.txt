@@ -1,0 +1,28 @@
+
+================================================================
+Paper Investigation Results  |  model=gpt-5.2
+================================================================
+
+  Papers scored:        1
+  Papers skipped:       0  (no paper text or parse failure)
+
+  Avg Variant Recall:   1.000
+  Avg Question Acc:     0.946  (across recalled variants only)
+  Avg Paper Score:      0.948  (recall x question_acc)
+
+By pipeline breakdown:
+  Pipeline              Questions    Correct   Accuracy
+  -------------------- ---------- ---------- ----------
+  mcq_drug                     16         15     0.938
+  mcq_variant                  16         16     1.000
+  study_param                  24         22     0.917
+  -------------------- ---------- ---------- ----------
+  TOTAL                        56         53     0.946
+
+WORST PAPERS (by paper_score):
+  [1] PMC11730665  recall=1.000  q_acc=0.946  score=0.948
+
+BEST PAPERS (by paper_score):
+  [1] PMC11730665  recall=1.000  q_acc=0.946  score=0.948
+
+Eval results saved to runs/20260213_053210_gpt-5.2_PI/paper_investigation_eval_results.jsonl
