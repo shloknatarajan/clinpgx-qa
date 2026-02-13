@@ -16,7 +16,8 @@
       "Bash(for f in runs/20260211_023809_*/yes_no_responses.jsonl)",
       "Bash(do echo \"Re-scoring: $f\")",
       "Bash(done)",
-      "Bash(for f in runs/20260211_023711_*/yes_no_responses.jsonl)"
+      "Bash(for f in runs/20260211_023711_*/yes_no_responses.jsonl)",
+      "Bash(git -C /Users/shloknatarajan/stanford/research/daneshjou/clinpgx-qa log --oneline --all -- \"src/modules/question_generator/table_lookup.py\")"
     ]
   }
 }
