@@ -1,0 +1,38 @@
+
+======================================================================
+Variant Extraction Results  |  model=gpt-4o-mini  |  Recall=0.875
+======================================================================
+
+  Articles scored: 1/1
+  Parse failures:  0/1
+
+By variant type:
+  Type                TP     FN     Recall
+  --------------- ------ ------ ----------
+  rsID                 7      1     0.875
+  --------------- ------ ------ ----------
+  MICRO-AVG            7      1     0.875
+
+  Macro-avg Recall: 0.875
+
+----------------------------------------------------------------------
+Example WORST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC11730665  Recall=0.875
+  Title: Comparative efficacy and safety of sitagliptin or gliclazide combined with metfo
+  Ground truth (8): ['rs1799853', 'rs4664443', 'rs7754840', 'rs3765467', 'rs2285676']
+  Predicted (9): ['rs1057910', 'rs163184', 'rs1799853', 'rs2285676', 'rs2909451']
+  Missed: ['rs6923761']
+
+----------------------------------------------------------------------
+Example BEST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC11730665  Recall=0.875
+  Title: Comparative efficacy and safety of sitagliptin or gliclazide combined with metfo
+  Ground truth (8): ['rs1799853', 'rs4664443', 'rs7754840', 'rs3765467', 'rs2285676']
+  Predicted (9): ['rs1057910', 'rs163184', 'rs1799853', 'rs2285676', 'rs2909451']
+  Missed: ['rs6923761']
+
+Eval results saved to runs/20260213_031230_gpt-4o-mini_VE/variant_eval_results.jsonl

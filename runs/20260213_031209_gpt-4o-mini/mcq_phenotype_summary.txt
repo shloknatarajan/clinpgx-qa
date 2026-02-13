@@ -1,0 +1,29 @@
+
+======================================================================
+Mcq Phenotype Results  |  model=gpt-4o-mini  |  1/1 (100.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  standard                         1        1    100.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  pheno                       1        1    100.0%
+
+----------------------------------------------------------------------
+Example CORRECT answers (1 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC5712579
+  Sentence: HLA-B *35:08 is not associated with likelihood of ______ when treated with lamotrigine in people with Epilepsy.
+  Options: a) Disease:Severe Cutaneous Adverse Reactions  b) Side Effect:Maculopapular Exanthema  c) Side Effect:Maculopapular Exanthema, Side Effect:Stevens-Johnson Syndrome  d) Side Effect:Maculopapular Exanthema, Side Effect:Severe Cutaneous Adverse Reactions, Side Effect:Stevens-Johnson Syndrome
+  Expected: d  Got: d
+
+----------------------------------------------------------------------
+Example INCORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+Eval results saved to runs/20260213_031209_gpt-4o-mini/mcq_phenotype_eval_results.jsonl

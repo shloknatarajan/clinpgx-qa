@@ -1,0 +1,29 @@
+
+======================================================================
+Mcq Drug Results  |  model=gpt-4o-mini  |  1/1 (100.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  standard                         1        1    100.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        1        1    100.0%
+
+----------------------------------------------------------------------
+Example CORRECT answers (1 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=drug  pmcid=PMC11730665
+  Sentence: Genotype TT is associated with decreased response to ______ in people with Diabetes Mellitus, Type 2.
+  Options: a) saxagliptin  b) linagliptin  c) vildagliptin  d) sitagliptin
+  Expected: d  Got: d
+
+----------------------------------------------------------------------
+Example INCORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+Eval results saved to runs/20260213_031204_gpt-4o-mini/mcq_drug_eval_results.jsonl

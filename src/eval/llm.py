@@ -16,7 +16,7 @@ from src.utils.paper_map import build_pmcid_paper_map
 
 
 _REASONING_PREFIXES = ("o1", "o3", "o4", "gpt-5")
-_REASONING_GEMINI_PREFIXES = ("gemini-2.5",)
+_REASONING_GEMINI_PREFIXES = ("gemini-2.5", "gemini-3")
 
 
 def _is_reasoning_model(model: str) -> bool:

@@ -1,0 +1,1 @@
+{"question_id": 1, "annotation_id": "1453073660", "pmcid": "PMC11730665", "question_type": "correct", "table_type": "drug", "expected_answer_p_value": "< 0.001", "expected_answer_significance": "yes", "response": "{\"p_value\": \"<.001>\", \"significance\": \"yes\"}", "response_p_value": "<.001>", "response_significance": "yes", "had_paper_context": true, "model": "gpt-4o-mini"}
