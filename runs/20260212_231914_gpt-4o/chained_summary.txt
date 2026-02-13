@@ -1,0 +1,133 @@
+
+======================================================================
+Chained Results  |  model=gpt-4o  |  turns: 139/184 (75.5%)  |  chains: 21/50 (42.0%)
+======================================================================
+
+By chain_family:
+  Family                                Turn Acc  Chain Acc
+  ----------------------------------- ---------- ----------
+  A_claim→modality→stat→eval              77.4%     40.5%
+  B_claim→presence_absence                56.2%     50.0%
+
+By reasoning_type:
+  Type                                      Correct    Total   Accuracy
+  ---------------------------------------- -------- -------- ----------
+  claim_verification                             31       50     62.0%
+  counterfactual_evaluation                       2        4     50.0%
+  evidence_provenance_localization               46       50     92.0%
+  objective_evaluation                           31       38     81.6%
+  statistical_extraction                         29       42     69.0%
+
+By turn number:
+    Turn  Correct    Total   Accuracy
+  ------ -------- -------- ----------
+       1       31       50     62.0%
+       2       46       50     92.0%
+       3       29       42     69.0%
+       4       33       42     78.6%
+
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000047  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC2042718)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC2042718, is the following pharmacogenomic claim supported or contradicted: CYP2D6 *17/*17 is associated with decreased metabolism of debrisoquine in healthy individuals as compared to CYP2D6 *1/*1 + *1/*2 + *1/*17. Answer one of: supported, contradicted.
+  Model response: Supported
+  Ground truth:   supported
+
+  [2] chain=chain_000027  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC12032684)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC12032684, is the following pharmacogenomic claim supported or contradicted: Genotypes CC + CT is associated with increased likelihood of statin-related myopathy when treated with atorvastatin in people with Cardiovascular Disease, Diabetes Mellitus, Acute coronary syndrome or Dyslipidaemia as compared to genotype TT. Answer one of: supported, contradicted.
+  Model response: Supported.
+  Ground truth:   supported
+
+  [3] chain=chain_000003  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: True.
+  Ground truth:   True
+
+  [4] chain=chain_000010  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: clinical_association
+  Ground truth:   clinical_association
+
+  [5] chain=chain_000016  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC4864175)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC4864175, is the following pharmacogenomic claim supported or contradicted: Allele T is not associated with risk of cognitive dysfunction due to opioids in people with Neoplasms as compared to allele G. Answer one of: supported, contradicted.
+  Model response: Supported
+  Ground truth:   supported
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000045  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC4519434)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC4519434, is the following pharmacogenomic claim supported or contradicted: Allele T is associated with increased risk of Heroin Dependence due to heroin as compared to allele C. Answer one of: supported, contradicted.
+  Model response: The claim is contradicted. The paper finds that the rs3778150-C allele, not the T allele, is associated with increased risk of heroin addiction.
+  Ground truth:   supported
+
+  [2] chain=chain_000010  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2046934 and aspirin, clopidogrel in Efficacy (PMCID PMC5331771), what confidence interval was reported?
+  Model response: The paper does not specifically report a confidence interval for the study of rs2046934 in relation to the efficacy of treatment with aspirin and clopidogrel. The results related to rs2046934, a polymorphism in the P2Y12 gene, are discussed in terms of associations with high on-treatment platelet reactivity and clinical endpoints, but specific confidence intervals are not provided in the context of efficacy in the study.
+  Ground truth:   1.64–3.53
+
+  [3] chain=chain_000031  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5721751)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5721751, is the following pharmacogenomic claim supported or contradicted: Allele C is associated with decreased response to atenolol and hydrochlorothiazide in people with Hypertension as compared to allele T. Answer one of: supported, contradicted.
+  Model response: The claim is contradicted. The paper identifies that allele T of the SNP rs261316 in the gene ALDH1A2 is associated with an increased odds of uncontrolled blood pressure on a combination therapy of atenolol and hydrochlorothiazide. This indicates that the presence of allele T, not allele C, is associated with decreased response to the treatment in the context discussed.
+  Ground truth:   supported
+
+  [4] chain=chain_000014  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5538123)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5538123, is the following pharmacogenomic claim supported or contradicted: Allele A is not associated with response to risperidone in people with Schizophrenia as compared to allele G. Answer one of: supported, contradicted.
+  Model response: Contradicted.
+  Ground truth:   supported
+
+  [5] chain=chain_000004  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: True.
+  Ground truth:   False
+
+Eval results saved to runs/20260212_231914_gpt-4o/chained_eval_results.jsonl

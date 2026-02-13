@@ -1,0 +1,233 @@
+
+======================================================================
+Chained Results  |  model=anthropic/claude-haiku-4-5-20251001  |  turns: 117/184 (63.6%)  |  chains: 8/50 (16.0%)
+======================================================================
+
+By chain_family:
+  Family                                Turn Acc  Chain Acc
+  ----------------------------------- ---------- ----------
+  A_claim→modality→stat→eval              65.5%     11.9%
+  B_claim→presence_absence                43.8%     37.5%
+
+By reasoning_type:
+  Type                                      Correct    Total   Accuracy
+  ---------------------------------------- -------- -------- ----------
+  claim_verification                             12       50     24.0%
+  counterfactual_evaluation                       3        4     75.0%
+  evidence_provenance_localization               45       50     90.0%
+  objective_evaluation                           27       38     71.1%
+  statistical_extraction                         30       42     71.4%
+
+By turn number:
+    Turn  Correct    Total   Accuracy
+  ------ -------- -------- ----------
+       1       12       50     24.0%
+       2       45       50     90.0%
+       3       30       42     71.4%
+       4       30       42     71.4%
+
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000009  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: # Analysis
+
+Looking at the confidence intervals for rs2542151 in Crohn Disease from Table 1:
+
+**Primary analysis (Non-Hispanic European; Definite cases):**
+- 95% CI: (0.74–1.58)
+
+**Secondary analysis (Non-Hispanic European + Unknown; Definite cases):**
+- 95% CI: (0.72–1.51)
+
+Both confidence intervals **include 1.0** (the null value), as the lower bound is less than 1.0 and the upper bound is greater than 1.0.
+
+**Answer: false**
+
+The confidence intervals do NOT exclude the null value of 1.0.
+  Ground truth:   False
+
+  [2] chain=chain_000030  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs3786362 and capecitabine in Other:Colorectal Neoplasms (PMCID PMC8291172), what OR was reported?
+  Model response: # Analysis
+
+From Table 2 in the paper, for **rs3786362** and capecitabine-induced hand-foot syndrome (CAP-HFS):
+
+**OR (Odds Ratio) = 0.38 (95% CI, 0.21 to 0.70); p = 1.89×10⁻³**
+
+This indicates that the G allele of rs3786362 (the minor allele) is associated with a **decreased risk** of developing hand-foot syndrome, with carriers having approximately 62% lower odds of HFS compared to non-carriers.
+  Ground truth:   0.38
+
+  [3] chain=chain_000029  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: # Analysis
+
+The question asks what type of evidence this paper represents based on the annotation categories of "clinical association" or "functional assay."
+
+This paper is an **observational cohort study** that examines associations between genetic variants (SNPs in OPRM1 and CYP2B6) and **clinical treatment outcomes** in methadone-maintained patients. Specifically, it tests associations with:
+
+1. Continued opioid use (measured via urine toxicology screens)
+2. Relapse (measured via urine toxicology screens)
+3. Methadone dose (clinical measurement)
+
+The study uses **regression analyses** to test for statistical associations between genetic variants and these clinical phenotypes/outcomes in a patient population receiving treatment.
+
+This is **not** a functional assay (which would involve laboratory experiments examining molecular/cellular mechanisms, protein function, enzyme activity, etc.).
+
+**Answer: clinical_association**
+  Ground truth:   clinical_association
+
+  [4] chain=chain_000034  turn=2  type=evidence_provenance_localization
+  Prompt:
+    Does PMCID PMC3164878 report any quantitative statistic (p-value/OR/CI) for this claim?
+  Model response: # Search for Quantitative Statistics on rs671531 and Fentanyl Toxicity
+
+## Findings:
+
+**rs671531 (SNP13) statistics:** The paper does not provide quantitative statistics (p-values, OR, CI) for rs671531 in any table or results section. SNP13 is listed in Figure 1 but is not included in Table 1A or Table 1B, which contain the detailed allele and genotype frequency comparisons with p-values for the other SNPs.
+
+**Fentanyl toxicity statistics:** The paper reports **no statistics whatsoever** related to fentanyl or fentanyl toxicity outcomes.
+
+## Answer:
+
+**No** - PMC3164878 does not report any quantitative statistics (p-value/OR/CI) for the claim that rs671531 is associated with fentanyl toxicity outcomes.
+  Ground truth:   no
+
+  [5] chain=chain_000028  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs717620 and mycophenolic acid, tacrolimus in Other:Kidney Transplantation (PMCID PMC11050844), what p-value was reported for this association?
+  Model response: # Analysis
+
+Based on my review of PMCID PMC11050844, there is **no study of rs717620** reported in this paper.
+
+The paper examines three SNPs:
+1. CYP3A5*3 (also referred to as CYP3A5 12083A>G)
+2. ABCC2 -24C>T
+3. ABCC2 3972C>T
+
+The ABCC2 -24C>T polymorphism showed a p-value of **0.038** in the multiple logistic regression model for association with acute graft rejection and/or ATN.
+
+However, rs717620 is not mentioned anywhere in this paper, so no p-value can be reported for that SNP.
+
+**Answer: Not applicable - rs717620 was not studied in this paper.**
+  Ground truth:   = 0.038
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000029  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC8673616)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC8673616, is the following pharmacogenomic claim supported or contradicted: Allele G is not associated with dose of methadone in people with Opioid-Related Disorders as compared to allele A. Answer one of: supported, contradicted.
+  Model response: # Analysis
+
+The question asks about the association between Allele G vs. Allele A and methadone dose in people with Opioid-Related Disorders.
+
+Looking at the results tables in the paper:
+
+**Table 3** presents OPRM1 SNPs and associated outcomes, including methadone dose results for rs1799971 (which has alleles G and A):
+
+For rs1799971 and methadone dose:
+- Total sample (N=1165): G allele, β = 0.20, SE = 2.90, P = 0.95
+- Males: β = 2.59, SE = 3.76, P = 0.49
+- Females: β = -4.92, SE = 4.63, P = 0.29
+
+None of these associations are statistically significant (all p-values >> 0.05 or the Bonferroni-corrected threshold of P<0.017).
+
+**Table 4** presents CYP2B6 SNPs. The SNP rs3745274 has alleles T and G:
+
+For rs3
+  Ground truth:   supported
+
+  [2] chain=chain_000010  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs2046934 and aspirin, clopidogrel in Efficacy (PMCID PMC5331771), what confidence interval was reported?
+  Model response: # Analysis
+
+The paper does not report a confidence interval specifically for rs2046934 (P2Y12 polymorphism) and aspirin/clopidogrel efficacy.
+
+While the paper does mention P2Y12 polymorphism associations, the results are presented as:
+- P-values (e.g., "P = 0.001" for P2Y12 mutant carriers vs. endpoints)
+- Mean ± SD values for PRU levels
+- Odds ratios with 95% CIs in logistic regression tables
+
+However, upon review of Table 6 (univariate and multivariate logistic regression), which would typically contain confidence intervals, the paper does not explicitly provide confidence intervals for the P2Y12 polymorphism associations in the text or clearly identifiable format for this specific SNP and efficacy outcomes.
+
+## Answer
+
+**No confidence interval was reported for rs2046934 (P2Y12) and efficacy outcomes in this paper.** The results are presented primarily as P-values and mean platelet reactivity values rather than with confidence intervals for the effect estimates.
+  Ground truth:   1.64–3.53
+
+  [3] chain=chain_000043  turn=2  type=evidence_provenance_localization
+  Prompt:
+    Does PMCID PMC11062152 report any quantitative statistic (p-value/OR/CI) for this claim?
+  Model response: # Analysis of Quantitative Statistics
+
+## What quantitative statistics are reported:
+
+**For Dosage Association with UGT1A1 genotype:**
+- Yes, p-value is reported: **p=0.011** (comparing initial nal-IRI doses across genotype groups)
+
+**For Efficacy Outcomes:**
+- No quantitative statistics are reported because efficacy outcomes are not evaluated in this study at all
+
+## Summary:
+
+There **IS a quantitative statistic (p=0.011)** reported for the dosage association with UGT1A1*6 or *28 polymorphisms.
+
+However, **NO quantitative statistics are reported for efficacy outcomes** because the paper does not assess efficacy endpoints. The study is exclusively focused on adverse events (safety), not treatment efficacy.
+  Ground truth:   no
+
+  [4] chain=chain_000032  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5558540)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5558540, is the following pharmacogenomic claim supported, contradicted, or not reported: In PMC5558540, rs4141964 is associated with Toxicity outcomes for morphine. Answer one of: supported, contradicted, not_reported.
+  Model response: # Analysis of Claim: rs4141964 Association with Morphine Toxicity Outcomes
+
+## Examination of the Paper
+
+Looking at **Table 3** (Genotype–phenotype association of FAAH variants with experimental minute ventilation response to hypercapnia and morphine-related clinical outcomes), the associations for **rs4141964** are:
+
+- **HCVR response–genotype interaction**: β = -0.633, p < 0.0001 ✓ (significant)
+- **Postoperative vomiting**: OR = 0.7, 95% CI 0.41–1.18, p = 0.1767 (not significant)
+- **Clinical respiratory depression**: OR = 0.71, 95% CI 0.4–1.27, p = 0.2519 (not significant)
+
+## Key Findings from the Text
+
+The paper explicitly states (in the Discussion):
+> "The first four SNPs listed above are also associated with HCVR in the present study" (referring to rs4141964, rs3766246, rs324420,
+  Ground truth:   not_reported
+
+  [5] chain=chain_000008  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases were included in the study of G6PD deficiency and trimethoprim in Toxicity (PMCID PMC1689719)?
+  Model response: # Answer
+
+**Unable to determine from provided information**
+
+## Reasoning
+
+The paper abstract and scanned pages provided do not contain specific information about the number of cases included in a study examining G6PD deficiency and trimethoprim toxicity. 
+
+While the paper discusses various drugs (primaquine, nitrofurantoin, aspirin, sulphamethoxazole) and their effects on red-cell survival in G6PD-deficient individuals, trimethoprim is not explicitly mentioned in the available text excerpts. Additionally, the scanned document quality and limited structured text make it difficult to extract precise numerical data about study participant numbers for any specific drug-outcome combination without access to the full detailed methods section.
+
+To answer this question accurately, the complete full-text PDF would need to be thoroughly reviewed.
+  Ground truth:   8
+
+Eval results saved to runs/20260212_231914_anthropic_claude-haiku-4-5-20251001/chained_eval_results.jsonl

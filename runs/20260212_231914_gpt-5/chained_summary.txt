@@ -1,0 +1,103 @@
+
+======================================================================
+Chained Results  |  model=gpt-5  |  turns: 135/184 (73.4%)  |  chains: 19/50 (38.0%)
+======================================================================
+
+By chain_family:
+  Family                                Turn Acc  Chain Acc
+  ----------------------------------- ---------- ----------
+  A_claim→modality→stat→eval              72.0%     28.6%
+  B_claim→presence_absence                87.5%     87.5%
+
+By reasoning_type:
+  Type                                      Correct    Total   Accuracy
+  ---------------------------------------- -------- -------- ----------
+  claim_verification                             31       50     62.0%
+  counterfactual_evaluation                       3        4     75.0%
+  evidence_provenance_localization               49       50     98.0%
+  objective_evaluation                           30       38     78.9%
+  statistical_extraction                         22       42     52.4%
+
+By turn number:
+    Turn  Correct    Total   Accuracy
+  ------ -------- -------- ----------
+       1       31       50     62.0%
+       2       49       50     98.0%
+       3       22       42     52.4%
+       4       33       42     78.6%
+
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000013  turn=2  type=evidence_provenance_localization
+  Prompt:
+    Does PMCID PMC8602039 report any quantitative statistic (p-value/OR/CI) for this claim?
+  Model response: No. They report statistics for rs74569896 with MACE (e.g., HR 1.90, P=5.91×10^-5), but not for aspirin/clopidogrel efficacy, toxicity, or metabolism/PK outcomes.
+  Ground truth:   no
+
+  [2] chain=chain_000009  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: clinical_association
+  Ground truth:   clinical_association
+
+  [3] chain=chain_000021  turn=3  type=statistical_extraction
+  Prompt:
+    How many cases were included in the study of rs77005399 and sulfamethoxazole / trimethoprim in Disease:Infectious disease (PMCID PMC3619396)?
+  Model response: 99
+  Ground truth:   99
+
+  [4] chain=chain_000023  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study cases? Answer true or false.
+  Model response: true
+  Ground truth:   True
+
+  [5] chain=chain_000002  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC4640545)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC4640545, is the following pharmacogenomic claim supported or contradicted: Genotype CC is not associated with metabolism of carbamazepine in people with Epilepsy as compared to genotypes CT + TT. Answer one of: supported, contradicted.
+  Model response: supported
+  Ground truth:   supported
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000018  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: true
+  Ground truth:   False
+
+  [2] chain=chain_000004  turn=4  type=objective_evaluation
+  Prompt:
+    Is this finding statistically significant at alpha = 0.05? Answer true or false.
+  Model response: true
+  Ground truth:   False
+
+  [3] chain=chain_000026  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs201279313 and atenolol, hydrochlorothiazide, metoprolol in Disease:Hypertension (PMCID PMC4752391), what p-value was reported for this association?
+  Model response: 2.5×10^-8
+  Ground truth:   = 1.10E-07
+
+  [4] chain=chain_000006  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of rs776746 and everolimus in Disease:Breast Neoplasms (PMCID PMC5519037), what p-value was reported for this association?
+  Model response: not reported
+  Ground truth:   > 0.05
+
+  [5] chain=chain_000007  turn=4  type=objective_evaluation
+  Prompt:
+    Does this meet the dataset minimum of N ≥ 30 for study controls? Answer true or false.
+  Model response: false
+  Ground truth:   True
+
+Eval results saved to runs/20260212_231914_gpt-5/chained_eval_results.jsonl

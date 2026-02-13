@@ -1,0 +1,127 @@
+
+======================================================================
+Chained Results  |  model=anthropic/claude-opus-4-6  |  turns: 142/184 (77.2%)  |  chains: 21/50 (42.0%)
+======================================================================
+
+By chain_family:
+  Family                                Turn Acc  Chain Acc
+  ----------------------------------- ---------- ----------
+  A_claim→modality→stat→eval              79.8%     40.5%
+  B_claim→presence_absence                50.0%     50.0%
+
+By reasoning_type:
+  Type                                      Correct    Total   Accuracy
+  ---------------------------------------- -------- -------- ----------
+  claim_verification                             30       50     60.0%
+  counterfactual_evaluation                       2        4     50.0%
+  evidence_provenance_localization               45       50     90.0%
+  objective_evaluation                           33       38     86.8%
+  statistical_extraction                         32       42     76.2%
+
+By turn number:
+    Turn  Correct    Total   Accuracy
+  ------ -------- -------- ----------
+       1       30       50     60.0%
+       2       45       50     90.0%
+       3       32       42     76.2%
+       4       35       42     83.3%
+
+----------------------------------------------------------------------
+Example CORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000016  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: **clinical_association**
+
+The study is a cross-sectional multicenter clinical study (EPOS) examining associations between SNP genotypes and cognitive function (measured by MMSE scores) in 1586 opioid-treated cancer patients. This represents observational clinical association evidence, not a functional assay. No laboratory-based functional experiments were conducted to determine the mechanistic effects of any genetic variants.
+  Ground truth:   clinical_association
+
+  [2] chain=chain_000007  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: **clinical_association**
+
+The study examines the statistical association between germline SNP genotypes and pathologic complete response (pCR) in breast cancer patients receiving bevacizumab plus chemotherapy. This is an observational/clinical study using logistic regression to identify associations between genetic variants and treatment outcomes, rather than a functional assay that would mechanistically characterize how specific alleles affect protein function, gene expression, or drug metabolism.
+  Ground truth:   clinical_association
+
+  [3] chain=chain_000011  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: **clinical_association**
+  Ground truth:   clinical_association
+
+  [4] chain=chain_000048  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC5354739)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC5354739, is the following pharmacogenomic claim supported or contradicted: Allele C is associated with increased concentrations of methotrexate in children with as compared to allele T. Answer one of: supported, contradicted.
+  Model response: **Supported**
+
+The paper reports that for **ABCB1 rs9282564** (allele A/G, where the wild-type is A and the variant creates a T>C exchange at position 61), patients carrying the variant allele (C) had higher AUC₀₋₄₈ values (OR = 4.2, p = 0.04) and higher peak MTX concentrations (OR = 8.8, p = 0.02) compared to patients with the homozygous wild-type (TT) genotype. The paper explicitly states: "For ABCB1 rs9282564, the AUC₀₋₄₈ of the concentration–time curve and the peak concentration were higher in patients with the variant allele, compared with patients with the homozygous TT genotype."
+
+This supports the claim that the C allele is associated with increased methotrexate concentrations compared to the T allele in children with osteosarcoma.
+  Ground truth:   supported
+
+  [5] chain=chain_000012  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: **clinical_association**
+
+The evidence is based on a genome-wide association study (GWAS) examining the statistical association between the rs3824662 genotype and clinical outcomes (minimal residual disease, relapse risk) in children treated on COG clinical trials. This represents a clinical association derived from observational patient data rather than a functional assay performed in a laboratory setting.
+  Ground truth:   clinical_association
+
+----------------------------------------------------------------------
+Example INCORRECT turns (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] chain=chain_000033  turn=4  type=counterfactual_evaluation
+  Prompt:
+    Would this association remain significant at alpha = 0.01? Answer true or false.
+  Model response: **True**
+
+The CT genotype association had a p-value of 0.001 and the CC genotype had a p-value of 0.008, both of which are below the alpha = 0.01 threshold. The C allele association had a p-value of 0.01, which is right at the threshold and would also be considered significant at alpha = 0.01.
+  Ground truth:   False
+
+  [2] chain=chain_000047  turn=3  type=statistical_extraction
+  Prompt:
+    For the study of CYP2D6*1, CYP2D6*2, CYP2D6*17 and debrisoquine in Metabolism/PK (PMCID PMC2042718), what p-value was reported for this association?
+  Model response: The paper does not report a specific p-value for this association. The full text is only available as a PDF, and based on the abstract, the authors state that the CYP2D6*17 allele was "strongly associated with lower capacity for debrisoquine hydroxylation," but no explicit p-value is provided in the available text.
+  Ground truth:   < 0.001
+
+  [3] chain=chain_000015  turn=2  type=evidence_provenance_localization
+  Prompt:
+    What type of evidence does this annotation represent: clinical association or functional assay? Answer one of: clinical_association, functional_assay.
+  Model response: **functional_assay**
+
+The PAPI Study measured ADP-stimulated platelet aggregation using optical aggregometry (a laboratory-based ex vivo functional assay) in healthy volunteers given clopidogrel under controlled conditions. This is a pharmacodynamic/functional measurement of drug response, not a clinical outcome (such as cardiovascular events, stent thrombosis, or bleeding). Therefore, this represents functional assay evidence.
+  Ground truth:   clinical_association
+
+  [4] chain=chain_000018  turn=4  type=objective_evaluation
+  Prompt:
+    Does the confidence interval for the OR exclude the null value of 1.0? Answer true or false.
+  Model response: **True**
+
+The 95% confidence interval for the OR was **0.16–0.82**, which does not include 1.0, so the null value is excluded.
+  Ground truth:   False
+
+  [5] chain=chain_000045  turn=1  type=claim_verification
+  Prompt:
+    ## Paper (PMCID PMC4519434)
+    
+    <paper>
+    
+    ## Question
+    
+    Based on PMCID PMC4519434, is the following pharmacogenomic claim supported or contradicted: Allele T is associated with increased risk of Heroin Dependence due to heroin as compared to allele C. Answer one of: supported, contradicted.
+  Model response: **Contradicted.**
+
+The paper finds that the **rs3778150-C allele** is associated with **increased** heroin addiction risk (meta-analysis P=4.3×10⁻⁸), with odds ratios consistently above 1.0 across all cohorts. This means the C allele (minor allele) confers increased risk, and the T allele (major allele) would be the reference/lower-risk allele. The claim states the opposite — that T is the risk allele compared to C — which is contradicted by the findings.
+  Ground truth:   supported
+
+Eval results saved to runs/20260212_231914_anthropic_claude-opus-4-6/chained_eval_results.jsonl

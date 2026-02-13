@@ -1,6 +1,8 @@
 """
 Run evaluation across multiple models.
 
+All outputs are saved to a single timestamped directory under runs/.
+
 Usage:
     python run_all_models.py --limit 100                     # yes/no only (default)
     python run_all_models.py --limit 100 --dataset chained   # chained only
@@ -15,6 +17,8 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
+
+from tqdm import tqdm
 
 MODELS = [
     "anthropic/claude-opus-4-6",
@@ -37,8 +41,20 @@ PIPELINES = {
 }
 
 
+def _make_run_dir() -> Path:
+    """Create a single timestamped run directory for all models."""
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_dir = Path("runs") / f"{ts}_all_models"
+    run_dir.mkdir(parents=True, exist_ok=True)
+    return run_dir
+
+
 def _run_pipeline(
-    model: str, limit: int, pipeline_name: str, log_lines: list[str]
+    model: str,
+    limit: int,
+    pipeline_name: str,
+    output_dir: Path,
+    log_lines: list[str],
 ) -> dict:
     """Run generate + score for a single pipeline. Returns result dict."""
     cfg = PIPELINES[pipeline_name]
@@ -55,6 +71,8 @@ def _run_pipeline(
         model,
         "--limit",
         str(limit),
+        "--output-dir",
+        str(output_dir),
     ]
     gen_result = subprocess.run(gen_cmd, capture_output=True, text=True)
     log_lines.append(gen_result.stderr)
@@ -111,20 +129,19 @@ def _run_pipeline(
     }
 
 
-def run_model(model: str, limit: int, pipelines: list[str]) -> dict:
+def run_model(
+    model: str, limit: int, pipelines: list[str], output_dir: Path
+) -> dict:
     """Run generate + score for all requested pipelines on a single model.
 
     All output is captured and returned (not printed) so parallel runs
     don't interleave on the terminal.
     """
     log_lines: list[str] = []
-    log_lines.append(f"\n{'=' * 70}")
-    log_lines.append(f"  Starting: {model}  |  limit={limit}  |  pipelines={pipelines}")
-    log_lines.append(f"{'=' * 70}\n")
 
     pipeline_results = {}
     for pipeline_name in pipelines:
-        result = _run_pipeline(model, limit, pipeline_name, log_lines)
+        result = _run_pipeline(model, limit, pipeline_name, output_dir, log_lines)
         pipeline_results[pipeline_name] = result
 
     all_ok = all(r["status"] == "ok" for r in pipeline_results.values())
@@ -170,17 +187,21 @@ def main():
     else:
         pipelines = [args.dataset]
 
+    run_dir = _make_run_dir()
     start = datetime.now()
     results: list[dict] = []
 
     print(
         f"Running {len(args.models)} models with up to {args.workers} workers"
-        f"  |  pipelines: {pipelines}\n"
+        f"  |  pipelines: {pipelines}"
     )
+    print(f"Output directory: {run_dir}\n")
+
+    pbar = tqdm(total=len(args.models), desc="Models", unit="model")
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures = {
-            pool.submit(run_model, model, args.limit, pipelines): model
+            pool.submit(run_model, model, args.limit, pipelines, run_dir): model
             for model in args.models
         }
 
@@ -188,12 +209,13 @@ def main():
             model = futures[future]
             result = future.result()
             results.append(result)
-            # Print this model's captured log now that it's done
-            print(result.get("log", ""))
             status = (
                 "OK" if result["status"] == "ok" else f"FAILED ({result['status']})"
             )
-            print(f"  >> {model} finished: {status}\n")
+            pbar.set_postfix_str(f"{model} -> {status}")
+            pbar.update(1)
+
+    pbar.close()
 
     # Sort results to match the original model order
     model_order = {m: i for i, m in enumerate(args.models)}
@@ -202,8 +224,9 @@ def main():
     elapsed = datetime.now() - start
 
     # Final summary
-    print(f"\n\n{'=' * 70}")
+    print(f"\n{'=' * 70}")
     print(f"  ALL MODELS COMPLETE  |  {elapsed.total_seconds():.0f}s elapsed")
+    print(f"  Output: {run_dir}")
     print(f"{'=' * 70}\n")
 
     for r in results:
