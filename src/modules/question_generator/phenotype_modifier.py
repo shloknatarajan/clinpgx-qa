@@ -118,10 +118,19 @@ def blank_phenotype_in_sentence(sentence: str, phenotype_field: str) -> str:
 # Phenotype bank validation (Fix 5)
 # ---------------------------------------------------------------------------
 
-_PHENOTYPE_BLOCKLIST = frozenset({
-    "other", "unknown", "n/a", "na", "toxicity", "efficacy",
-    "metabolism", "dosage", "pharmacokinetics",
-})
+_PHENOTYPE_BLOCKLIST = frozenset(
+    {
+        "other",
+        "unknown",
+        "n/a",
+        "na",
+        "toxicity",
+        "efficacy",
+        "metabolism",
+        "dosage",
+        "pharmacokinetics",
+    }
+)
 
 
 def _is_valid_phenotype(entry: str) -> bool:
@@ -452,7 +461,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate phenotype MCQ distractor options"
     )
-    parser.add_argument("--seed", type=int, default=42, help="Random seed (default: 42)")
+    parser.add_argument(
+        "--seed", type=int, default=42, help="Random seed (default: 42)"
+    )
     parser.add_argument(
         "--output",
         default="data/mcq_options/phenotype_mcq_options.jsonl",

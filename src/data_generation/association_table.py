@@ -38,9 +38,7 @@ def load_variant_bench_metadata() -> dict[str, str]:
     return pmid_to_pmcid
 
 
-def _load_and_filter(
-    tsv_path: Path, pmid_to_pmcid: dict[str, str]
-) -> pd.DataFrame:
+def _load_and_filter(tsv_path: Path, pmid_to_pmcid: dict[str, str]) -> pd.DataFrame:
     """Load a single annotation TSV, filter to variant_bench PMIDs, add PMCID."""
     df = pd.read_csv(tsv_path, sep="\t", dtype=str)
     logger.info(f"Loaded {len(df)} rows from {tsv_path}")
@@ -95,18 +93,28 @@ def build_association_tables() -> tuple[pd.DataFrame, pd.DataFrame]:
     """Build drug and pheno association tables and save to TSV."""
     pmid_to_pmcid = load_variant_bench_metadata()
     study_params = pd.read_csv(STUDY_PARAMS_PATH, sep="\t", dtype=str)
-    logger.info(f"Loaded {len(study_params)} study parameter rows from {STUDY_PARAMS_PATH}")
+    logger.info(
+        f"Loaded {len(study_params)} study parameter rows from {STUDY_PARAMS_PATH}"
+    )
 
     drug_ann = _load_and_filter(DRUG_ANN_PATH, pmid_to_pmcid)
     pheno_ann = _load_and_filter(PHENO_ANN_PATH, pmid_to_pmcid)
 
-    drug_df = _join_and_save(drug_ann, study_params, DRUG_OUTPUT_PATH, "Drug associations")
-    pheno_df = _join_and_save(pheno_ann, study_params, PHENO_OUTPUT_PATH, "Pheno associations")
+    drug_df = _join_and_save(
+        drug_ann, study_params, DRUG_OUTPUT_PATH, "Drug associations"
+    )
+    pheno_df = _join_and_save(
+        pheno_ann, study_params, PHENO_OUTPUT_PATH, "Pheno associations"
+    )
 
     return drug_df, pheno_df
 
 
 if __name__ == "__main__":
     drug_df, pheno_df = build_association_tables()
-    print(f"\nDrug association table:  {len(drug_df)} rows, {len(drug_df.columns)} columns")
-    print(f"Pheno association table: {len(pheno_df)} rows, {len(pheno_df.columns)} columns")
+    print(
+        f"\nDrug association table:  {len(drug_df)} rows, {len(drug_df.columns)} columns"
+    )
+    print(
+        f"Pheno association table: {len(pheno_df)} rows, {len(pheno_df.columns)} columns"
+    )

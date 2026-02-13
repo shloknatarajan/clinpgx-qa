@@ -223,7 +223,9 @@ def write_simplified_mcqs(
             distractors = [opt for opt in row["options"] if opt["role"] != "correct"]
             if len(distractors) >= 3:
                 nota = {**base, "question_type": "none_of_the_above"}
-                nota_options = [opt[answer_key] for opt in distractors[:3]] + [NOTA_TEXT]
+                nota_options = [opt[answer_key] for opt in distractors[:3]] + [
+                    NOTA_TEXT
+                ]
                 rng.shuffle(nota_options)
                 for i, val in enumerate(nota_options):
                     nota[f"option_{OPTION_LABELS[i]}"] = val

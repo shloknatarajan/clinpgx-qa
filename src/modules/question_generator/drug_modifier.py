@@ -112,7 +112,7 @@ def tokenize_drug(drug: str) -> set[str]:
     cleaned = drug.strip().lower()
     if " " not in cleaned and len(cleaned) >= 4:
         for i in range(len(cleaned) - 2):
-            tokens.add(f"d3g_{cleaned[i:i+3]}")
+            tokens.add(f"d3g_{cleaned[i : i + 3]}")
 
     return tokens
 
@@ -372,10 +372,10 @@ def generate_all_drug_mcqs(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Generate drug MCQ distractor options"
+    parser = argparse.ArgumentParser(description="Generate drug MCQ distractor options")
+    parser.add_argument(
+        "--seed", type=int, default=42, help="Random seed (default: 42)"
     )
-    parser.add_argument("--seed", type=int, default=42, help="Random seed (default: 42)")
     parser.add_argument(
         "--output",
         default="data/mcq_options/drug_mcq_options.jsonl",

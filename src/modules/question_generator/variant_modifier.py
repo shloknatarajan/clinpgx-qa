@@ -72,7 +72,7 @@ def blank_sentence(sentence: str) -> str:
     """
     m = re.search(r"\b(is|are)\b\s+(not\s+)?(associated with)", sentence, re.IGNORECASE)
     if m:
-        return "______ " + sentence[m.start():]
+        return "______ " + sentence[m.start() :]
     return sentence
 
 
@@ -100,7 +100,7 @@ def tokenize_variant(variant: str) -> set[str]:
     if rs_match:
         digits = rs_match.group(1)
         for i in range(len(digits) - 2):
-            tokens.add(f"rs3g_{digits[i:i+3]}")
+            tokens.add(f"rs3g_{digits[i : i + 3]}")
 
     return tokens
 
@@ -335,7 +335,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate variant MCQ distractor options"
     )
-    parser.add_argument("--seed", type=int, default=42, help="Random seed (default: 42)")
+    parser.add_argument(
+        "--seed", type=int, default=42, help="Random seed (default: 42)"
+    )
     parser.add_argument(
         "--output",
         default="data/mcq_options/variant_mcq_options.jsonl",

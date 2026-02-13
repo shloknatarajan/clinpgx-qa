@@ -48,9 +48,9 @@ def build_term_banks() -> dict[str, list[str]]:
     logger.info(f"Loaded {len(drug_df)} drug rows, {len(pheno_df)} pheno rows")
 
     # --- Variants ---
-    variants = _split_comma_separated(drug_df["Variant/Haplotypes"]) | _split_comma_separated(
-        pheno_df["Variant/Haplotypes"]
-    )
+    variants = _split_comma_separated(
+        drug_df["Variant/Haplotypes"]
+    ) | _split_comma_separated(pheno_df["Variant/Haplotypes"])
     variants_sorted = sorted(variants)
 
     # --- (Gene, Variant) pairs ---
@@ -68,7 +68,9 @@ def build_term_banks() -> dict[str, list[str]]:
     )
 
     # --- Drugs ---
-    drugs = _split_comma_separated(drug_df["Drug(s)"]) | _split_comma_separated(pheno_df["Drug(s)"])
+    drugs = _split_comma_separated(drug_df["Drug(s)"]) | _split_comma_separated(
+        pheno_df["Drug(s)"]
+    )
     drugs_sorted = sorted(drugs)
 
     # --- Phenotypes ---
