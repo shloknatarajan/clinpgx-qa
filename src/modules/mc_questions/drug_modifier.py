@@ -51,6 +51,7 @@ class DrugMCQOptions(BaseModel):
     annotation_id: str
     pmid: str
     pmcid: str
+    variant: str
     drug: str
     original_sentence: str
     blanked_sentence: str
@@ -308,6 +309,7 @@ def generate_mcq_for_row(
         annotation_id=row.variant_annotation_id,
         pmid=row.pmid,
         pmcid=row.pmcid,
+        variant=row.variant_haplotypes,
         drug=row.drug,
         original_sentence=row.sentence,
         blanked_sentence=blank_drug_in_sentence(row.sentence, row.drug),
