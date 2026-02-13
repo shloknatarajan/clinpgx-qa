@@ -68,9 +68,14 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
 
     logger.info(f"Generating responses with model={args.model}")
 
+    model_slug = args.model.replace("/", "_")
     if output_dir is None:
         output_dir = _make_run_dir(args.model)
-    responses_path = output_dir / "chained_responses.jsonl"
+        file_prefix = "chained"
+    else:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        file_prefix = f"{model_slug}_chained"
+    responses_path = output_dir / f"{file_prefix}_responses.jsonl"
 
     with open(responses_path, "w") as out_f:
         for ci, chain in enumerate(chains):
@@ -482,8 +487,11 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
         output_dir = responses_path.parent
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Derive file prefix from responses filename (e.g. "gpt-4o_chained" or "chained")
+    file_prefix = responses_path.stem.replace("_responses", "")
+
     # Save eval results JSONL
-    results_path = output_dir / "chained_eval_results.jsonl"
+    results_path = output_dir / f"{file_prefix}_eval_results.jsonl"
     with open(results_path, "w") as f:
         for r in results:
             f.write(json.dumps(r) + "\n")
@@ -494,7 +502,7 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     print(summary)
 
     # Save summary text
-    summary_path = output_dir / "chained_summary.txt"
+    summary_path = output_dir / f"{file_prefix}_summary.txt"
     with open(summary_path, "w") as f:
         f.write(summary + "\n")
 
@@ -526,6 +534,11 @@ def main() -> None:
         default=0,
         help="Limit number of chains (0 = all)",
     )
+    gen_p.add_argument(
+        "--output-dir",
+        default=None,
+        help="Output directory (default: auto-generated timestamped dir)",
+    )
 
     # score
     score_p = subparsers.add_parser("score", help="Score saved responses")
@@ -537,7 +550,8 @@ def main() -> None:
 
     args = parser.parse_args()
     if args.command == "generate":
-        generate(args)
+        out_dir = Path(args.output_dir) if args.output_dir else None
+        generate(args, output_dir=out_dir)
     elif args.command == "score":
         score(args)
 
