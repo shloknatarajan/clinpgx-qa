@@ -133,8 +133,7 @@ def main():
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures = {
-            pool.submit(run_model, model, args.limit): model
-            for model in args.models
+            pool.submit(run_model, model, args.limit): model for model in args.models
         }
 
         for future in as_completed(futures):
@@ -143,7 +142,9 @@ def main():
             results.append(result)
             # Print this model's captured log now that it's done
             print(result.get("log", ""))
-            status = "OK" if result["status"] == "ok" else f"FAILED ({result['status']})"
+            status = (
+                "OK" if result["status"] == "ok" else f"FAILED ({result['status']})"
+            )
             print(f"  >> {model} finished: {status}\n")
 
     # Sort results to match the original model order

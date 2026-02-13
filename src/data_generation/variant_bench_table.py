@@ -1,5 +1,9 @@
 """
-Takes benchmark annotations from data/benchmark_annotations and creates a jsonl file data/benchmark_variants.jsonl
+Reads var_drug_ann.tsv and var_pheno_ann.tsv from data/raw/variantAnnotations/,
+groups variants by PMID, and creates data/variant_bench.jsonl.
+
+Enriches each entry with pmcid and article_title from data/papers/ markdown files.
+
 Each row in the jsonl file contains:
 - pmcid: str
 - pmid: str
@@ -8,7 +12,9 @@ Each row in the jsonl file contains:
 - raw_variants: list[list[str]] - preserving the original groupings from annotations
 """
 
+import csv
 import json
+from collections import defaultdict
 from pydantic import BaseModel
 from pathlib import Path
 from loguru import logger
@@ -33,146 +39,197 @@ class SingleArticleVariants(BaseModel):
     raw_variants: list[list[str]]
 
 
-def get_file_variants(
-    file_path: Path | str, deduplicate: bool = True, ungroup: bool = True
-) -> SingleArticleVariants:
+def _clean_title(title: str) -> str:
+    """Normalize unicode characters in titles to their ASCII equivalents."""
+    replacements = {
+        "\u2010": "-",  # hyphen
+        "\u2011": "-",  # non-breaking hyphen
+        "\u2012": "-",  # figure dash
+        "\u2013": "-",  # en dash
+        "\u2014": "-",  # em dash
+        "\u2015": "-",  # horizontal bar
+        "\u2018": "'",  # left single quote
+        "\u2019": "'",  # right single quote
+        "\u201c": '"',  # left double quote
+        "\u201d": '"',  # right double quote
+        "\u2009": " ",  # thin space
+        "\u00a0": " ",  # non-breaking space
+        "\u202f": " ",  # narrow no-break space
+        "\u03b1": "alpha",  # α
+        "\u03b2": "beta",  # β
+        "\u03b3": "gamma",  # γ
+        "\u03b4": "delta",  # δ
+        "\u0394": "Delta",  # Δ
+        "\u03b5": "epsilon",  # ε
+        "\u03bc": "mu",  # μ
+        "\u00b5": "mu",  # µ (micro sign)
+        "\u03ba": "kappa",  # κ
+        "\u03bb": "lambda",  # λ
+        "\u00ef": "i",  # ï
+        "\u00e9": "e",  # é
+        "\u00e8": "e",  # è
+        "\u00fc": "u",  # ü
+        "\u00f6": "o",  # ö
+        "\u00e4": "a",  # ä
+        "\u00e1": "a",  # á
+        "\u00ed": "i",  # í
+        "\u00f1": "n",  # ñ
+        "\u00e7": "c",  # ç
+        "\u00df": "ss",  # ß
+        "\u00e3": "a",  # ã
+        "\u00bb": "",  # » (right guillemet)
+        "\u00ab": "",  # « (left guillemet)
+        "\u00ae": "",  # ® (registered)
+        "\u2605": "*",  # ★
+        "\u00b0": " degrees",  # °
+        "\u2003": " ",  # em space
+        "\u2002": " ",  # en space
+        "\u2212": "-",  # minus sign
+        "\u2192": "->",  # rightwards arrow
+        "\u2217": "*",  # asterisk operator
+        "\u2032": "'",  # prime
+        "\u2033": '"',  # double prime
+    }
+    for old, new in replacements.items():
+        title = title.replace(old, new)
+    # Return None if title still contains non-ASCII (e.g. Chinese characters)
+    if any(ord(c) > 127 for c in title):
+        return None
+    return title
+
+
+def _build_pmid_metadata(papers_dir: Path) -> dict[str, dict[str, str]]:
     """
-    Extracts all mentioned variants from a single JSON article file.
-
-    This function reads a JSON file, extracts variant/haplotype information from
-    'var_drug_ann', 'var_pheno_ann', and 'var_fa_ann' sections. It can also
-    deduplicate and ungroup variants based on the provided flags.
-
-    Args:
-        file_path (Path | str): The path to the JSON file containing article annotations.
-        deduplicate (bool, optional): If True, removes duplicate variants. Defaults to True.
-        ungroup (bool, optional): If True, splits comma-separated grouped variants into
-                                   individual variants. Defaults to True.
+    Builds a PMID -> {pmcid, title} mapping by parsing markdown files in data/papers/.
 
     Returns:
-        SingleArticleVariants: An object containing the article's metadata and
-                               the extracted variants. Returns an empty
-                               SingleArticleVariants object if the file cannot
-                               be processed, logging a warning.
+        Dict mapping PMID strings to {"pmcid": ..., "title": ...}.
     """
-    # from json file, extract all the variants from variant/haplotypes
-    # Convert file to path
-    if isinstance(file_path, str):
-        file_path = Path(file_path)
-    try:
-        with open(file_path, "r") as f:
-            data = json.load(f)
-    except Exception as e:
-        logger.warning(f"Warning: Could not process file {file_path}: {e}")
-        return SingleArticleVariants(
-            pmcid="", pmid="", article_title="", variants=[], raw_variants=[]
-        )
-    variants: list[str] = []
-    pmcid = data["pmcid"]
-    pmid = data["pmid"]
-    article_title = data["title"]
-    for item in data["var_drug_ann"]:
-        variants.append(item["Variant/Haplotypes"])
-    for item in data["var_pheno_ann"]:
-        variants.append(item["Variant/Haplotypes"])
-    for item in data["var_fa_ann"]:
-        variants.append(item["Variant/Haplotypes"])
+    pmid_map: dict[str, dict[str, str]] = {}
 
-    # Preserve original groupings as list of lists (split each group by comma)
-    raw_variants: list[list[str]] = [
-        [v.strip() for v in variant.split(",")] for variant in variants
-    ]
+    for md_file in papers_dir.glob("*.md"):
+        pmcid = md_file.stem  # filename is e.g. PMC5508045.md
+        title = ""
+        pmid = ""
 
-    if deduplicate:
-        variants = list(set(variants))
-    if ungroup:
-        variants = [variant.split(",") for variant in variants]
-        variants = [variant.strip() for sublist in variants for variant in sublist]
-    return SingleArticleVariants(
-        pmcid=pmcid,
-        pmid=pmid,
-        article_title=article_title,
-        variants=variants,
-        raw_variants=raw_variants,
-    )
+        # Only need to read the metadata header (first ~15 lines)
+        with open(md_file, "r") as f:
+            for i, line in enumerate(f):
+                if i == 0 and line.startswith("# "):
+                    title = _clean_title(line[2:].strip())
+                if line.startswith("**PMID:**"):
+                    pmid = line.split("**PMID:**")[1].strip()
+                if i > 15:
+                    break
+
+        if pmid and title is not None:
+            pmid_map[pmid] = {"pmcid": pmcid, "title": title}
+
+    return pmid_map
 
 
-def get_dir_variants(
-    dir_path: str, deduplicate: bool = True, ungroup: bool = True
+def get_all_tsv_variants(
+    deduplicate: bool = True,
+    ungroup: bool = True,
+    save_jsonl: bool = True,
 ) -> list[SingleArticleVariants]:
     """
-    Processes all JSON article files within a specified directory to extract variants.
+    Reads var_drug_ann.tsv and var_pheno_ann.tsv from data/raw/variantAnnotations/,
+    groups variants by PMID, and returns one SingleArticleVariants per article.
 
-    This function iterates through all JSON files in the given directory,
-    applies `get_file_variants` to each, and aggregates the results.
+    Enriches each entry with pmcid and article_title from data/papers/ markdown files
+    when available.
+
+    Does NOT include var_fa_ann.
 
     Args:
-        dir_path (str): The path to the directory containing JSON annotation files.
-        deduplicate (bool, optional): If True, variants extracted from each file
-                                     will be deduplicated. Defaults to True.
-        ungroup (bool, optional): If True, splits comma-separated grouped variants
-                                  into individual variants for each file. Defaults to True.
+        deduplicate: If True, removes duplicate variants per article.
+        ungroup: If True, splits comma-separated grouped variants into individual variants.
+        save_jsonl: If True, saves to data/variant_bench.jsonl.
 
     Returns:
-        list[SingleArticleVariants]: A list of `SingleArticleVariants` objects, each
-                                     representing the variants found in one article file.
-
-    Raises:
-        ValueError: If the provided `dir_path` does not exist or is not a directory.
+        List of SingleArticleVariants, one per unique PMID.
     """
-    # Validate path
-    directory = Path(dir_path)
-    if not directory.exists() or not directory.is_dir():
-        raise ValueError(f"Directory {dir_path} does not exist or is not a directory.")
-    variant_list: list[SingleArticleVariants] = []
+    tsv_dir = Path("data/raw/variantAnnotations")
+    tsv_files = ["var_drug_ann.tsv", "var_pheno_ann.tsv"]
 
-    # Loop through json files in the directory
-    for file in directory.glob("*.json"):
-        try:
-            article_variants = get_file_variants(
-                file, deduplicate=deduplicate, ungroup=ungroup
+    # Build PMID -> metadata lookup from papers
+    papers_dir = Path("data/papers")
+    pmid_metadata = _build_pmid_metadata(papers_dir) if papers_dir.exists() else {}
+    logger.info(
+        f"Built metadata lookup for {len(pmid_metadata)} PMIDs from {papers_dir}"
+    )
+
+    # Collect raw variant strings grouped by PMID
+    pmid_variants: dict[str, list[str]] = defaultdict(list)
+
+    for tsv_name in tsv_files:
+        tsv_path = tsv_dir / tsv_name
+        if not tsv_path.exists():
+            logger.warning(f"TSV file not found: {tsv_path}")
+            continue
+        with open(tsv_path, "r") as f:
+            reader = csv.DictReader(f, delimiter="\t")
+            for row in reader:
+                pmid = str(row["PMID"]).strip()
+                variant = row["Variant/Haplotypes"].strip()
+                if pmid and variant:
+                    pmid_variants[pmid].append(variant)
+
+    logger.info(
+        f"Read {sum(len(v) for v in pmid_variants.values())} variant annotations "
+        f"across {len(pmid_variants)} unique PMIDs from {tsv_files}"
+    )
+
+    results: list[SingleArticleVariants] = []
+    skipped = 0
+    for pmid, variants in pmid_variants.items():
+        raw_variants: list[list[str]] = [
+            [v.strip() for v in variant.split(",")] for variant in variants
+        ]
+
+        processed = list(variants)
+        if deduplicate:
+            processed = list(set(processed))
+        if ungroup:
+            processed = [v.strip() for variant in processed for v in variant.split(",")]
+
+        meta = pmid_metadata.get(pmid)
+        if not meta:
+            skipped += 1
+            continue
+
+        results.append(
+            SingleArticleVariants(
+                pmcid=meta["pmcid"],
+                pmid=pmid,
+                article_title=meta["title"],
+                variants=processed,
+                raw_variants=raw_variants,
             )
-            variant_list.append(article_variants)
-        except Exception as e:
-            logger.warning(f"Warning: Could not process file {file}: {e}")
-    return variant_list
+        )
 
-
-def get_benchmark_variants(save_jsonl: bool = True) -> list[SingleArticleVariants]:
-    """
-    Retrieves and processes variants from the benchmark annotation directory.
-
-    This function specifically targets the 'data/benchmark_annotations' directory,
-    deduplicating and ungrouping variants by default.
-
-    Args:
-        save_jsonl (bool, optional): If True, saves the results to a JSONL file
-                                     at 'data/benchmark_variants.jsonl'. Defaults to True.
-
-    Returns:
-        list[SingleArticleVariants]: A list of `SingleArticleVariants` objects
-                                     representing the processed benchmark variants.
-    """
-    benchmark_dir = "data/benchmark_annotations"
-    logger.info(f"Loading variants from benchmark dir {benchmark_dir}")
-    benchmark_variants = get_dir_variants(benchmark_dir, deduplicate=True, ungroup=True)
+    logger.info(
+        f"Kept {len(results)} PMIDs with paper metadata, "
+        f"skipped {skipped} without a matching paper"
+    )
 
     if save_jsonl:
-        output_path = Path("data") / "benchmark_v2" / "variant_bench.jsonl"
+        output_path = Path("data") / "variant_bench.jsonl"
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, "w") as f:
-            for variant in benchmark_variants:
-                f.write(json.dumps(variant.model_dump()) + "\n")
-        logger.info(f"Saved {len(benchmark_variants)} articles to {output_path}")
+            for item in results:
+                f.write(json.dumps(item.model_dump()) + "\n")
+        logger.info(f"Saved {len(results)} articles to {output_path}")
 
-    return benchmark_variants
+    return results
 
 
 if __name__ == "__main__":
-    benchmark_variants = get_benchmark_variants(save_jsonl=True)
-    print(f"Found {len(benchmark_variants)} articles with variants")
+    all_variants = get_all_tsv_variants(save_jsonl=True)
+    print(f"Found {len(all_variants)} articles from raw TSVs")
 
-    # Verify the JSONL file is loadable
-    with open("data/benchmark_v2/variant_bench.jsonl", "r") as f:
-        loaded_variants = [json.loads(line) for line in f]
-    print(f"Loaded JSONL with {len(loaded_variants)} rows")
-    print(f"First entry: {loaded_variants[0]}")
+    with open("data/variant_bench.jsonl", "r") as f:
+        loaded = [json.loads(line) for line in f]
+    print(f"Loaded JSONL with {len(loaded)} rows")
+    print(f"First entry: {json.dumps(loaded[0], indent=2)}")
