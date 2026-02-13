@@ -99,7 +99,10 @@ def _build_question_text(
         "\nWhat is the p-value reported for this specific association, "
         "and is the association statistically significant?\n"
         "\n"
-        "Respond with ONLY a JSON object in this exact format:\n"
+        "IMPORTANT: Respond with ONLY a JSON object — no explanation, no reasoning, "
+        "no markdown code fences, no text before or after. Just the raw JSON.\n"
+        "\n"
+        "Use this exact format:\n"
         '{"p_value": "<value>", "significance": "<yes/no/not stated>"}\n'
         "\n"
         "If the exact association is not found in the study, respond with:\n"

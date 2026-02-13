@@ -1,0 +1,133 @@
+
+======================================================================
+Study Param Results  |  model=anthropic/claude-haiku-4-5-20251001  |  both: 5/10 (50.0%)
+======================================================================
+
+By field:
+  Field                 Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  p_value                     5       10     50.0%
+  significance                8       10     80.0%
+  both                        5       10     50.0%
+
+By question_type:
+  Type                         P-value    Signif.       Both    Total
+  ------------------------- ---------- ---------- ---------- --------
+  correct                       25.0%    100.0%     25.0%        4
+  modified_drug                 33.3%     33.3%     33.3%        3
+  modified_variant             100.0%    100.0%    100.0%        3
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        5       10     50.0%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=modified_variant  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: ```json
+{"p_value": "not found", "significance": "not found"}
+```
+
+The paper reports findings for rs2285676 in the KCNJ11 gene (not KCNQ1), showing that the CC genotype (not GG) was associated with be
+
+  [2] type=modified_variant  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: ```json
+{"p_value": "not found", "significance": "not found"}
+```
+
+The paper reports on rs2909451 TT genotype (not GG) in the DPP-4 gene (not KCNJ11), showing lower efficacy with sitagliptin (p < .001
+
+  [3] type=modified_variant  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: ```json
+{"p_value": "not found", "significance": "not found"}
+```
+
+The paper reports on rs3765467 in the GLP1R gene (not DPP4), and describes the AG genotype (not TT) as being associated with favorabl
+
+  [4] type=modified_drug  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: ```json
+{"p_value": "not found", "significance": "not found"}
+```
+
+The study reports on rs2285676 in KCNJ11 with sitagliptin (not ifosfamide), but describes the association as involving the **CC genot
+
+  [5] type=correct  table=drug  pmcid=PMC11730665
+  Expected p_value:      = 0.053
+  Response p_value:      0.053
+  Expected significance: no
+  Response significance: no
+  Raw response: ```json
+{"p_value": "0.053", "significance": "no"}
+```
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=correct  table=drug  pmcid=PMC11730665
+  Expected p_value:      < 0.001
+  Response p_value:      <.001
+  Expected significance: yes
+  Response significance: yes
+  Raw response: ```json
+{"p_value": "<.001", "significance": "yes"}
+```
+
+  [2] type=correct  table=drug  pmcid=PMC11730665
+  Expected p_value:      < 0.001
+  Response p_value:      <.001
+  Expected significance: yes
+  Response significance: yes
+  Raw response: ```json
+{"p_value": "<.001", "significance": "yes"}
+```
+
+  [3] type=correct  table=drug  pmcid=PMC11730665
+  Expected p_value:      < 0.001
+  Response p_value:      <0.001
+  Expected significance: yes
+  Response significance: yes
+  Raw response: ```json
+{"p_value": "<0.001", "significance": "yes"}
+```
+
+  [4] type=modified_drug  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      <0.001
+  Expected significance: not found
+  Response significance: yes
+  Raw response: ```json
+{"p_value": "<0.001", "significance": "yes"}
+```
+
+  [5] type=modified_drug  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      < .001
+  Expected significance: not found
+  Response significance: yes
+  Raw response: ```json
+{"p_value": "< .001", "significance": "yes"}
+```
+
+The association is found in Table 6 of the paper, which shows that patients with the rs163184 GG genotype in the sitagliptin-treated study gro
+
+Eval results saved to runs/20260213_013820_all_models/anthropic_claude-haiku-4-5-20251001_study_param_eval_results.jsonl

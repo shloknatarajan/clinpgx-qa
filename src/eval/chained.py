@@ -173,7 +173,14 @@ def parse_evidence_provenance(response: str) -> str | None:
 
 
 def _extract_numbers(text: str) -> list[float]:
-    """Extract all numeric values from text, including decimals and scientific notation."""
+    """Extract all numeric values from text, including decimals and scientific notation.
+
+    Each region of text is matched at most once: scientific notation and
+    E-notation are matched first, then plain numbers are extracted only from
+    regions not already consumed by the earlier passes.  This prevents phantom
+    sub-components (e.g. the exponent ``-2`` from ``1.5e-2``) from appearing
+    as separate numbers.
+    """
     # Normalize unicode characters
     text = text.replace("\u2212", "-").replace("\u2013", "-")
     text = text.replace("\u00d7", "x")  # × → x
@@ -184,25 +191,39 @@ def _extract_numbers(text: str) -> list[float]:
     text = re.sub(r"(\d),(\d)", r"\1\2", text)
 
     results: list[float] = []
+    matched_spans: list[tuple[int, int]] = []
+
+    def _overlaps(start: int, end: int) -> bool:
+        return any(start < me and end > ms for ms, me in matched_spans)
+
     # Scientific notation: 1.3x10^-5, 1.3x10-5 (after superscript conversion)
     for m in re.finditer(
         r"(-?\d+\.?\d*)\s*[xX]\s*10\s*\^?\s*\(?\s*(-?\d+)\s*\)?",
         text,
     ):
+        if _overlaps(m.start(), m.end()):
+            continue
         try:
             results.append(float(m.group(1)) * 10 ** int(m.group(2)))
+            matched_spans.append((m.start(), m.end()))
         except (ValueError, OverflowError):
             pass
     # E notation: 1.96E-8, 2.2e-63
     for m in re.finditer(r"-?\d+\.?\d*[eE][+-]?\d+", text):
+        if _overlaps(m.start(), m.end()):
+            continue
         try:
             results.append(float(m.group()))
+            matched_spans.append((m.start(), m.end()))
         except ValueError:
             pass
-    # Plain numbers
-    for m in re.findall(r"-?\d+\.?\d*", text):
+    # Plain numbers (including leading-decimal like .053)
+    for m in re.finditer(r"-?\d+\.?\d*|-?\.\d+", text):
+        if _overlaps(m.start(), m.end()):
+            continue
         try:
-            results.append(float(m))
+            results.append(float(m.group()))
+            matched_spans.append((m.start(), m.end()))
         except ValueError:
             pass
     return results
@@ -237,12 +258,41 @@ def _satisfies_inequality(value: float, op: str, threshold: float) -> bool:
     return False
 
 
+def _find_response_inequality(text: str) -> tuple[str | None, float | None]:
+    """Find an inequality operator and threshold anywhere in *text*.
+
+    Unlike ``_parse_inequality`` (which anchors at the start of the string),
+    this searches anywhere — useful for responses like ``"P < 0.001"``.
+    """
+    m = re.search(r"([<>]=?)\s*(\d+\.?\d*|\.\d+)", text)
+    if not m:
+        return None, None
+    try:
+        return m.group(1), float(m.group(2))
+    except ValueError:
+        return None, None
+
+
+def _is_ci_range(gt_str: str) -> tuple[float, float] | None:
+    """Detect a confidence-interval / range ground truth like ``0.13-0.27``.
+
+    Returns ``(lower, upper)`` or ``None``.
+    """
+    m = re.match(r"^\s*(\d+\.?\d*)\s*[-\u2013]\s*(\d+\.?\d*)\s*$", gt_str)
+    if m:
+        return float(m.group(1)), float(m.group(2))
+    return None
+
+
 def parse_statistical_extraction(response: str, ground_truth) -> bool:
     """Compare numeric or string values.
 
     For int ground truths: look for matching integer in response.
     For string ground truths with an inequality (e.g. "< 0.024", "> 0.05"):
+      first check whether the response echoes a matching inequality, then
       check whether any number in the response satisfies the inequality.
+    For CI / range ground truths (e.g. "0.13-0.27"):
+      require both the lower and upper bounds to appear in the response.
     For string ground truths containing a number (e.g. "= 0.004", "0.54"):
       extract the number and compare numerically (5% relative tolerance).
     Fallback: case-insensitive string match.
@@ -261,10 +311,43 @@ def parse_statistical_extraction(response: str, ground_truth) -> bool:
     # Check for inequality ground truths (e.g. "< 0.024", "> 0.05")
     op, threshold = _parse_inequality(gt_str)
     if op and threshold is not None:
+        # First check: does the response echo a matching inequality?
+        # e.g. GT "< 0.001" vs response "P < 0.001"
+        resp_op, resp_threshold = _find_response_inequality(text)
+        if resp_op and resp_threshold is not None:
+            same_direction = (op in ("<", "<=") and resp_op in ("<", "<=")) or (
+                op in (">", ">=") and resp_op in (">", ">=")
+            )
+            if same_direction:
+                if threshold == 0:
+                    if resp_threshold == 0:
+                        return True
+                elif math.isclose(resp_threshold, threshold, rel_tol=0.05):
+                    return True
+
+        # Second check: does a concrete numeric value satisfy the inequality?
         for resp_val in _extract_numbers(text):
             if _satisfies_inequality(resp_val, op, threshold):
                 return True
         return False
+
+    # Check for CI / range ground truths (e.g. "0.13-0.27")
+    ci = _is_ci_range(gt_str)
+    if ci is not None:
+        gt_lower, gt_upper = ci
+        resp_nums = _extract_numbers(text)
+        # Use abs() because _extract_numbers misinterprets range dashes as
+        # negative signs (e.g. "0.13-0.27" → [0.13, -0.27]).  CI bounds are
+        # always positive so this is safe.
+        lower_ok = any(
+            (math.isclose(abs(n), gt_lower, rel_tol=0.05) if gt_lower != 0 else n == 0)
+            for n in resp_nums
+        )
+        upper_ok = any(
+            (math.isclose(abs(n), gt_upper, rel_tol=0.05) if gt_upper != 0 else n == 0)
+            for n in resp_nums
+        )
+        return lower_ok and upper_ok
 
     # Numeric comparison with 5% tolerance
     gt_nums = _extract_numbers(gt_str)

@@ -1,0 +1,51 @@
+
+======================================================================
+Mcq Phenotype Results  |  model=gemini/gemini-2.5-pro  |  0/10 (0.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  standard                         0       10      0.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  pheno                       0       10      0.0%
+
+  Parse failures: 10/10 (100.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC11936550
+  Sentence: Genotypes AA + AG is associated with increased likelihood of ______ when treated with cyclophosphamide in children with 
+  Options: a) Absence  b) Side Effect:hemorrhagic cystitis  c) Acute  d) Side Effect:Cystitis
+  Expected: d  Got: 
+
+  [2] type=standard  table=pheno  pmcid=PMC11554802
+  Sentence: UGT1A1 *1/*28 + *28/*28 is associated with increased severity of ______ when treated with sacituzumab govitecan in peopl
+  Options: a) Side Effect:Febrile neutropenia  b) Side Effect:neutropenia and infections  c) Side Effect:severe neutropenia  d) Side Effect:Neutropenia
+  Expected: d  Got: 
+
+  [3] type=standard  table=pheno  pmcid=PMC9261480
+  Sentence: ABCB1 intermediate activity is associated with increased risk of ______ when exposed to loperamide.
+  Options: a) Disease:Alcohol-Related Disorders  b) Disease:Substance-Related Disorders  c) Side Effect:Opioid-Related Disorders  d) Disease:Anxiety Disorders
+  Expected: c  Got: 
+
+  [4] type=standard  table=pheno  pmcid=PMC11936550
+  Sentence: Genotypes AG + GG is associated with increased likelihood of ______ when treated with cyclophosphamide in children with 
+  Options: a) Side Effect:Cystitis  b) Absence  c) Acute  d) Side Effect:hemorrhagic cystitis
+  Expected: a  Got: 
+
+  [5] type=standard  table=pheno  pmcid=PMC11954185
+  Sentence: HLA-A *02:01 is not associated with increased likelihood of ______ when treated with ipilimumab, nivolumab or pembrolizu
+  Options: a) Disease:adverse cardiovascular events  b) Side Effect:CNS adverse events  c) Side Effect:Sexual adverse events  d) Side Effect:adverse events
+  Expected: d  Got: 
+
+Eval results saved to runs/20260213_020814_mc_study_all_models/gemini_gemini-2.5-pro_mcq_phenotype_eval_results.jsonl

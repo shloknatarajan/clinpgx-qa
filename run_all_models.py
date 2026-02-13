@@ -14,6 +14,7 @@ Usage:
 import argparse
 import subprocess
 import sys
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
@@ -24,9 +25,10 @@ MODELS = [
     "anthropic/claude-opus-4-6",
     "anthropic/claude-sonnet-4-5-20250929",
     "anthropic/claude-haiku-4-5-20251001",
-    "gpt-4o",
+    "gpt-4o-mini",
     "gpt-5",
     "gpt-5.2",
+    "gemini/gemini-2.5-pro",
 ]
 
 PIPELINES = {
@@ -38,15 +40,51 @@ PIPELINES = {
         "script": "src/eval/chained.py",
         "summary_marker": "Chained Results",
     },
+    "study_param": {
+        "script": "src/eval/study_param.py",
+        "summary_marker": "Study Param Results",
+    },
+    "mcq_variant": {
+        "script": "src/eval/mcq_variant.py",
+        "summary_marker": "Mcq Variant Results",
+    },
+    "mcq_drug": {
+        "script": "src/eval/mcq_drug.py",
+        "summary_marker": "Mcq Drug Results",
+    },
+    "mcq_phenotype": {
+        "script": "src/eval/mcq_phenotype.py",
+        "summary_marker": "Mcq Phenotype Results",
+    },
 }
 
 
-def _make_run_dir() -> Path:
+def _make_run_dir(dataset: str) -> Path:
     """Create a single timestamped run directory for all models."""
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_dir = Path("runs") / f"{ts}_all_models"
+    suffix = "all_models"
+    if dataset == "mc_study":
+        suffix = "mc_study_all_models"
+    run_dir = Path("runs") / f"{ts}_{suffix}"
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
+
+
+def _short_model(model: str) -> str:
+    """Return a short display name for a model identifier."""
+    return model.rsplit("/", 1)[-1]
+
+
+def _stream_stderr(proc: subprocess.Popen, captured: list[str],
+                   pbar: tqdm | None, model: str, pipeline_name: str) -> None:
+    """Read stderr from a subprocess line-by-line, logging progress in real time."""
+    short = _short_model(model)
+    for raw_line in proc.stderr:
+        line = raw_line.rstrip("\n")
+        captured.append(line)
+        # Show question-level progress lines (e.g. "  [25/100]")
+        if pbar and ("[" in line and "/" in line and "]" in line):
+            pbar.write(f"  {short} | {pipeline_name}: {line.strip()}")
 
 
 def _run_pipeline(
@@ -55,14 +93,18 @@ def _run_pipeline(
     pipeline_name: str,
     output_dir: Path,
     log_lines: list[str],
+    pbar: tqdm | None = None,
 ) -> dict:
     """Run generate + score for a single pipeline. Returns result dict."""
     cfg = PIPELINES[pipeline_name]
     script = cfg["script"]
+    short = _short_model(model)
 
     log_lines.append(f"  [{pipeline_name}] generating...")
+    if pbar:
+        pbar.write(f"  {short} | {pipeline_name}: generating...")
 
-    # Generate
+    # Generate — stream stderr so we see per-question progress
     gen_cmd = [
         sys.executable,
         script,
@@ -74,32 +116,46 @@ def _run_pipeline(
         "--output-dir",
         str(output_dir),
     ]
-    gen_result = subprocess.run(gen_cmd, capture_output=True, text=True)
-    log_lines.append(gen_result.stderr)
+    gen_proc = subprocess.Popen(
+        gen_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+    )
+    gen_stderr: list[str] = []
+    stderr_thread = threading.Thread(
+        target=_stream_stderr,
+        args=(gen_proc, gen_stderr, pbar, model, pipeline_name),
+    )
+    stderr_thread.start()
+    gen_proc.stdout.read()
+    gen_proc.wait()
+    stderr_thread.join()
+    log_lines.extend(gen_stderr)
 
-    if gen_result.returncode != 0:
+    if gen_proc.returncode != 0:
         log_lines.append(f"  [{pipeline_name}] FAILED (generate): {model}")
+        if pbar:
+            pbar.write(f"  {short} | {pipeline_name}: FAILED (generate)")
         return {
             "pipeline": pipeline_name,
             "status": "generate_failed",
-            "error": gen_result.stderr,
+            "error": "\n".join(gen_stderr[-20:]),
         }
 
-    # Find the responses path from generate output
+    # Find the responses path from this pipeline's generate stderr
     responses_path = None
-    for line in gen_result.stderr.splitlines():
+    for line in gen_stderr:
         if "Responses saved to" in line:
             responses_path = line.split("Responses saved to")[-1].strip()
-            break
 
     if not responses_path:
         return {
             "pipeline": pipeline_name,
             "status": "no_responses_path",
-            "error": gen_result.stderr,
+            "error": "\n".join(gen_stderr[-20:]),
         }
 
     log_lines.append(f"  [{pipeline_name}] scoring...")
+    if pbar:
+        pbar.write(f"  {short} | {pipeline_name}: scoring...")
 
     # Score
     score_cmd = [
@@ -115,11 +171,16 @@ def _run_pipeline(
 
     if score_result.returncode != 0:
         log_lines.append(f"  [{pipeline_name}] FAILED (score): {model}")
+        if pbar:
+            pbar.write(f"  {short} | {pipeline_name}: FAILED (score)")
         return {
             "pipeline": pipeline_name,
             "status": "score_failed",
             "error": score_result.stderr,
         }
+
+    if pbar:
+        pbar.write(f"  {short} | {pipeline_name}: done")
 
     return {
         "pipeline": pipeline_name,
@@ -129,18 +190,25 @@ def _run_pipeline(
     }
 
 
-def run_model(model: str, limit: int, pipelines: list[str], output_dir: Path) -> dict:
+def run_model(
+    model: str, limit: int, pipelines: list[str], output_dir: Path,
+    pbar: tqdm | None = None,
+) -> dict:
     """Run generate + score for all requested pipelines on a single model.
 
-    All output is captured and returned (not printed) so parallel runs
-    don't interleave on the terminal.
+    Progress is streamed via the shared tqdm bar so the user sees
+    per-pipeline and per-question updates in real time.
     """
     log_lines: list[str] = []
 
     pipeline_results = {}
     for pipeline_name in pipelines:
-        result = _run_pipeline(model, limit, pipeline_name, output_dir, log_lines)
+        result = _run_pipeline(
+            model, limit, pipeline_name, output_dir, log_lines, pbar=pbar,
+        )
         pipeline_results[pipeline_name] = result
+        if pbar:
+            pbar.update(1)
 
     all_ok = all(r["status"] == "ok" for r in pipeline_results.values())
 
@@ -174,32 +242,43 @@ def main():
     )
     parser.add_argument(
         "--dataset",
-        choices=["yes_no", "chained", "all"],
+        choices=[
+            "yes_no", "chained", "study_param",
+            "mcq_variant", "mcq_drug", "mcq_phenotype",
+            "mc_study", "all",
+        ],
         default="yes_no",
         help="Which pipeline(s) to run (default: yes_no)",
     )
     args = parser.parse_args()
 
+    MC_STUDY_PIPELINES = ["study_param", "mcq_variant", "mcq_drug", "mcq_phenotype"]
     if args.dataset == "all":
         pipelines = list(PIPELINES.keys())
+    elif args.dataset == "mc_study":
+        pipelines = MC_STUDY_PIPELINES
     else:
         pipelines = [args.dataset]
 
-    run_dir = _make_run_dir()
+    run_dir = _make_run_dir(args.dataset)
     start = datetime.now()
     results: list[dict] = []
 
+    total_pipelines = len(args.models) * len(pipelines)
     print(
-        f"Running {len(args.models)} models with up to {args.workers} workers"
-        f"  |  pipelines: {pipelines}"
+        f"Running {len(args.models)} models x {len(pipelines)} pipelines "
+        f"({total_pipelines} total) with up to {args.workers} workers"
     )
+    print(f"Pipelines: {pipelines}")
     print(f"Output directory: {run_dir}\n")
 
-    pbar = tqdm(total=len(args.models), desc="Models", unit="model")
+    pbar = tqdm(total=total_pipelines, desc="Pipelines", unit="pipeline")
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures = {
-            pool.submit(run_model, model, args.limit, pipelines, run_dir): model
+            pool.submit(
+                run_model, model, args.limit, pipelines, run_dir, pbar,
+            ): model
             for model in args.models
         }
 
@@ -210,8 +289,7 @@ def main():
             status = (
                 "OK" if result["status"] == "ok" else f"FAILED ({result['status']})"
             )
-            pbar.set_postfix_str(f"{model} -> {status}")
-            pbar.update(1)
+            pbar.write(f"  {_short_model(model)}: all pipelines {status}")
 
     pbar.close()
 

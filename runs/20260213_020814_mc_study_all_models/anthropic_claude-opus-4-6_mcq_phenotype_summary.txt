@@ -1,0 +1,64 @@
+
+======================================================================
+Mcq Phenotype Results  |  model=anthropic/claude-opus-4-6  |  7/10 (70.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  standard                         7       10     70.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  pheno                       7       10     70.0%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC3202555
+  Sentence: Genotypes AA + AT are associated with decreased risk of ______ due to nicotine as compared to genotype TT.
+  Options: a) Disease:Hypotensive disorder  b) Disease:Hematologic Disorder  c) Other:Tobacco Use Disorder  d) Disease:Bipolar Disorder
+  Expected: c  Got: c
+
+  [2] type=standard  table=pheno  pmcid=PMC9261480
+  Sentence: ABCB1 intermediate activity is associated with increased risk of ______ when exposed to loperamide.
+  Options: a) Disease:Alcohol-Related Disorders  b) Disease:Substance-Related Disorders  c) Side Effect:Opioid-Related Disorders  d) Disease:Anxiety Disorders
+  Expected: c  Got: c
+
+  [3] type=standard  table=pheno  pmcid=PMC11954185
+  Sentence: HLA-A *02:01 is not associated with increased likelihood of ______ when treated with ipilimumab, nivolumab or pembrolizu
+  Options: a) Disease:adverse cardiovascular events  b) Side Effect:CNS adverse events  c) Side Effect:Sexual adverse events  d) Side Effect:adverse events
+  Expected: d  Got: d
+
+  [4] type=standard  table=pheno  pmcid=PMC11554802
+  Sentence: UGT1A1 *1/*28 + *28/*28 is associated with increased severity of ______ when treated with sacituzumab govitecan in peopl
+  Options: a) Side Effect:Febrile neutropenia  b) Side Effect:neutropenia and infections  c) Side Effect:severe neutropenia  d) Side Effect:Neutropenia
+  Expected: d  Got: d
+
+  [5] type=standard  table=pheno  pmcid=PMC12035587
+  Sentence: NUDT15 *3/*3 is associated with increased severity of ______ when treated with mercaptopurine in women with Leukemia, Pr
+  Options: a) Side Effect:Myelosuppression, Side Effect:Toxic liver disease, Side Effect:Alopecia  b) Side Effect:venoocclusive disease of the liver  c) Disease:Toxic liver disease  d) Disease:Fatty liver disease
+  Expected: a  Got: a
+
+----------------------------------------------------------------------
+Example INCORRECT answers (3 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC11936550
+  Sentence: Genotypes AA + AG is associated with increased likelihood of ______ when treated with cyclophosphamide in children with 
+  Options: a) Absence  b) Side Effect:hemorrhagic cystitis  c) Acute  d) Side Effect:Cystitis
+  Expected: d  Got: b
+
+  [2] type=standard  table=pheno  pmcid=PMC5712579
+  Sentence: HLA-B *35:08 is not associated with likelihood of ______ when treated with lamotrigine in people with Epilepsy.
+  Options: a) Disease:Severe Cutaneous Adverse Reactions  b) Side Effect:Maculopapular Exanthema  c) Side Effect:Maculopapular Exanthema, Side Effect:Stevens-Johnson Syndrome  d) Side Effect:Maculopapular Exanthema, Side Effect:Severe Cutaneous Adverse Reactions, Side Effect:Stevens-Johnson Syndrome
+  Expected: d  Got: a
+
+  [3] type=standard  table=pheno  pmcid=PMC11936550
+  Sentence: Genotypes AG + GG is associated with increased likelihood of ______ when treated with cyclophosphamide in children with 
+  Options: a) Side Effect:Cystitis  b) Absence  c) Acute  d) Side Effect:hemorrhagic cystitis
+  Expected: a  Got: d
+
+Eval results saved to runs/20260213_020814_mc_study_all_models/anthropic_claude-opus-4-6_mcq_phenotype_eval_results.jsonl

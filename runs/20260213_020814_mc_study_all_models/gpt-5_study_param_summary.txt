@@ -1,0 +1,89 @@
+
+======================================================================
+Study Param Results  |  model=gpt-5  |  both: 7/10 (70.0%)
+======================================================================
+
+By field:
+  Field                 Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  p_value                     7       10     70.0%
+  significance                7       10     70.0%
+  both                        7       10     70.0%
+
+By question_type:
+  Type                         P-value    Signif.       Both    Total
+  ------------------------- ---------- ---------- ---------- --------
+  correct                       75.0%     75.0%     75.0%        4
+  modified_drug                 33.3%     33.3%     33.3%        3
+  modified_variant             100.0%    100.0%    100.0%        3
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        7       10     70.0%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=correct  table=drug  pmcid=PMC11730665
+  Expected p_value:      = 0.053
+  Response p_value:      0.053
+  Expected significance: no
+  Response significance: no
+  Raw response: {"p_value": "0.053", "significance": "no"}
+
+  [2] type=modified_variant  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+  [3] type=modified_variant  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+  [4] type=correct  table=drug  pmcid=PMC11730665
+  Expected p_value:      < 0.001
+  Response p_value:      <.001
+  Expected significance: yes
+  Response significance: yes
+  Raw response: {"p_value": "<.001", "significance": "yes"}
+
+  [5] type=modified_drug  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+----------------------------------------------------------------------
+Example INCORRECT answers (3 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=correct  table=drug  pmcid=PMC11730665
+  Expected p_value:      < 0.001
+  Response p_value:      not found
+  Expected significance: yes
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+  [2] type=modified_drug  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      <0.001
+  Expected significance: not found
+  Response significance: yes
+  Raw response: {"p_value": "<0.001", "significance": "yes"}
+
+  [3] type=modified_drug  table=drug  pmcid=PMC11730665
+  Expected p_value:      not found
+  Response p_value:      <.001
+  Expected significance: not found
+  Response significance: yes
+  Raw response: {"p_value": "<.001", "significance": "yes"}
+
+Eval results saved to runs/20260213_020814_mc_study_all_models/gpt-5_study_param_eval_results.jsonl
