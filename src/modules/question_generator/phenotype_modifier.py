@@ -115,6 +115,44 @@ def blank_phenotype_in_sentence(sentence: str, phenotype_field: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Phenotype bank validation (Fix 5)
+# ---------------------------------------------------------------------------
+
+_PHENOTYPE_BLOCKLIST = frozenset({
+    "other", "unknown", "n/a", "na", "toxicity", "efficacy",
+    "metabolism", "dosage", "pharmacokinetics",
+})
+
+
+def _is_valid_phenotype(entry: str) -> bool:
+    """Return False for junk phenotype bank entries."""
+    raw = entry.strip()
+    stripped = strip_phenotype_prefix(raw).strip()
+
+    # PK: prefixed entries
+    if raw.startswith("PK:"):
+        return False
+
+    # Too short after stripping prefix
+    if len(stripped) < 4:
+        return False
+
+    # Starts with digit
+    if stripped[0].isdigit():
+        return False
+
+    # Generic blocklist
+    if stripped.lower() in _PHENOTYPE_BLOCKLIST:
+        return False
+
+    # Prefix-less fragments containing / or )
+    if stripped != raw and ("/" in stripped or ")" in stripped):
+        return False
+
+    return True
+
+
+# ---------------------------------------------------------------------------
 # Jaccard similarity for phenotypes
 # ---------------------------------------------------------------------------
 
@@ -154,10 +192,24 @@ class PhenotypeSimilarityIndex:
     """Precomputed token sets for all bank phenotypes, supports fast lookup."""
 
     def __init__(self, bank: list[str]) -> None:
-        self._bank = bank
+        filtered = [p for p in bank if _is_valid_phenotype(p)]
+        logger.info(
+            f"Phenotype bank: {len(bank)} raw → {len(filtered)} after filtering"
+        )
+        self._bank = filtered
         self._token_sets: list[tuple[str, set[str]]] = [
-            (p, tokenize_phenotype(p)) for p in bank
+            (p, tokenize_phenotype(p)) for p in filtered
         ]
+        # Map stripped lowercase name → set of raw bank entries
+        self._by_stripped_name: dict[str, set[str]] = {}
+        for p in filtered:
+            key = strip_phenotype_prefix(p).strip().lower()
+            self._by_stripped_name.setdefault(key, set()).add(p)
+
+    def get_entries_by_stripped_name(self, name: str) -> set[str]:
+        """Return all bank entries whose stripped name matches (case-insensitive)."""
+        key = strip_phenotype_prefix(name).strip().lower()
+        return self._by_stripped_name.get(key, set())
 
     def find_most_similar(
         self,
@@ -202,7 +254,10 @@ def _get_same_paper_distractors(
     """Find distractors from the same paper with different phenotype AND different association."""
     paper_rows = index.get_rows_by_pmid(target.pmid)
     seen_phenotypes: set[str] = set()
+    seen_stripped: set[str] = set()
     distractors: list[DistractorOption] = []
+
+    target_stripped = strip_phenotype_prefix(target.phenotype).strip().lower()
 
     for row in paper_rows:
         # Only consider pheno-table rows
@@ -211,6 +266,10 @@ def _get_same_paper_distractors(
         # Must be a different phenotype
         if row.phenotype == target.phenotype:
             continue
+        row_stripped = strip_phenotype_prefix(row.phenotype).strip().lower()
+        # Skip candidates whose stripped name matches the target
+        if row_stripped == target_stripped:
+            continue
         # Must have a non-empty phenotype
         if not row.phenotype:
             continue
@@ -218,10 +277,11 @@ def _get_same_paper_distractors(
         differs_on = _association_differs_on(target, row)
         if differs_on is None:
             continue
-        # Deduplicate by phenotype string
-        if row.phenotype in seen_phenotypes:
+        # Deduplicate by phenotype string and by stripped name
+        if row.phenotype in seen_phenotypes or row_stripped in seen_stripped:
             continue
         seen_phenotypes.add(row.phenotype)
+        seen_stripped.add(row_stripped)
         distractors.append(
             DistractorOption(
                 phenotype=row.phenotype,
@@ -272,16 +332,31 @@ def generate_mcq_for_row(
     paper_phenotypes = index.get_paper_phenotypes(row.pmid)
     exclude = paper_phenotypes | {row.phenotype}
 
+    # Expand exclusion to all bank entries sharing the same stripped name
+    # as the correct answer or any chosen same-paper distractor
+    expanded_exclude = set(exclude)
+    expanded_exclude |= sim_index.get_entries_by_stripped_name(row.phenotype)
+    for sp in chosen_same_paper:
+        expanded_exclude |= sim_index.get_entries_by_stripped_name(sp.phenotype)
+
     # 4 + fallback: phenotype bank distractors
     bank_needed = remaining_slots
     bank_candidates = sim_index.find_most_similar(
         row.phenotype,
-        exclude=exclude,
-        top_k=bank_needed + 5,
+        exclude=expanded_exclude,
+        top_k=bank_needed + 10,
     )
 
+    # Deduplicate bank candidates by stripped name to avoid prefix-only variants
+    seen_bank_stripped: set[str] = set()
     bank_distractors: list[DistractorOption] = []
-    for phenotype, score in bank_candidates[:bank_needed]:
+    for phenotype, score in bank_candidates:
+        if len(bank_distractors) >= bank_needed:
+            break
+        cand_stripped = strip_phenotype_prefix(phenotype).strip().lower()
+        if cand_stripped in seen_bank_stripped:
+            continue
+        seen_bank_stripped.add(cand_stripped)
         bank_distractors.append(
             DistractorOption(
                 phenotype=phenotype,
@@ -341,24 +416,30 @@ def generate_all_phenotype_mcqs(
     out.parent.mkdir(parents=True, exist_ok=True)
 
     total = 0
+    blank_skipped = 0
     notes_counter: dict[str, int] = {}
 
     with open(out, "w") as f:
         for row in tqdm(pheno_rows, desc="Generating phenotype MCQs", unit="row"):
             mcq = generate_mcq_for_row(row, index, sim_index, rng)
+            if mcq.blanked_sentence == mcq.original_sentence:
+                blank_skipped += 1
+                continue
             f.write(mcq.model_dump_json() + "\n")
             total += 1
             for note in mcq.generation_notes:
                 key = note.split(";")[0].split("(")[0].strip()
                 notes_counter[key] = notes_counter.get(key, 0) + 1
 
+    if blank_skipped:
+        logger.info(f"Skipped {blank_skipped} rows where blanking failed")
     logger.info(f"Generated {total} phenotype MCQ entries → {out}")
     if notes_counter:
         logger.info("Generation notes distribution:")
         for key, count in sorted(notes_counter.items(), key=lambda x: -x[1]):
             logger.info(f"  {key}: {count}")
 
-    write_simplified_mcqs(out, answer_key="phenotype")
+    write_simplified_mcqs(out, answer_key="phenotype", seed=seed, start_id=60001)
     return out
 
 

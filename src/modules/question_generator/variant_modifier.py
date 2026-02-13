@@ -322,7 +322,7 @@ def generate_all_variant_mcqs(
         for key, count in sorted(notes_counter.items(), key=lambda x: -x[1]):
             logger.info(f"  {key}: {count}")
 
-    write_simplified_mcqs(out, answer_key="variant")
+    write_simplified_mcqs(out, answer_key="variant", start_id=1)
     return out
 
 

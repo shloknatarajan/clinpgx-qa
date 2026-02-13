@@ -158,6 +158,21 @@ class DrugSimilarityIndex:
 
 
 # ---------------------------------------------------------------------------
+# Drug overlap helpers (Fix 3)
+# ---------------------------------------------------------------------------
+
+
+def _drug_parts(drug: str) -> set[str]:
+    """Split a drug field into a set of individual drug names (lowercased)."""
+    return {d.strip().lower() for d in drug.split(",") if d.strip()}
+
+
+def _drugs_overlap(a: str, b: str) -> bool:
+    """Return True if any individual drug component appears in both strings."""
+    return bool(_drug_parts(a) & _drug_parts(b))
+
+
+# ---------------------------------------------------------------------------
 # Same-paper distractor selection
 # ---------------------------------------------------------------------------
 
@@ -189,6 +204,9 @@ def _get_same_paper_distractors(
     for row in paper_rows:
         # Must be a different drug
         if row.drug == target.drug:
+            continue
+        # Skip if drug components overlap
+        if _drugs_overlap(row.drug, target.drug):
             continue
         # Must differ on at least one other association field
         differs_on = _association_differs_on(target, row)
@@ -253,8 +271,12 @@ def generate_mcq_for_row(
     bank_candidates = sim_index.find_most_similar(
         row.drug,
         exclude=exclude,
-        top_k=bank_needed + 5,
+        top_k=bank_needed + 10,  # increased to compensate for overlap filtering
     )
+    # Filter out candidates with overlapping drug components
+    bank_candidates = [
+        (d, s) for d, s in bank_candidates if not _drugs_overlap(d, row.drug)
+    ]
 
     bank_distractors: list[DistractorOption] = []
     for drug, score in bank_candidates[:bank_needed]:
@@ -317,24 +339,30 @@ def generate_all_drug_mcqs(
     out.parent.mkdir(parents=True, exist_ok=True)
 
     total = 0
+    blank_skipped = 0
     notes_counter: dict[str, int] = {}
 
     with open(out, "w") as f:
         for row in tqdm(drug_rows, desc="Generating drug MCQs", unit="row"):
             mcq = generate_mcq_for_row(row, index, sim_index, rng)
+            if mcq.blanked_sentence == mcq.original_sentence:
+                blank_skipped += 1
+                continue
             f.write(mcq.model_dump_json() + "\n")
             total += 1
             for note in mcq.generation_notes:
                 key = note.split(";")[0].split("(")[0].strip()
                 notes_counter[key] = notes_counter.get(key, 0) + 1
 
+    if blank_skipped:
+        logger.info(f"Skipped {blank_skipped} rows where blanking failed")
     logger.info(f"Generated {total} drug MCQ entries → {out}")
     if notes_counter:
         logger.info("Generation notes distribution:")
         for key, count in sorted(notes_counter.items(), key=lambda x: -x[1]):
             logger.info(f"  {key}: {count}")
 
-    write_simplified_mcqs(out, answer_key="drug")
+    write_simplified_mcqs(out, answer_key="drug", seed=seed, start_id=30001)
     return out
 
 

@@ -7,6 +7,7 @@ methods for the distractor generation engines.
 """
 
 import json
+import random
 import sys
 from pathlib import Path
 
@@ -167,11 +168,14 @@ class AssociationTableIndex:
 # ---------------------------------------------------------------------------
 
 OPTION_LABELS = ["a", "b", "c", "d"]
+NOTA_TEXT = "None of the options"
 
 
 def write_simplified_mcqs(
     detailed_path: Path,
     answer_key: str,
+    seed: int = 42,
+    start_id: int = 1,
 ) -> Path:
     """Read a detailed MCQ JSONL and write a simplified version next to it.
 
@@ -183,11 +187,14 @@ def write_simplified_mcqs(
       2. **none_of_the_above** — the 3 distractors as options a–c, with
          option_d = "None of the above" and correct_answer = "d".
     """
+    rng = random.Random(seed)
+
     out_dir = detailed_path.parent / "simplified"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / detailed_path.name
 
     total = 0
+    qid = start_id
     with open(detailed_path) as fin, open(out_path, "w") as fout:
         for line in fin:
             row = json.loads(line)
@@ -207,6 +214,8 @@ def write_simplified_mcqs(
                 if opt["role"] == "correct":
                     correct_answer = label
             standard["correct_answer"] = correct_answer
+            standard = {"question_id": qid, **standard}
+            qid += 1
             fout.write(json.dumps(standard) + "\n")
             total += 1
 
@@ -214,10 +223,16 @@ def write_simplified_mcqs(
             distractors = [opt for opt in row["options"] if opt["role"] != "correct"]
             if len(distractors) >= 3:
                 nota = {**base, "question_type": "none_of_the_above"}
-                for i, opt in enumerate(distractors[:3]):
-                    nota[f"option_{OPTION_LABELS[i]}"] = opt[answer_key]
-                nota["option_d"] = "None of the above"
-                nota["correct_answer"] = "d"
+                nota_options = [opt[answer_key] for opt in distractors[:3]] + [NOTA_TEXT]
+                rng.shuffle(nota_options)
+                for i, val in enumerate(nota_options):
+                    nota[f"option_{OPTION_LABELS[i]}"] = val
+                for i, val in enumerate(nota_options):
+                    if val == NOTA_TEXT:
+                        nota["correct_answer"] = OPTION_LABELS[i]
+                        break
+                nota = {"question_id": qid, **nota}
+                qid += 1
                 fout.write(json.dumps(nota) + "\n")
                 total += 1
 
