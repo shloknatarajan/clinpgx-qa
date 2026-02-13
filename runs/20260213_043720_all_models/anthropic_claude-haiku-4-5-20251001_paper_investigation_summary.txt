@@ -1,0 +1,30 @@
+
+================================================================
+Paper Investigation Results  |  model=anthropic/claude-haiku-4-5-20251001
+================================================================
+
+  Papers scored:        2
+  Papers skipped:       0  (no paper text or parse failure)
+
+  Avg Variant Recall:   0.833
+  Avg Question Acc:     0.674  (across recalled variants only)
+  Avg Paper Score:      0.583  (recall x question_acc)
+
+By pipeline breakdown:
+  Pipeline              Questions    Correct   Accuracy
+  -------------------- ---------- ---------- ----------
+  mcq_drug                     22         22     1.000
+  mcq_variant                  22         17     0.773
+  study_param                  31         17     0.548
+  -------------------- ---------- ---------- ----------
+  TOTAL                        75         56     0.747
+
+WORST PAPERS (by paper_score):
+  [1] PMC12080641  recall=0.667  q_acc=0.526  score=0.348
+  [2] PMC11730665  recall=1.000  q_acc=0.821  score=0.818
+
+BEST PAPERS (by paper_score):
+  [1] PMC12080641  recall=0.667  q_acc=0.526  score=0.348
+  [2] PMC11730665  recall=1.000  q_acc=0.821  score=0.818
+
+Eval results saved to runs/20260213_043720_all_models/anthropic_claude-haiku-4-5-20251001_paper_investigation_eval_results.jsonl

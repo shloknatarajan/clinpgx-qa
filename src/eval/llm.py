@@ -15,26 +15,30 @@ from tenacity import (
 from src.utils.paper_map import build_pmcid_paper_map
 
 
-_REASONING_PREFIXES = ("o1", "o3", "o4", "gpt-5")
+_REASONING_PREFIXES = ("o1", "o3", "o4", "gpt-5-")
+_REASONING_EXACT = {"gpt-5"}
 _REASONING_GEMINI_PREFIXES = ("gemini-2.5", "gemini-3")
+
+# Timeout in seconds for a single LLM call.
+_LLM_TIMEOUT = 300
 
 
 def _is_reasoning_model(model: str) -> bool:
     """Check if a model is a reasoning model that needs higher token limits."""
-    name = model.lower()
-    if any(
-        name.startswith(p) or name.startswith(f"openai/{p}")
-        for p in _REASONING_PREFIXES
-    ):
+    # Strip provider prefix (e.g. "openai/gpt-5" → "gpt-5")
+    bare = model.lower().split("/", 1)[-1]
+    if bare in _REASONING_EXACT:
+        return True
+    if any(bare.startswith(p) for p in _REASONING_PREFIXES):
         return True
     # Gemini thinking models (e.g. gemini/gemini-2.5-pro)
-    bare = name.removeprefix("gemini/")
-    return any(bare.startswith(p) for p in _REASONING_GEMINI_PREFIXES)
+    gemini_bare = model.lower().removeprefix("gemini/")
+    return any(gemini_bare.startswith(p) for p in _REASONING_GEMINI_PREFIXES)
 
 
 @retry(
     retry=retry_if_exception_type(
-        (litellm.RateLimitError, litellm.exceptions.APIConnectionError)
+        (litellm.RateLimitError, litellm.exceptions.APIConnectionError, litellm.Timeout)
     ),
     wait=wait_exponential(min=2, max=120),
     stop=stop_after_attempt(8),
@@ -52,12 +56,14 @@ def call_llm(
     is_reasoning = _is_reasoning_model(model)
     kwargs: dict = {"drop_params": True, "temperature": temperature}
     if is_reasoning:
-        kwargs["max_completion_tokens"] = 16_000
+        # Scale up for chain-of-thought overhead, floor at 4096, cap at 16k.
+        kwargs["max_completion_tokens"] = min(max(max_tokens * 8, 4096), 16_000)
     else:
         kwargs["max_tokens"] = max_tokens
     response = litellm.completion(
         model=model,
         messages=messages,
+        timeout=_LLM_TIMEOUT,
         **kwargs,
     )
     content = response.choices[0].message.content

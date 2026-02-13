@@ -120,7 +120,7 @@ def main() -> None:
         try:
             prediction = call_llm(q.blanked_sentence, args.model)
         except Exception as e:
-            logger.error(f"LLM error on question {i}: {e}")
+            print(f"LLM error on question {i}: {e}")
             prediction = ""
 
         is_correct = score_prediction(prediction, ground_truth)

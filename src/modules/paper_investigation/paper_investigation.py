@@ -218,7 +218,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
             try:
                 ve_response = call_llm(ve_messages, args.model, max_tokens=2048)
             except Exception as e:
-                logger.error(f"VE LLM error on {pmcid}: {e}")
+                print(f"VE LLM error on {pmcid}: {e}")
                 ve_response = ""
 
             predicted_raw = parse_variant_list(ve_response)
@@ -273,7 +273,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
                     try:
                         response = call_llm(messages, args.model)
                     except Exception as e:
-                        logger.error(
+                        print(
                             f"LLM error on {pmcid}/{variant}/{uq.source_pipeline}: {e}"
                         )
                         response = ""

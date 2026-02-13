@@ -1,0 +1,30 @@
+
+================================================================
+Paper Investigation Results  |  model=gpt-4o-mini
+================================================================
+
+  Papers scored:        2
+  Papers skipped:       0  (no paper text or parse failure)
+
+  Avg Variant Recall:   0.604
+  Avg Question Acc:     0.580  (across recalled variants only)
+  Avg Paper Score:      0.378  (recall x question_acc)
+
+By pipeline breakdown:
+  Pipeline              Questions    Correct   Accuracy
+  -------------------- ---------- ---------- ----------
+  mcq_drug                     18         18     1.000
+  mcq_variant                  18          8     0.444
+  study_param                  24         12     0.500
+  -------------------- ---------- ---------- ----------
+  TOTAL                        60         38     0.633
+
+WORST PAPERS (by paper_score):
+  [1] PMC12080641  recall=0.333  q_acc=0.500  score=0.167
+  [2] PMC11730665  recall=0.875  q_acc=0.660  score=0.589
+
+BEST PAPERS (by paper_score):
+  [1] PMC12080641  recall=0.333  q_acc=0.500  score=0.167
+  [2] PMC11730665  recall=0.875  q_acc=0.660  score=0.589
+
+Eval results saved to runs/20260213_043720_all_models/gpt-4o-mini_paper_investigation_eval_results.jsonl

@@ -1,0 +1,28 @@
+
+================================================================
+Paper Investigation Results  |  model=anthropic/claude-sonnet-4-5-20250929
+================================================================
+
+  Papers scored:        1
+  Papers skipped:       0  (no paper text or parse failure)
+
+  Avg Variant Recall:   1.000
+  Avg Question Acc:     0.714  (across recalled variants only)
+  Avg Paper Score:      0.708  (recall x question_acc)
+
+By pipeline breakdown:
+  Pipeline              Questions    Correct   Accuracy
+  -------------------- ---------- ---------- ----------
+  mcq_drug                     16         12     0.750
+  mcq_variant                  16         12     0.750
+  study_param                  24         16     0.667
+  -------------------- ---------- ---------- ----------
+  TOTAL                        56         40     0.714
+
+WORST PAPERS (by paper_score):
+  [1] PMC11730665  recall=1.000  q_acc=0.714  score=0.708
+
+BEST PAPERS (by paper_score):
+  [1] PMC11730665  recall=1.000  q_acc=0.714  score=0.708
+
+Eval results saved to runs/20260213_041910_all_models/anthropic_claude-sonnet-4-5-20250929_paper_investigation_eval_results.jsonl
