@@ -38,21 +38,25 @@ def _is_reasoning_model(model: str) -> bool:
 def call_llm(
     messages: list[dict],
     model: str,
-    temperature: float = 0,
+    temperature: float = 1.0,
     max_tokens: int = 256,
 ) -> str:
     """Send messages to any model via litellm and return stripped response text."""
-    # Reasoning models use internal chain-of-thought tokens that count against
-    # max_tokens, so we need a much higher limit.
-    effective_max = 16_000 if _is_reasoning_model(model) else max_tokens
+    # Reasoning models require max_completion_tokens (not max_tokens) and
+    # only support temperature=1, so we drop temperature for them.
+    is_reasoning = _is_reasoning_model(model)
+    kwargs: dict = {"drop_params": True, "temperature": temperature}
+    if is_reasoning:
+        kwargs["max_completion_tokens"] = 16_000
+    else:
+        kwargs["max_tokens"] = max_tokens
     response = litellm.completion(
         model=model,
         messages=messages,
-        temperature=temperature,
-        max_tokens=effective_max,
-        drop_params=True,
+        **kwargs,
     )
-    return response.choices[0].message.content.strip()
+    content = response.choices[0].message.content
+    return content.strip() if content else ""
 
 
 def build_paper_index(papers_dir: str = "data/papers") -> dict[str, str]:

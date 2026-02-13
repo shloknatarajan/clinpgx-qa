@@ -1,0 +1,49 @@
+
+======================================================================
+Variant Extraction Results  |  model=gpt-4o  |  Recall=0.667
+======================================================================
+
+  Articles scored: 2/2
+  Parse failures:  0/2
+
+By variant type:
+  Type                TP     FN     Recall
+  --------------- ------ ------ ----------
+  phenotype            1      2     0.333
+  rsID                 8      0     1.000
+  --------------- ------ ------ ----------
+  MICRO-AVG            9      2     0.818
+
+  Macro-avg Recall: 0.667
+
+----------------------------------------------------------------------
+Example WORST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC12080641  Recall=0.333
+  Title: Sociodemographic, clinical, and genetic factors associated with self-reported an
+  Ground truth (3): ['CYP2C19 ultrarapid metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 intermediate metabolizer']
+  Predicted (1): ['CYP2C19 poor metabolizer']
+  Missed: ['CYP2C19 intermediate metabolizer', 'CYP2C19 ultrarapid metabolizer']
+
+  [2] pmcid=PMC11730665  Recall=1.000
+  Title: Comparative efficacy and safety of sitagliptin or gliclazide combined with metfo
+  Ground truth (8): ['rs1799853', 'rs4664443', 'rs7754840', 'rs3765467', 'rs2285676']
+  Predicted (10): ['rs1057910', 'rs163184', 'rs1799853', 'rs2285676', 'rs2909451']
+
+----------------------------------------------------------------------
+Example BEST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC12080641  Recall=0.333
+  Title: Sociodemographic, clinical, and genetic factors associated with self-reported an
+  Ground truth (3): ['CYP2C19 ultrarapid metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 intermediate metabolizer']
+  Predicted (1): ['CYP2C19 poor metabolizer']
+  Missed: ['CYP2C19 intermediate metabolizer', 'CYP2C19 ultrarapid metabolizer']
+
+  [2] pmcid=PMC11730665  Recall=1.000
+  Title: Comparative efficacy and safety of sitagliptin or gliclazide combined with metfo
+  Ground truth (8): ['rs1799853', 'rs4664443', 'rs7754840', 'rs3765467', 'rs2285676']
+  Predicted (10): ['rs1057910', 'rs163184', 'rs1799853', 'rs2285676', 'rs2909451']
+
+Eval results saved to runs/20260212_182208_all_models_VE/gpt-4o_variant_eval_results.jsonl
