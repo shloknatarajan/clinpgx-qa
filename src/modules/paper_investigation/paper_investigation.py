@@ -11,6 +11,7 @@ Usage:
 import argparse
 import json
 import os
+import re
 import sys
 from collections import defaultdict
 from datetime import datetime
@@ -24,9 +25,7 @@ _project_root = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(_project_root))
 
 from src.eval.llm import build_paper_index, call_llm, load_paper
-from src.eval.mcq import SYSTEM_PROMPT as MCQ_SYSTEM_PROMPT
 from src.eval.mcq import _parse_letter
-from src.eval.study_param import SYSTEM_PROMPT as SP_SYSTEM_PROMPT
 from src.eval.study_param import (
     _parse_json_response,
     _score_p_value,
@@ -63,44 +62,35 @@ def _make_run_dir(model: str) -> Path:
 
 
 # ---------------------------------------------------------------------------
-# Question prompting
+# Batched question prompting
 # ---------------------------------------------------------------------------
 
+BATCHED_SYSTEM_PROMPT = (
+    "You are a pharmacogenomics expert. "
+    "Read the provided paper and answer each numbered question. "
+    "For each question, respond with ONLY the answer on its own line, "
+    "prefixed by the question number (e.g. '1. a' or '2. {\"p_value\": ...}')."
+)
 
-def _build_mcq_prompt(q: dict, paper_text: str | None, pmcid: str) -> list[dict]:
-    """Build LLM messages for an MCQ question (variant/drug/phenotype)."""
-    options_text = (
-        f"a) {q['option_a']}\n"
-        f"b) {q['option_b']}\n"
-        f"c) {q['option_c']}\n"
-        f"d) {q['option_d']}"
-    )
-    question_text = (
-        f"Fill in the blank in the following sentence from the paper:\n\n"
-        f'"{q["blanked_sentence"]}"\n\n'
-        f"Options:\n{options_text}\n\n"
-        "Respond with ONLY a single letter (a, b, c, or d). "
-        "Do not include any explanation or reasoning."
-    )
-    if paper_text:
-        user_content = (
-            f"## Paper (PMCID {pmcid})\n\n{paper_text}\n\n"
-            f"## Question\n\n{question_text}"
+
+def _format_single_question(uq: UnifiedQuestion) -> str:
+    """Format a single question as text (no paper context — that goes in the header)."""
+    q = uq.raw_question
+    if uq.source_pipeline.startswith("mcq_"):
+        options_text = (
+            f"a) {q['option_a']}\n"
+            f"b) {q['option_b']}\n"
+            f"c) {q['option_c']}\n"
+            f"d) {q['option_d']}"
         )
-    else:
-        user_content = question_text
-
-    return [
-        {"role": "system", "content": MCQ_SYSTEM_PROMPT},
-        {"role": "user", "content": user_content},
-    ]
-
-
-def _build_study_param_prompt(
-    q: dict, paper_text: str | None, pmcid: str
-) -> list[dict]:
-    """Build LLM messages for a study param question."""
-    question_text = _build_question_text(
+        return (
+            f"Fill in the blank in the following sentence from the paper:\n"
+            f'"{q["blanked_sentence"]}"\n\n'
+            f"Options:\n{options_text}\n\n"
+            "Respond with ONLY a single letter (a, b, c, or d)."
+        )
+    # study_param
+    return _build_question_text(
         variant=q["variant"],
         gene=q["gene"],
         drug=q["drug"],
@@ -108,18 +98,64 @@ def _build_study_param_prompt(
         phenotype=q["phenotype"],
         sentence=q["sentence"],
     )
+
+
+def _build_batched_prompt(
+    questions: list[UnifiedQuestion], paper_text: str | None, pmcid: str
+) -> list[dict]:
+    """Build a single LLM prompt with all questions for a variant."""
+    numbered_questions = []
+    for i, uq in enumerate(questions, 1):
+        numbered_questions.append(f"### Question {i}\n{_format_single_question(uq)}")
+
+    questions_block = "\n\n".join(numbered_questions)
+
     if paper_text:
         user_content = (
             f"## Paper (PMCID {pmcid})\n\n{paper_text}\n\n"
-            f"## Question\n\n{question_text}"
+            f"## Questions\n\n{questions_block}\n\n"
+            f"Answer each question on its own line, prefixed by the question number. "
+            f"For multiple-choice questions, respond with only the letter. "
+            f'For p-value questions, respond with only the JSON object.\n'
+            f"Example:\n1. b\n"
+            f'2. {{"p_value": "0.03", "significance": "yes"}}\n3. a'
         )
     else:
-        user_content = question_text
+        user_content = (
+            f"{questions_block}\n\n"
+            f"Answer each question on its own line, prefixed by the question number. "
+            f"For multiple-choice questions, respond with only the letter. "
+            f'For p-value questions, respond with only the JSON object.\n'
+            f"Example:\n1. b\n"
+            f'2. {{"p_value": "0.03", "significance": "yes"}}\n3. a'
+        )
 
     return [
-        {"role": "system", "content": SP_SYSTEM_PROMPT},
+        {"role": "system", "content": BATCHED_SYSTEM_PROMPT},
         {"role": "user", "content": user_content},
     ]
+
+
+def _parse_batched_response(
+    response: str, num_questions: int
+) -> list[str]:
+    """Parse a batched response into individual answer strings.
+
+    Expects lines like '1. a', '2. {"p_value": ...}', etc.
+    Returns a list of answer strings (one per question). Missing answers
+    are returned as empty strings.
+    """
+    answers = [""] * num_questions
+
+    # Match lines starting with a number followed by a dot/parenthesis
+    for match in re.finditer(
+        r"(?m)^(\d+)\s*[.)]\s*(.+)", response
+    ):
+        idx = int(match.group(1)) - 1  # 0-based
+        if 0 <= idx < num_questions:
+            answers[idx] = match.group(2).strip()
+
+    return answers
 
 
 # ---------------------------------------------------------------------------
@@ -257,36 +293,31 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
                     continue
                 questions = questions[:MAX_QUESTIONS_PER_VARIANT]
 
+                # Single batched LLM call for all questions on this variant
+                messages = _build_batched_prompt(questions, paper_text, pmcid)
+                try:
+                    # Scale max_tokens with question count
+                    batched_response = call_llm(
+                        messages, args.model, max_tokens=256 * len(questions)
+                    )
+                except Exception as e:
+                    print(f"LLM error on {pmcid}/{variant}: {e}")
+                    batched_response = ""
+
+                answers = _parse_batched_response(batched_response, len(questions))
+
                 responses_list: list[dict] = []
                 q_correct = 0
 
-                for uq in questions:
-                    q = uq.raw_question
-
-                    # Build prompt
-                    if uq.source_pipeline.startswith("mcq_"):
-                        messages = _build_mcq_prompt(q, paper_text, pmcid)
-                    else:
-                        messages = _build_study_param_prompt(q, paper_text, pmcid)
-
-                    # Call LLM
-                    try:
-                        response = call_llm(messages, args.model)
-                    except Exception as e:
-                        print(
-                            f"LLM error on {pmcid}/{variant}/{uq.source_pipeline}: {e}"
-                        )
-                        response = ""
-
-                    # Score
-                    is_correct, expected = _score_question(uq, response)
+                for uq, answer in zip(questions, answers):
+                    is_correct, expected = _score_question(uq, answer)
                     q_correct += int(is_correct)
 
                     responses_list.append(
                         {
                             "source_pipeline": uq.source_pipeline,
                             "annotation_id": uq.annotation_id,
-                            "model_response": response,
+                            "model_response": answer,
                             "correct": is_correct,
                             "expected_answer": expected,
                         }

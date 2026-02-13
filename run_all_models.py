@@ -10,13 +10,13 @@ Usage:
     python run_all_models.py --dataset variant_extraction               # variant extraction
     python run_all_models.py --dataset paper_investigation              # paper investigation
     python run_all_models.py --models gpt-4o anthropic/claude-opus-4-6
-    python run_all_models.py --workers 3                                # run 3 models in parallel
 """
 
 import argparse
 import subprocess
 import sys
 import threading
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
@@ -82,6 +82,21 @@ def _make_run_dir(dataset: str) -> Path:
 def _short_model(model: str) -> str:
     """Return a short display name for a model identifier."""
     return model.rsplit("/", 1)[-1]
+
+
+def _provider(model: str) -> str:
+    """Extract provider from a model identifier (e.g. 'anthropic/claude-...' → 'anthropic')."""
+    if "/" in model:
+        return model.split("/", 1)[0]
+    return "openai"
+
+
+def _group_by_provider(models: list[str]) -> dict[str, list[str]]:
+    """Group models by provider, preserving order within each group."""
+    groups: dict[str, list[str]] = defaultdict(list)
+    for m in models:
+        groups[_provider(m)].append(m)
+    return dict(groups)
 
 
 def _stream_stderr(
@@ -260,12 +275,6 @@ def main():
         help="Model identifiers to evaluate",
     )
     parser.add_argument(
-        "--workers",
-        type=int,
-        default=len(MODELS),
-        help="Max parallel workers (default: number of models)",
-    )
-    parser.add_argument(
         "--dataset",
         choices=[
             "yes_no",
@@ -296,37 +305,39 @@ def main():
     start = datetime.now()
     results: list[dict] = []
 
+    provider_groups = _group_by_provider(args.models)
     total_pipelines = len(args.models) * len(pipelines)
     print(
         f"Running {len(args.models)} models x {len(pipelines)} pipelines "
-        f"({total_pipelines} total) with up to {args.workers} workers"
+        f"({total_pipelines} total) across {len(provider_groups)} providers"
     )
+    for provider, models in provider_groups.items():
+        print(f"  {provider}: {[_short_model(m) for m in models]} (sequential)")
     print(f"Pipelines: {pipelines}")
     print(f"Output directory: {run_dir}\n")
 
     pbar = tqdm(total=total_pipelines, desc="Pipelines", unit="pipeline")
 
-    with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futures = {
-            pool.submit(
-                run_model,
-                model,
-                args.limit,
-                pipelines,
-                run_dir,
-                pbar,
-            ): model
-            for model in args.models
-        }
-
-        for future in as_completed(futures):
-            model = futures[future]
-            result = future.result()
-            results.append(result)
+    def _run_provider_group(models: list[str]) -> list[dict]:
+        """Run models sequentially within a single provider group."""
+        group_results = []
+        for model in models:
+            result = run_model(model, args.limit, pipelines, run_dir, pbar)
+            group_results.append(result)
             status = (
                 "OK" if result["status"] == "ok" else f"FAILED ({result['status']})"
             )
             pbar.write(f"  {_short_model(model)}: all pipelines {status}")
+        return group_results
+
+    # One thread per provider — models within each provider run sequentially
+    with ThreadPoolExecutor(max_workers=len(provider_groups)) as pool:
+        futures = {
+            pool.submit(_run_provider_group, models): provider
+            for provider, models in provider_groups.items()
+        }
+        for future in as_completed(futures):
+            results.extend(future.result())
 
     pbar.close()
 
