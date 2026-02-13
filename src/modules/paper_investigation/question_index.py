@@ -104,7 +104,9 @@ class QuestionIndex:
                 + (f" (skipped {skipped})" if skipped else "")
             )
 
-        logger.info(f"QuestionIndex: {total} questions across {len(self._pmcids)} papers")
+        logger.info(
+            f"QuestionIndex: {total} questions across {len(self._pmcids)} papers"
+        )
 
     def get_questions(self, pmcid: str, variant: str) -> list[UnifiedQuestion]:
         """Return all questions for a (pmcid, variant) pair."""

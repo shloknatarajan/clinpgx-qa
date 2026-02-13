@@ -27,8 +27,15 @@ from src.eval.llm import build_paper_index, call_llm, load_paper
 from src.eval.mcq import SYSTEM_PROMPT as MCQ_SYSTEM_PROMPT
 from src.eval.mcq import _parse_letter
 from src.eval.study_param import SYSTEM_PROMPT as SP_SYSTEM_PROMPT
-from src.eval.study_param import _parse_json_response, _score_p_value, _score_significance
-from src.modules.paper_investigation.question_index import QuestionIndex, UnifiedQuestion
+from src.eval.study_param import (
+    _parse_json_response,
+    _score_p_value,
+    _score_significance,
+)
+from src.modules.paper_investigation.question_index import (
+    QuestionIndex,
+    UnifiedQuestion,
+)
 from src.modules.study_param_questions.generate import _build_question_text
 from src.modules.variant_extraction.variant_extraction import (
     SYSTEM_PROMPT as VE_SYSTEM_PROMPT,
@@ -240,9 +247,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
 
             # Step 3: Answer questions for recalled variants
             variant_results: dict[str, dict] = {}
-            pbar.set_postfix(
-                pmcid=pmcid, status=f"Q&A ({len(recalled)} variants)"
-            )
+            pbar.set_postfix(pmcid=pmcid, status=f"Q&A ({len(recalled)} variants)")
 
             for variant in sorted(recalled):
                 questions = question_index.get_questions(pmcid, variant)
@@ -274,13 +279,15 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
                     is_correct, expected = _score_question(uq, response)
                     q_correct += int(is_correct)
 
-                    responses_list.append({
-                        "source_pipeline": uq.source_pipeline,
-                        "annotation_id": uq.annotation_id,
-                        "model_response": response,
-                        "correct": is_correct,
-                        "expected_answer": expected,
-                    })
+                    responses_list.append(
+                        {
+                            "source_pipeline": uq.source_pipeline,
+                            "annotation_id": uq.annotation_id,
+                            "model_response": response,
+                            "correct": is_correct,
+                            "expected_answer": expected,
+                        }
+                    )
 
                 q_acc = q_correct / len(questions) if questions else 0.0
                 variant_results[variant] = {
@@ -395,8 +402,12 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
 
     lines.append("")
     lines.append(f"  Avg Variant Recall:   {avg_recall:.3f}")
-    lines.append(f"  Avg Question Acc:     {avg_q_acc:.3f}  (across recalled variants only)")
-    lines.append(f"  Avg Paper Score:      {avg_paper_score:.3f}  (recall x question_acc)")
+    lines.append(
+        f"  Avg Question Acc:     {avg_q_acc:.3f}  (across recalled variants only)"
+    )
+    lines.append(
+        f"  Avg Paper Score:      {avg_paper_score:.3f}  (recall x question_acc)"
+    )
 
     # Pipeline breakdown
     lines.append("")
