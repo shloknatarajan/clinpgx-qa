@@ -34,7 +34,8 @@ SYSTEM_PROMPT = (
 )
 
 USER_PROMPT_TEMPLATE = """\
-Extract all pharmacogenetic variants from the following article.
+Extract all pharmacogenetic variants studied in the following article.
+Don't include variants that are only mentioned for background information.
 
 VARIANT TYPES:
 1. rsIDs: rs followed by numbers (rs9923231, rs1057910)
@@ -48,6 +49,7 @@ NORMALIZATION RULES:
 - Star alleles: Always use GENE*NUMBER (CYP2C9*3, not CYP2C9 *3)
 - HLA: Always include HLA- prefix and use colon separator (HLA-B*58:01)
 - Include diplotypes if mentioned (e.g., *1/*3 should be listed as the individual alleles)
+- Prefer standardized formats used by PharmGKB/ClinPGx
 
 Return ONLY a JSON array of unique variants. No explanations.
 
@@ -109,7 +111,8 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
                     "pmcid": pmcid,
                     "article_title": article.get("article_title", ""),
                     "ground_truth": article["variants"],
-                    "response": "",
+                    "predicted": None,
+                    "raw_response": "",
                     "had_paper_context": False,
                     "model": args.model,
                 }
@@ -130,11 +133,13 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
                 logger.error(f"LLM error on {pmcid}: {e}")
                 response = ""
 
+            predicted = parse_variant_list(response)
             record = {
                 "pmcid": pmcid,
                 "article_title": article.get("article_title", ""),
                 "ground_truth": article["variants"],
-                "response": response,
+                "predicted": predicted,
+                "raw_response": response,
                 "had_paper_context": True,
                 "model": args.model,
             }
@@ -225,7 +230,11 @@ def score(args: argparse.Namespace, output_dir: Path | None = None) -> None:
     type_stats: dict[str, dict[str, int]] = defaultdict(lambda: {"tp": 0, "fn": 0})
 
     for r in records:
-        predicted_raw = parse_variant_list(r["response"])
+        # Support both new format (predicted field) and legacy (response string)
+        if "predicted" in r:
+            predicted_raw = r["predicted"]
+        else:
+            predicted_raw = parse_variant_list(r["response"])
         ground_truth_raw = r["ground_truth"]
 
         if predicted_raw is None:

@@ -1,0 +1,58 @@
+
+======================================================================
+Variant Extraction Results  |  model=gpt-5.2  |  Recall=0.800
+======================================================================
+
+  Articles scored: 5/5
+  Parse failures:  0/5
+
+By variant type:
+  Type                TP     FN     Recall
+  --------------- ------ ------ ----------
+  phenotype            5      0     1.000
+  rsID                 9      1     0.900
+  --------------- ------ ------ ----------
+  MICRO-AVG           14      1     0.933
+
+  Macro-avg Recall: 0.800
+
+----------------------------------------------------------------------
+Example WORST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC11921366  Recall=0.000
+  Title: Novel LZTR1 germline mutation as a mechanism of resistance to osimertinib in EGF
+  Ground truth (1): ['rs1411200130']
+  Predicted (16): ['EGFR c.2236_2250del', 'EGFR p.E746_A750del', 'ESR1 p.A505P', 'LZTR1 c.1653C>G', 'LZTR1 p.Y551*']
+  Missed: ['rs1411200130']
+
+  [2] pmcid=PMC11730665  Recall=1.000
+  Title: Comparative efficacy and safety of sitagliptin or gliclazide combined with metfo
+  Ground truth (8): ['rs1799853', 'rs4664443', 'rs7754840', 'rs3765467', 'rs2285676']
+  Predicted (10): ['rs1057910', 'rs163184', 'rs1799853', 'rs2285676', 'rs2909451']
+
+  [3] pmcid=PMC12080641  Recall=1.000
+  Title: Sociodemographic, clinical, and genetic factors associated with self-reported an
+  Ground truth (3): ['CYP2C19 ultrarapid metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 intermediate metabolizer']
+  Predicted (5): ['CYP2C19 intermediate metabolizer', 'CYP2C19 normal metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 rapid metabolizer', 'CYP2C19 ultrarapid metabolizer']
+
+----------------------------------------------------------------------
+Example BEST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC12080641  Recall=1.000
+  Title: Sociodemographic, clinical, and genetic factors associated with self-reported an
+  Ground truth (3): ['CYP2C19 ultrarapid metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 intermediate metabolizer']
+  Predicted (5): ['CYP2C19 intermediate metabolizer', 'CYP2C19 normal metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 rapid metabolizer', 'CYP2C19 ultrarapid metabolizer']
+
+  [2] pmcid=PMC6347826  Recall=1.000
+  Title: Effect of TCF7L2 polymorphism on pancreatic hormones after exenatide in type 2 d
+  Ground truth (1): ['rs7903146']
+  Predicted (1): ['rs7903146']
+
+  [3] pmcid=PMC7655626  Recall=1.000
+  Title: Pharmacogenetic Interactions of Rifapentine plus Isoniazid with Efavirenz or Nev
+  Ground truth (2): ['NAT2 slow acetylator', 'CYP2B6 poor metabolizer']
+  Predicted (30): ['CYP2B6 poor metabolizer', 'NAT2 slow acetylator', 'rs1041983', 'rs10841753', 'rs11045819']
+
+Eval results saved to runs/20260212_184429_all_models_VE/gpt-5.2_variant_eval_results.jsonl
