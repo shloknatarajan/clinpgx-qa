@@ -10,8 +10,8 @@ Fallback: when fewer than 2 same-paper distractors are found, remaining
 slots are filled from the drug bank.
 
 Usage:
-    python -m src.modules.question_generator.drug_modifier
-    python -m src.modules.question_generator.drug_modifier --seed 42 --output data/mcq_options/drug_mcq_options.jsonl
+    python -m src.modules.mcq_generator.drug_modifier
+    python -m src.modules.mcq_generator.drug_modifier --seed 42 --output data/mcq_options/drug_mcq_options.jsonl
 """
 
 import argparse
@@ -27,7 +27,7 @@ from tqdm import tqdm
 _project_root = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(_project_root))
 
-from src.modules.question_generator.table_lookup import (
+from src.modules.mcq_generator.table_lookup import (
     AssociationRow,
     AssociationTableIndex,
     write_simplified_mcqs,

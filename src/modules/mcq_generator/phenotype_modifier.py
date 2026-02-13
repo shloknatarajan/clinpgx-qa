@@ -12,8 +12,8 @@ slots are filled from the phenotype bank.
 Only processes pheno-table rows (drug-table rows have no phenotype field).
 
 Usage:
-    python -m src.modules.question_generator.phenotype_modifier
-    python -m src.modules.question_generator.phenotype_modifier --seed 42 --output data/mcq_options/phenotype_mcq_options.jsonl
+    python -m src.modules.mcq_generator.phenotype_modifier
+    python -m src.modules.mcq_generator.phenotype_modifier --seed 42 --output data/mcq_options/phenotype_mcq_options.jsonl
 """
 
 import argparse
@@ -29,7 +29,7 @@ from tqdm import tqdm
 _project_root = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(_project_root))
 
-from src.modules.question_generator.table_lookup import (
+from src.modules.mcq_generator.table_lookup import (
     AssociationRow,
     AssociationTableIndex,
     write_simplified_mcqs,
