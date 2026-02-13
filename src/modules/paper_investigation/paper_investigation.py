@@ -246,6 +246,8 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
             )
 
             # Step 3: Answer questions for recalled variants
+            # Cap questions per variant to keep cost/time bounded
+            MAX_QUESTIONS_PER_VARIANT = 10
             variant_results: dict[str, dict] = {}
             pbar.set_postfix(pmcid=pmcid, status=f"Q&A ({len(recalled)} variants)")
 
@@ -253,6 +255,7 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
                 questions = question_index.get_questions(pmcid, variant)
                 if not questions:
                     continue
+                questions = questions[:MAX_QUESTIONS_PER_VARIANT]
 
                 responses_list: list[dict] = []
                 q_correct = 0

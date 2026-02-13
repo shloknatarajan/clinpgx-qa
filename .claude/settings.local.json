@@ -19,7 +19,8 @@
       "Bash(for f in runs/20260211_023711_*/yes_no_responses.jsonl)",
       "Bash(git -C /Users/shloknatarajan/stanford/research/daneshjou/clinpgx-qa log --oneline --all -- \"src/modules/question_generator/table_lookup.py\")",
       "mcp__ide__getDiagnostics",
-      "Bash(ruff check:*)"
+      "Bash(ruff check:*)",
+      "Bash(cat:*)"
     ]
   }
 }

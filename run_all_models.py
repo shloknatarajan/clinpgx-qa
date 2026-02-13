@@ -30,7 +30,6 @@ MODELS = [
     "gpt-4o-mini",
     "gpt-5",
     "gpt-5.2",
-    "gemini/gemini-2.5-pro",
 ]
 
 PIPELINES = {
