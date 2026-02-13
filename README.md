@@ -90,3 +90,44 @@ This creates a `chained_responses.jsonl` file in a new `runs/...` directory.
 python src/eval/chained.py score \
     --responses-path runs/<your_run_directory>/chained_responses.jsonl
 ```
+
+---
+
+## Variant Extraction
+
+Tests how well models can extract pharmacogenetic variants from full paper text. The model is prompted to return a JSON array of variants, and scoring measures **recall only** — extra variants are not penalized.
+
+### Running Variant Extraction
+
+```bash
+# Generate + score in one step
+python src/modules/variant_extraction/variant_extraction.py run --model gpt-4o-mini --limit 100
+
+# Or run each phase separately
+python src/modules/variant_extraction/variant_extraction.py generate --model gpt-4o-mini --limit 100
+python src/modules/variant_extraction/variant_extraction.py score \
+    --responses-path runs/<your_run_directory>/variant_responses.jsonl
+```
+
+#### Arguments:
+- `--model`: LiteLLM model identifier. Defaults to `gpt-4o-mini`.
+- `--bench-path`: Path to ground truth JSONL. Defaults to `data/variant_bench.jsonl`.
+- `--limit`: Number of articles to process. `0` means all. Defaults to `0`.
+
+Outputs are saved to `runs/YYYYMMDD_HHMMSS_model_VE/`.
+
+### Running Across All Models
+
+```bash
+# All 6 models, all articles, in parallel
+python run_all_models_ve.py
+
+# Limit to 100 articles per model
+python run_all_models_ve.py --limit 100
+
+# Specific models only
+python run_all_models_ve.py --models gpt-4o anthropic/claude-opus-4-6
+
+# Control parallelism
+python run_all_models_ve.py --workers 3
+```

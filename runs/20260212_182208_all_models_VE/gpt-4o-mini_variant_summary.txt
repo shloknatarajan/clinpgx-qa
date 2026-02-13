@@ -1,0 +1,51 @@
+
+======================================================================
+Variant Extraction Results  |  model=gpt-4o-mini  |  Recall=0.604
+======================================================================
+
+  Articles scored: 2/2
+  Parse failures:  0/2
+
+By variant type:
+  Type                TP     FN     Recall
+  --------------- ------ ------ ----------
+  phenotype            1      2     0.333
+  rsID                 7      1     0.875
+  --------------- ------ ------ ----------
+  MICRO-AVG            8      3     0.727
+
+  Macro-avg Recall: 0.604
+
+----------------------------------------------------------------------
+Example WORST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC12080641  Recall=0.333
+  Title: Sociodemographic, clinical, and genetic factors associated with self-reported an
+  Ground truth (3): ['CYP2C19 ultrarapid metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 intermediate metabolizer']
+  Predicted (4): ['CYP2C19 poor metabolizer', 'CYP2C19*17', 'CYP2C19*2', 'CYP2C19*3']
+  Missed: ['CYP2C19 intermediate metabolizer', 'CYP2C19 ultrarapid metabolizer']
+
+  [2] pmcid=PMC11730665  Recall=0.875
+  Title: Comparative efficacy and safety of sitagliptin or gliclazide combined with metfo
+  Ground truth (8): ['rs1799853', 'rs4664443', 'rs7754840', 'rs3765467', 'rs2285676']
+  Predicted (15): ['CYP2C19*2', 'CYP2C19*3', 'CYP2C9*2', 'CYP2C9*3', 'CYP2D6 poor metabolizer']
+  Missed: ['rs6923761']
+
+----------------------------------------------------------------------
+Example BEST RECALL articles
+----------------------------------------------------------------------
+
+  [1] pmcid=PMC12080641  Recall=0.333
+  Title: Sociodemographic, clinical, and genetic factors associated with self-reported an
+  Ground truth (3): ['CYP2C19 ultrarapid metabolizer', 'CYP2C19 poor metabolizer', 'CYP2C19 intermediate metabolizer']
+  Predicted (4): ['CYP2C19 poor metabolizer', 'CYP2C19*17', 'CYP2C19*2', 'CYP2C19*3']
+  Missed: ['CYP2C19 intermediate metabolizer', 'CYP2C19 ultrarapid metabolizer']
+
+  [2] pmcid=PMC11730665  Recall=0.875
+  Title: Comparative efficacy and safety of sitagliptin or gliclazide combined with metfo
+  Ground truth (8): ['rs1799853', 'rs4664443', 'rs7754840', 'rs3765467', 'rs2285676']
+  Predicted (15): ['CYP2C19*2', 'CYP2C19*3', 'CYP2C9*2', 'CYP2C9*3', 'CYP2D6 poor metabolizer']
+  Missed: ['rs6923761']
+
+Eval results saved to runs/20260212_182208_all_models_VE/gpt-4o-mini_variant_eval_results.jsonl
