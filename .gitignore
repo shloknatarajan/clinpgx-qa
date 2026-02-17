@@ -5,3 +5,5 @@ venv/
 __pycache__
 .env
 neurips_chained_questions.jsonl
+.ruff_cache
+.claude/.claude/
