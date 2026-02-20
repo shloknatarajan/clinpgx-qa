@@ -1,0 +1,78 @@
+======================================================================
+Contradiction Analysis  |  model=anthropic_claude-haiku-4-5-20251001
+======================================================================
+
+## Type 1: Standard vs NOTA contradictions
+--------------------------------------------------
+
+  VARIANT MCQ (5 annotation pairs):
+    Correct standard, wrong NOTA:      4  (80.0%)
+    Wrong standard, correct NOTA:      0  (0.0%)
+    Total contradictions:              4  (80.0%)
+
+  DRUG MCQ (10 annotation pairs):
+    Correct standard, wrong NOTA:      0  (0.0%)
+    Wrong standard, correct NOTA:      0  (0.0%)
+    Total contradictions:              0  (0.0%)
+
+  PHENOTYPE MCQ (10 annotation pairs):
+    Correct standard, wrong NOTA:      0  (0.0%)
+    Wrong standard, correct NOTA:      0  (0.0%)
+    Total contradictions:              0  (0.0%)
+
+## Type 2: Distractor-as-correct-answer contradictions
+--------------------------------------------------
+
+  VARIANT MCQ (5 standard questions, 0 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+
+  DRUG MCQ (10 standard questions, 0 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+
+  PHENOTYPE MCQ (10 standard questions, 6 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+    Wrong answers that contradict:  0.0%
+
+## Type 3: Cross-type contradictions
+--------------------------------------------------
+  Annotations in 2+ MCQ types:         5
+  Cross-type contradictions:            0  (0.0%)
+
+======================================================================
+Total contradictions: 4  (across 30 total questions)
+======================================================================
+
+----------------------------------------------------------------------
+All Type 1: Standard vs NOTA contradictions (4)
+----------------------------------------------------------------------
+
+  #1
+  [Correct standard, wrong NOTA]  annotation=1453073660  pmcid=PMC11730665
+    Sentence: ______ is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    Correct entity: rs2909451
+    Standard picked: rs2909451  (Q1)
+    NOTA picked: rs2290910  (Q2, picked_none=False)
+
+  #2
+  [Correct standard, wrong NOTA]  annotation=1453075980  pmcid=PMC11730665
+    Sentence: ______ is associated with increased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    Correct entity: rs2285676
+    Standard picked: rs2285676  (Q3)
+    NOTA picked: rs1799853  (Q4, picked_none=False)
+
+  #3
+  [Correct standard, wrong NOTA]  annotation=1453075960  pmcid=PMC11730665
+    Sentence: ______ is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    Correct entity: rs163184
+    Standard picked: rs163184  (Q5)
+    NOTA picked: rs7754840  (Q6, picked_none=False)
+
+  #4
+  [Correct standard, wrong NOTA]  annotation=1453075941  pmcid=PMC11730665
+    Sentence: ______ is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    Correct entity: rs4664443
+    Standard picked: rs4664443  (Q9)
+    NOTA picked: rs7754840  (Q10, picked_none=False)

@@ -1,0 +1,27 @@
+======================================================================
+Contradiction Analysis  |  model=gpt-4o-mini
+======================================================================
+
+## Type 1: Standard vs NOTA contradictions
+--------------------------------------------------
+
+  PHENOTYPE MCQ (1 annotation pairs):
+    Correct standard, wrong NOTA:      0  (0.0%)
+    Wrong standard, correct NOTA:      0  (0.0%)
+    Total contradictions:              0  (0.0%)
+
+## Type 2: Distractor-as-correct-answer contradictions
+--------------------------------------------------
+
+  PHENOTYPE MCQ (1 standard questions, 0 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+
+## Type 3: Cross-type contradictions
+--------------------------------------------------
+  Annotations in 2+ MCQ types:         0
+  Cross-type contradictions:            0  (0.0%)
+
+======================================================================
+Total contradictions: 0  (across 1 total questions)
+======================================================================

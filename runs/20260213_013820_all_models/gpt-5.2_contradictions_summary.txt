@@ -1,0 +1,46 @@
+======================================================================
+Contradiction Analysis  |  model=gpt-5.2
+======================================================================
+
+## Type 1: Standard vs NOTA contradictions
+--------------------------------------------------
+
+  VARIANT MCQ (5 annotation pairs):
+    Correct standard, wrong NOTA:      0  (0.0%)
+    Wrong standard, correct NOTA:      0  (0.0%)
+    Total contradictions:              0  (0.0%)
+
+  DRUG MCQ (10 annotation pairs):
+    Correct standard, wrong NOTA:      0  (0.0%)
+    Wrong standard, correct NOTA:      0  (0.0%)
+    Total contradictions:              0  (0.0%)
+
+  PHENOTYPE MCQ (10 annotation pairs):
+    Correct standard, wrong NOTA:      0  (0.0%)
+    Wrong standard, correct NOTA:      0  (0.0%)
+    Total contradictions:              0  (0.0%)
+
+## Type 2: Distractor-as-correct-answer contradictions
+--------------------------------------------------
+
+  VARIANT MCQ (5 standard questions, 0 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+
+  DRUG MCQ (10 standard questions, 0 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+
+  PHENOTYPE MCQ (10 standard questions, 4 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+    Wrong answers that contradict:  0.0%
+
+## Type 3: Cross-type contradictions
+--------------------------------------------------
+  Annotations in 2+ MCQ types:         5
+  Cross-type contradictions:            0  (0.0%)
+
+======================================================================
+Total contradictions: 0  (across 30 total questions)
+======================================================================

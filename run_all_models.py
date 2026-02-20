@@ -23,6 +23,9 @@ from pathlib import Path
 
 from tqdm import tqdm
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from src.eval.contradictions import run_analysis as run_contradiction_analysis
+
 MODELS = [
     "anthropic/claude-opus-4-6",
     "anthropic/claude-sonnet-4-5-20250929",
@@ -71,10 +74,7 @@ PIPELINES = {
 def _make_run_dir(dataset: str) -> Path:
     """Create a single timestamped run directory for all models."""
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    suffix = "all_models"
-    if dataset == "mc_study":
-        suffix = "mc_study_all_models"
-    run_dir = Path("runs") / f"{ts}_{suffix}"
+    run_dir = Path("runs") / f"{ts}_{dataset}_all_models"
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
 
@@ -286,6 +286,7 @@ def main():
             "variant_extraction",
             "paper_investigation",
             "mc_study",
+            "mc_questions",
             "all",
         ],
         default="yes_no",
@@ -293,11 +294,14 @@ def main():
     )
     args = parser.parse_args()
 
-    MC_STUDY_PIPELINES = ["study_param", "mcq_variant", "mcq_drug", "mcq_phenotype"]
+    MC_QUESTIONS_PIPELINES = ["mcq_variant", "mcq_drug", "mcq_phenotype"]
+    MC_STUDY_PIPELINES = ["study_param", *MC_QUESTIONS_PIPELINES]
     if args.dataset == "all":
         pipelines = list(PIPELINES.keys())
     elif args.dataset == "mc_study":
         pipelines = MC_STUDY_PIPELINES
+    elif args.dataset == "mc_questions":
+        pipelines = MC_QUESTIONS_PIPELINES
     else:
         pipelines = [args.dataset]
 
@@ -344,6 +348,16 @@ def main():
     # Sort results to match the original model order
     model_order = {m: i for i, m in enumerate(args.models)}
     results.sort(key=lambda r: model_order.get(r["model"], 0))
+
+    # Run contradiction analysis if any MCQ pipelines were included
+    mcq_pipelines = {"mcq_variant", "mcq_drug", "mcq_phenotype"}
+    if mcq_pipelines & set(pipelines):
+        print(f"\n{'=' * 40} CONTRADICTIONS {'=' * 33}")
+        for model in args.models:
+            try:
+                run_contradiction_analysis(run_dir, model)
+            except Exception as e:
+                print(f"  Contradiction analysis failed for {model}: {e}")
 
     elapsed = datetime.now() - start
 

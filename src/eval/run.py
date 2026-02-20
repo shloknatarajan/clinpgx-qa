@@ -32,6 +32,7 @@ from src.eval.yes_no import generate as yn_generate, score as yn_score
 from src.eval.chained import generate as ch_generate, score as ch_score
 from src.eval.study_param import generate as sp_generate, score as sp_score
 from src.eval.mcq import generate as mcq_generate, score as mcq_score
+from src.eval.contradictions import run_analysis as run_contradiction_analysis
 
 DEFAULT_MODEL = "gpt-4o-mini"
 
@@ -40,10 +41,7 @@ def _make_run_dir(model: str, dataset: str) -> Path:
     """Create a timestamped run directory under runs/."""
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     model_slug = model.replace("/", "_")
-    suffix = model_slug
-    if dataset == "mc_study":
-        suffix = f"{model_slug}_mc_study"
-    run_dir = Path("runs") / f"{ts}_{suffix}"
+    run_dir = Path("runs") / f"{ts}_{model_slug}_{dataset}"
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
 
@@ -71,6 +69,7 @@ def main() -> None:
             "mcq_drug",
             "mcq_phenotype",
             "mc_study",
+            "mc_questions",
             "all",
         ],
         default="all",
@@ -88,12 +87,13 @@ def main() -> None:
     args = parser.parse_args()
 
     _mc_study = ("mc_study", "all")
+    _mc_questions = ("mc_questions", *_mc_study)
     run_yes_no = args.dataset in ("yes_no", "all")
     run_chained = args.dataset in ("chained", "all")
     run_study_param = args.dataset in ("study_param", *_mc_study)
-    run_mcq_variant = args.dataset in ("mcq_variant", *_mc_study)
-    run_mcq_drug = args.dataset in ("mcq_drug", *_mc_study)
-    run_mcq_phenotype = args.dataset in ("mcq_phenotype", *_mc_study)
+    run_mcq_variant = args.dataset in ("mcq_variant", *_mc_questions)
+    run_mcq_drug = args.dataset in ("mcq_drug", *_mc_questions)
+    run_mcq_phenotype = args.dataset in ("mcq_phenotype", *_mc_questions)
 
     if args.score_only:
         if not args.responses_path:
@@ -212,6 +212,12 @@ def main() -> None:
             output_dir=run_dir,
             pipeline_name="mcq_phenotype",
         )
+
+    # --- Contradiction analysis (runs if any MCQ pipelines were executed) ---
+    any_mcq = run_mcq_variant or run_mcq_drug or run_mcq_phenotype
+    if any_mcq:
+        logger.info("=" * 40 + " CONTRADICTIONS " + "=" * 32)
+        run_contradiction_analysis(run_dir, args.model)
 
     logger.info(f"All outputs saved to {run_dir}")
 

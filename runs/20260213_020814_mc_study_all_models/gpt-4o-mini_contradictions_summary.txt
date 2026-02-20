@@ -1,0 +1,100 @@
+======================================================================
+Contradiction Analysis  |  model=gpt-4o-mini
+======================================================================
+
+## Type 1: Standard vs NOTA contradictions
+--------------------------------------------------
+
+  VARIANT MCQ (5 annotation pairs):
+    Correct standard, wrong NOTA:      2  (40.0%)
+    Wrong standard, correct NOTA:      1  (20.0%)
+    Total contradictions:              3  (60.0%)
+
+  DRUG MCQ (10 annotation pairs):
+    Correct standard, wrong NOTA:      0  (0.0%)
+    Wrong standard, correct NOTA:      0  (0.0%)
+    Total contradictions:              0  (0.0%)
+
+  PHENOTYPE MCQ (10 annotation pairs):
+    Correct standard, wrong NOTA:      0  (0.0%)
+    Wrong standard, correct NOTA:      0  (0.0%)
+    Total contradictions:              0  (0.0%)
+
+## Type 2: Distractor-as-correct-answer contradictions
+--------------------------------------------------
+
+  VARIANT MCQ (5 standard questions, 2 wrong answers):
+    Contradiction instances:            1
+    Unique wrong answers involved:      1
+    Wrong answers that contradict:  50.0%
+
+  DRUG MCQ (10 standard questions, 0 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+
+  PHENOTYPE MCQ (10 standard questions, 4 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+    Wrong answers that contradict:  0.0%
+
+## Type 3: Cross-type contradictions
+--------------------------------------------------
+  Annotations in 2+ MCQ types:         5
+  Cross-type contradictions:            2  (40.0%)
+
+  Conflict breakdown (correct_type -> wrong_type):
+            drug correct, variant      wrong: 2
+
+======================================================================
+Total contradictions: 6  (across 30 total questions)
+======================================================================
+
+----------------------------------------------------------------------
+All Type 1: Standard vs NOTA contradictions (3)
+----------------------------------------------------------------------
+
+  #1
+  [Correct standard, wrong NOTA]  annotation=1453075980  pmcid=PMC11730665
+    Sentence: ______ is associated with increased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    Correct entity: rs2285676
+    Standard picked: rs2285676  (Q3)
+    NOTA picked: rs4664443  (Q4, picked_none=False)
+
+  #2
+  [Wrong standard, correct NOTA]  annotation=1453075960  pmcid=PMC11730665
+    Sentence: ______ is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    Correct entity: rs163184
+    Standard picked: rs163182  (Q5)
+    NOTA picked: None of the options  (Q6, picked_none=True)
+
+  #3
+  [Correct standard, wrong NOTA]  annotation=1453075941  pmcid=PMC11730665
+    Sentence: ______ is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2.
+    Correct entity: rs4664443
+    Standard picked: rs4664443  (Q9)
+    NOTA picked: rs2285676  (Q10, picked_none=False)
+
+----------------------------------------------------------------------
+All Type 2: Distractor-as-correct contradictions (1)
+----------------------------------------------------------------------
+
+  #1
+  [Distractor-as-correct]  pmcid=PMC11730665  entity=rs163184
+    Wrong Q7: ______ is associated with increased response to sitagliptin in people with Diabetes Mellitus, Type 2
+      Model picked "rs163184" but correct was "rs7754840"
+    Right Q5: ______ is associated with decreased response to sitagliptin in people with Diabetes Mellitus, Type 2
+      "rs163184" is correct here (model got it: False)
+
+----------------------------------------------------------------------
+All Type 3: Cross-type contradictions (2)
+----------------------------------------------------------------------
+
+  #1
+  [Cross-type]  annotation=1453076040  pmcid=PMC11730665  correct=['drug']  wrong=['variant']
+    variant      Q7: selected=rs163184  expected=rs7754840  [WRONG]
+    drug         Q1453076040: selected=sitagliptin  expected=sitagliptin  [CORRECT]
+
+  #2
+  [Cross-type]  annotation=1453075960  pmcid=PMC11730665  correct=['drug']  wrong=['variant']
+    variant      Q5: selected=rs163182  expected=rs163184  [WRONG]
+    drug         Q1453075960: selected=sitagliptin  expected=sitagliptin  [CORRECT]
