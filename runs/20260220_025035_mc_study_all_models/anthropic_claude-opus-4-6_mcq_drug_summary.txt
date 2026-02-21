@@ -1,0 +1,52 @@
+
+======================================================================
+Mcq Drug Results  |  model=anthropic/claude-opus-4-6  |  0/10000 (0.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above                0     5000      0.0%
+  standard                         0     5000      0.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        0    10000      0.0%
+
+  Parse failures: 10000/10000 (100.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=drug  pmcid=PMC3890033
+  Sentence: Genotype GG is not associated with response to ______ in people with Colorectal Neoplasms as compared to genotypes AA + 
+  Options: a) Anticholinergic Agents  b) None of the options  c) Alkylating Agents  d) Antineoplastic And Immunomodulating Agents
+  Expected: b  Got: 
+
+  [2] type=standard  table=drug  pmcid=PMC7393710
+  Sentence: Allele T is not associated with dose of ______ in people with Heroin Dependence as compared to allele C.
+  Options: a) non-steroids  b) methadone  c) corticosteroids  d) heroin
+  Expected: d  Got: 
+
+  [3] type=standard  table=drug  pmcid=PMC3567337
+  Sentence: Allele A is associated with decreased clearance of ______ in children with Precursor Cell Lymphoblastic Leukemia-Lymphom
+  Options: a) methotrexate  b) pralatrexate  c) pemetrexed  d) trimethoprim
+  Expected: a  Got: 
+
+  [4] type=standard  table=drug  pmcid=PMC3038469
+  Sentence: Genotypes AG + GG are associated with increased dose of ______ as compared to genotype AA.
+  Options: a) 6-hydroxy r-warfarin  b) warfarin  c) coumarin  d) heparin
+  Expected: b  Got: 
+
+  [5] type=none_of_the_above  table=drug  pmcid=PMC5233579
+  Sentence: CYP2A6 *17 is not associated with clearance of ______ in infants as compared to CYP2A6 *1.
+  Options: a) letrozole  b) None of the options  c) midazolam  d) benznidazole
+  Expected: b  Got: 
+
+Eval results saved to runs/20260220_025035_mc_study_all_models/anthropic_claude-opus-4-6_mcq_drug_eval_results.jsonl

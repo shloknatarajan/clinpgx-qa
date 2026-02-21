@@ -1,0 +1,52 @@
+
+======================================================================
+Mcq Phenotype Results  |  model=anthropic/claude-haiku-4-5-20251001  |  0/10000 (0.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above                0     5000      0.0%
+  standard                         0     5000      0.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  pheno                       0    10000      0.0%
+
+  Parse failures: 10000/10000 (100.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC2757655
+  Sentence: CYP2C9 *2 + *3 + *5 + *6 + *11 are not associated with ______ when treated with warfarin as compared to CYP2C9 *1/*1.
+  Options: a) Side Effect:over-anticoagulation  b) Efficacy:time to achieve stable dose  c) Efficacy:time to therapeutic inr  d) Efficacy:time to therapeutic INR>=2
+  Expected: c  Got: 
+
+  [2] type=none_of_the_above  table=pheno  pmcid=PMC11149109
+  Sentence: Genotypes AG + GG is associated with increased ______ when treated with CHOP and rituximab in people with Lymphoma, Larg
+  Options: a) None of the options  b) Efficacy:progression-free survival or overall survival  c) Efficacy:overall survival and progression-free survival  d) Other:overall or progression-free survival
+  Expected: a  Got: 
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC6737717
+  Sentence: Allele C is not associated with risk of ______ due to opioids as compared to allele T.
+  Options: a) Disease:Alcohol-Related Disorders  b) None of the options  c) Disease:Substance-Related Disorders  d) Disease:Anxiety Disorders
+  Expected: b  Got: 
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC4633171
+  Sentence: Genotypes AA + AG are not associated with ______ when exposed to tenofovir in people with HIV infectious disease as comp
+  Options: a) Disease:Bipolar Disorder  b) Disease:Hypotensive disorder  c) None of the options  d) Disease:Hematologic Disorder
+  Expected: c  Got: 
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC3492352
+  Sentence: Allele G is not associated with likelihood of ______ due to fentanyl in women with Pain, Postoperative as compared to al
+  Options: a) Disease:Postoperative Nausea and Vomiting  b) None of the options  c) Side Effect:nausea and vomiting  d) Side Effect:scores of postoperative nausea and vomiting
+  Expected: b  Got: 
+
+Eval results saved to runs/20260220_025035_mc_study_all_models/anthropic_claude-haiku-4-5-20251001_mcq_phenotype_eval_results.jsonl

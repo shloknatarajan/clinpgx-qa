@@ -1,0 +1,76 @@
+
+======================================================================
+Mcq Drug Results  |  model=gpt-5.2  |  273/300 (91.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above              131      150     87.3%
+  standard                       142      150     94.7%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       45       52     86.5%
+  pheno                     228      248     91.9%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: Allele C is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and S
+  Options: a) clozapine  b) None of the options  c) olanzapine  d) noscapine
+  Expected: b  Got: b
+
+  [2] type=standard  table=pheno  pmcid=PMC10946077
+  Sentence: UGT1A1 *28 is not associated with increased severity of Neutropenia, Leukopenia or Diarrhea when treated with ______ in 
+  Options: a) irinotecan  b) topotecan  c) FOLFIRINOX  d) diflomotecan
+  Expected: a  Got: a
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC10993165
+  Sentence: HLA-B *15:02 is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, Toxic or severe 
+  Options: a) trimethoprim  b) 1-hydroxymidazolam  c) None of the options  d) 10-monohydroxy oxcarbazepine
+  Expected: c  Got: c
+
+  [4] type=standard  table=pheno  pmcid=PMC10993165
+  Sentence: HLA-B *15:02 is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, Toxic or severe 
+  Options: a) 1-hydroxymidazolam  b) trimethoprim  c) 10-monohydroxy oxcarbazepine  d) sulfamethoxazole, sulfamethoxazole / trimethoprim
+  Expected: d  Got: d
+
+  [5] type=standard  table=pheno  pmcid=PMC3548984
+  Sentence: CYP2D6 *1/*10 + *1/*41 + *10/*10 + *41/*41 are not associated with increased likelihood of Recurrence when treated with 
+  Options: a) N-desmethyltamoxifen  b) endoxifen  c) tamoxifen  d) 4-hydroxytamoxifen
+  Expected: c  Got: c
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DQB1 *02:02 is associated with increased risk of Hypersensitivity when treated with ______.
+  Options: a) l-asparagine  b) sparteine  c) asparaginase  d) None of the options
+  Expected: d  Got: c
+
+  [2] type=none_of_the_above  table=drug  pmcid=PMC4706412
+  Sentence: Genotypes AA + AG are associated with increased dose of ______ as compared to genotype GG.
+  Options: a) heparin  b) coumarin  c) 6-hydroxy r-warfarin  d) None of the options
+  Expected: d  Got: c
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DRB1 *07:01 is associated with increased risk of Hypersensitivity when treated with ______.
+  Options: a) None of the options  b) asparaginase  c) l-asparagine  d) sparteine
+  Expected: a  Got: b
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC10880264
+  Sentence: Genotypes CT + TT (assigned as intermediate metabolizer phenotype) is associated with increased likelihood of suicidal i
+  Options: a) citalopram  b) desmethylcitalopram  c) metoclopramide  d) None of the options
+  Expected: d  Got: a
+
+  [5] type=standard  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DRB1 *07:01 is associated with increased risk of Hypersensitivity when treated with ______.
+  Options: a) l-asparagine  b) asparaginase  c) pegaspargase  d) sparteine
+  Expected: c  Got: b
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/gpt-5.2_mcq_drug_eval_results.jsonl

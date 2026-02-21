@@ -1,0 +1,75 @@
+
+======================================================================
+Mcq Phenotype Results  |  model=gpt-4o-mini  |  88/284 (31.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above               12      142      8.5%
+  standard                        76      142     53.5%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  pheno                      88      284     31.0%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC554812
+  Sentence: HLA-DRB1 *03:01 is associated with increased risk of ______ when treated with allopurinol.
+  Options: a) Side Effect:severe cutaneous adverse drug reactions  b) Side Effect:adverse reactions  c) Side Effect:severe adverse reactions  d) None of the options
+  Expected: d  Got: d
+
+  [2] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *78:01 is associated with Epidermal Necrolysis, Toxic, ______ when treated with nevirapine in people with HIV Infe
+  Options: a) Disease:Drug Reaction with Eosinophilia and Systemic Symptoms  b) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms, Side Effect:Severe Cutaneous Adverse Reactions  c) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms  d) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Severe Cutaneous Adverse Reactions, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms
+  Expected: b  Got: b
+
+  [3] type=standard  table=pheno  pmcid=PMC554812
+  Sentence: HLA-B *58:01 is associated with increased risk of ______ when treated with allopurinol.
+  Options: a) Side Effect:severe cutaneous adverse drug reactions  b) Side Effect:Severe Cutaneous Adverse Reactions  c) Side Effect:adverse reactions  d) Side Effect:severe adverse reactions
+  Expected: b  Got: b
+
+  [4] type=standard  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DRB1 *07:01 is associated with increased risk of ______ when treated with pegaspargase.
+  Options: a) Side Effect:aspirin hypersensitivity  b) Side Effect:Hypersensitivity Syndrome  c) Side Effect:Hypersensitivity  d) Disease:Drug Hypersensitivity
+  Expected: c  Got: c
+
+  [5] type=standard  table=pheno  pmcid=PMC10946077
+  Sentence: UGT1A1 *28 is not associated with increased severity of ______ when treated with irinotecan in people with Stomach Neopl
+  Options: a) Disease:Diarrhea  b) Disease:Leukopenia  c) Efficacy:Overall survival, Efficacy:Progression-free survival  d) Side Effect:Neutropenia, Side Effect:Leukopenia, Side Effect:Diarrhea
+  Expected: d  Got: d
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *56:06 is associated with Epidermal Necrolysis, Toxic, ______ when treated with nevirapine in people with HIV Infe
+  Options: a) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms  b) Disease:Drug Reaction with Eosinophilia and Systemic Symptoms  c) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Severe Cutaneous Adverse Reactions, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms  d) None of the options
+  Expected: d  Got: c
+
+  [2] type=standard  table=pheno  pmcid=PMC554812
+  Sentence: HLA-DRB1 *03:01 is associated with increased risk of ______ when treated with allopurinol.
+  Options: a) Side Effect:Severe Cutaneous Adverse Reactions  b) Side Effect:adverse reactions  c) Side Effect:severe adverse reactions  d) Side Effect:severe cutaneous adverse drug reactions
+  Expected: a  Got: d
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC10993165
+  Sentence: HLA-B *13:01 is associated with increased likelihood of ______ when treated with sulfamethoxazole or sulfamethoxazole / 
+  Options: a) Side Effect:Stevens-Johnson Syndrome, Side Effect:Toxic Epidermal Necrolysis, Side Effect:Severe Cutaneous Adverse Reactions  b) Side Effect:severe adverse reactions  c) Side Effect:severe cutaneous adverse drug reactions  d) None of the options
+  Expected: d  Got: c
+
+  [4] type=standard  table=pheno  pmcid=PMC10946077
+  Sentence: UGT1A1 *6 + *28 is not associated with decreased likelihood of ______ when treated with irinotecan in people with Stomac
+  Options: a) Efficacy:overall survival and progression-free survival  b) Efficacy:Overall survival, Efficacy:Progression-free survival  c) Efficacy:progression-free survival or overall survival  d) Side Effect:Neutropenia, Side Effect:Leukopenia, Side Effect:Diarrhea
+  Expected: b  Got: c
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC3387531
+  Sentence: HLA-C *04:01 is associated with increased risk of ______ when treated with nevirapine in people with HIV Infections.
+  Options: a) None of the options  b) Disease:Drug Hypersensitivity  c) Disease:Gastrointestinal toxicity  d) Disease:Drug Resistance
+  Expected: a  Got: b
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/gpt-4o-mini_mcq_phenotype_eval_results.jsonl

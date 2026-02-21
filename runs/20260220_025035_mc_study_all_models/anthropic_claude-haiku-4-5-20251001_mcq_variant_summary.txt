@@ -1,0 +1,52 @@
+
+======================================================================
+Mcq Variant Results  |  model=anthropic/claude-haiku-4-5-20251001  |  0/10000 (0.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above                0     5000      0.0%
+  standard                         0     5000      0.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        0    10000      0.0%
+
+  Parse failures: 10000/10000 (100.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=drug  pmcid=PMC6081148
+  Sentence: ______ is not associated with response to etanercept in people with Spondylitis, Ankylosing as compared to genotypes GG 
+  Options: a) rs2234693  b) rs1061622  c) rs2234689  d) None of the options
+  Expected: d  Got: 
+
+  [2] type=standard  table=drug  pmcid=PMC5521342
+  Sentence: ______ is not associated with dose of fentanyl in people with Pain, Postoperative as compared to allele G.
+  Options: a) rs12645107  b) rs11264579  c) rs7439366  d) rs10028494
+  Expected: a  Got: 
+
+  [3] type=standard  table=drug  pmcid=PMC4220464
+  Sentence: ______ is associated with increased response to hmg coa reductase inhibitors as compared to allele T.
+  Options: a) rs167769  b) rs2900478  c) rs10455872  d) rs646776
+  Expected: d  Got: 
+
+  [4] type=standard  table=drug  pmcid=PMC5538123
+  Sentence: ______ is not associated with response to risperidone in people with Schizophrenia as compared to allele C.
+  Options: a) rs10012  b) rs4633  c) rs2494732  d) rs2494743
+  Expected: c  Got: 
+
+  [5] type=none_of_the_above  table=drug  pmcid=PMC6049926
+  Sentence: ______ is not associated with response to peginterferon alfa-2a in people with Hepatitis B, Chronic as compared to genot
+  Options: a) rs1051298  b) None of the options  c) rs3212980  d) rs129882
+  Expected: b  Got: 
+
+Eval results saved to runs/20260220_025035_mc_study_all_models/anthropic_claude-haiku-4-5-20251001_mcq_variant_eval_results.jsonl

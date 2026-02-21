@@ -96,7 +96,7 @@ Composite evaluation: extract variants from a paper, then answer MCQ and study p
 - **Anthropic:** Claude Opus 4.6, Claude Sonnet 4.5, Claude Haiku 4.5
 - **Google:** Gemini 2.5 Pro
 
-### MCQ Results (10 questions each)
+### MCQ Results (Pilot — 10 questions each)
 
 | Model | Drug | Variant | Phenotype | Study Param |
 |-------|------|---------|-----------|-------------|
@@ -106,9 +106,49 @@ Composite evaluation: extract variants from a paper, then answer MCQ and study p
 | Claude Sonnet 4.5 | 100% | 60% | 60% | 80% |
 | Claude Haiku 4.5 | 100% | 70% | 40% | 70% |
 | GPT-4o-mini | 100% | 50% | 60% | 80% |
-| Gemini 2.5 Pro | 0%\* | 0%\* | 0%\* | 0%\* |
 
-\*Gemini 2.5 Pro had JSON parse failures on all outputs.
+**Pilot observations (n=10 per cell):**
+- Drug MCQ is trivially easy — all models ~100%.
+- Phenotype MCQ is the hardest differentiator (40–70%).
+- Variant MCQ: OpenAI models outperform Anthropic, largely due to "None of the Above" (NOTA) questions.
+- Study param accuracy is artificially low due to strict p-value string matching (e.g., `< 0.001` vs `<0.001`).
+
+### MCQ Full Run (10,000 questions each) — In Progress
+
+Run: `runs/20260220_025035_mc_study_all_models/`
+
+**Study Parameter Extraction (10,000 questions)**
+
+| Model | P-value Acc | Significance Acc | Both Correct | Parse Failures |
+|-------|-------------|------------------|--------------|----------------|
+| Claude Opus 4.6 | 7.3% | 8.2% | 6.4% | 83.9% |
+| GPT-4o-mini | 59.3% | 60.1% | 54.5% | 0.0% |
+
+**Breakdown by question type (GPT-4o-mini):**
+
+| Question Type | P-value | Significance | Both | N |
+|---------------|---------|--------------|------|---|
+| correct (real association) | 33.7% | 35.6% | 19.2% | 3,334 |
+| modified_drug (hallucination test) | 72.7% | 72.9% | 72.7% | 3,333 |
+| modified_variant (hallucination test) | 71.5% | 71.9% | 71.5% | 3,333 |
+
+Key insight: Models score much higher on modified (non-existent) associations by correctly returning "not found" (~72%), but struggle with real associations (~19% both-correct). The low "correct" type accuracy is partly due to strict p-value string matching — models extract the right numeric value but format it differently (e.g., `<0.001` vs `< 0.001`).
+
+**Breakdown by question type (Claude Opus 4.6):**
+
+| Question Type | P-value | Significance | Both | N |
+|---------------|---------|--------------|------|---|
+| correct | 8.8% | 11.5% | 6.3% | 3,334 |
+| modified_drug | 5.8% | 5.7% | 5.7% | 3,333 |
+| modified_variant | 7.4% | 7.3% | 7.3% | 3,333 |
+
+Opus had 83.9% JSON parse failures — the model often responded with long-form explanations instead of the required JSON format, especially on modified questions where it detected the mismatch and wrote out its reasoning rather than conforming to the output schema.
+
+**MCQ (Drug/Variant/Phenotype) — pending re-run for Anthropic models**
+
+The Anthropic MCQ pipelines (all 9 combinations of Opus/Sonnet/Haiku × variant/drug/phenotype) returned empty responses due to an API failure during the run. Sonnet and Haiku study_param also affected. GPT-4o-mini and GPT-5.2 MCQ results still in progress.
+
+These need to be re-run once the current OpenAI pipelines complete.
 
 ### Yes/No Claim Verification (GPT-4o, 5,000 questions)
 
@@ -143,12 +183,13 @@ Composite evaluation: extract variants from a paper, then answer MCQ and study p
 
 ## Key Findings
 
-1. **Drug identification is largely solved** -- most models reach 100% on drug MCQs.
-2. **Phenotype classification remains challenging** -- accuracy ranges 40-70%.
-3. **"None of the above" variants expose guessing bias** -- models struggle when the correct answer isn't among the choices.
-4. **Study parameter extraction is brittle** -- sensitive to formatting and lexical variation in p-value reporting.
-5. **Variant extraction is strong for top models** -- ~93% micro recall, but drops to 60% for weaker models.
-6. **End-to-end reasoning compounds errors** -- best model caps at ~61% paper score, showing a clear gap between entity identification and integrated reasoning.
+1. **Drug identification is largely solved** -- most models reach 100% on drug MCQs (pilot, n=10).
+2. **Phenotype classification remains challenging** -- accuracy ranges 40–70% (pilot, n=10), driven by specificity mismatches (e.g., "hemorrhagic cystitis" vs "Cystitis") and multi-phenotype negation questions.
+3. **"None of the above" variants expose calibration gaps** -- smaller Anthropic models guess rather than abstain. NOTA questions account for most contradictions.
+4. **Study parameter extraction: format vs understanding** -- at scale (n=10K), GPT-4o-mini reaches 54.5% "both correct" overall, but only 19.2% on real associations vs 72% on hallucination tests (correctly returning "not found"). P-value string matching inflates error rates.
+5. **Opus struggles with output format compliance** -- 84% JSON parse failures on study params at scale, despite correctly reasoning about the questions. Format non-compliance is a major confounder.
+6. **Variant extraction is strong for top models** -- ~93% micro recall, but drops to 60% for weaker models.
+7. **End-to-end reasoning compounds errors** -- best model caps at ~61% paper score, showing a clear gap between entity identification and integrated reasoning.
 
 ---
 

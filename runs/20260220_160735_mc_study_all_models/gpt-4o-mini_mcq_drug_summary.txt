@@ -1,0 +1,76 @@
+
+======================================================================
+Mcq Drug Results  |  model=gpt-4o-mini  |  258/300 (86.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above              109      150     72.7%
+  standard                       149      150     99.3%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       40       52     76.9%
+  pheno                     218      248     87.9%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *39:10 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+  Options: a) olanzapine  b) noscapine  c) clozapine  d) None of the options
+  Expected: d  Got: d
+
+  [2] type=none_of_the_above  table=drug  pmcid=PMC6714829
+  Sentence: Genotype TT is associated with increased response to ______ in people with Hypercholesterolemia as compared to genotypes
+  Options: a) fluvastatin  b) lovastatin  c) None of the options  d) pravastatin
+  Expected: c  Got: c
+
+  [3] type=standard  table=drug  pmcid=PMC2859392
+  Sentence: Genotype TT is not associated with response to ______ in people with HIV Infections and Tuberculosis as compared to geno
+  Options: a) efavirenz  b) abacavir  c) amprenavir  d) darunavir
+  Expected: a  Got: a
+
+  [4] type=standard  table=pheno  pmcid=PMC10946077
+  Sentence: UGT1A1 *6 is associated with increased severity of Neutropenia, Leukopenia or Diarrhea when treated with ______ in peopl
+  Options: a) irinotecan  b) diflomotecan  c) topotecan  d) FOLFIRINOX
+  Expected: a  Got: a
+
+  [5] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *51:02 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+  Options: a) noscapine  b) nevirapine  c) olanzapine  d) clozapine
+  Expected: b  Got: b
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC10880264
+  Sentence: CYP2C19 intermediate metabolizer is associated with increased likelihood of suicidal ideation, adverse events or deliber
+  Options: a) metoclopramide  b) None of the options  c) desmethylcitalopram  d) citalopram
+  Expected: b  Got: d
+
+  [2] type=none_of_the_above  table=pheno  pmcid=PMC10399933
+  Sentence: Genotypes GT + TT is not associated with increased risk of discontinuation when treated with ______ as compared to genot
+  Options: a) simvastatin  b) pravastatin  c) atorvastatin lactone  d) None of the options
+  Expected: d  Got: c
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC4706412
+  Sentence: CYP2C9 *2 + *3 + *8 are associated with decreased dose of ______ as compared to CYP2C9 *1.
+  Options: a) heparin  b) 6-hydroxy r-warfarin  c) None of the options  d) coumarin
+  Expected: c  Got: b
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DQB1 *02:02 is associated with increased risk of Hypersensitivity when treated with ______.
+  Options: a) l-asparagine  b) sparteine  c) asparaginase  d) None of the options
+  Expected: d  Got: c
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DQB1 *02:02 is associated with increased risk of Hypersensitivity when treated with ______.
+  Options: a) l-asparagine  b) None of the options  c) asparaginase  d) sparteine
+  Expected: b  Got: c
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/gpt-4o-mini_mcq_drug_eval_results.jsonl

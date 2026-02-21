@@ -123,67 +123,82 @@ def _run_pipeline(
     output_dir: Path,
     log_lines: list[str],
     pbar: tqdm | None = None,
+    pmcids_file: str | None = None,
 ) -> dict:
     """Run generate + score for a single pipeline. Returns result dict."""
     cfg = PIPELINES[pipeline_name]
     script = cfg["script"]
     short = _short_model(model)
+    model_slug = model.replace("/", "_")
 
-    log_lines.append(f"  [{pipeline_name}] generating...")
-    if pbar:
-        pbar.write(f"  {short} | {pipeline_name}: generating...")
-
-    # Generate — stream stderr so we see per-question progress
-    gen_cmd = [
-        sys.executable,
-        script,
-        "generate",
-        "--model",
-        model,
-        "--limit",
-        str(limit),
-        "--output-dir",
-        str(output_dir),
-    ]
-    gen_proc = subprocess.Popen(
-        gen_cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-    )
-    gen_stderr: list[str] = []
-    stderr_thread = threading.Thread(
-        target=_stream_stderr,
-        args=(gen_proc, gen_stderr, pbar, model, pipeline_name),
-    )
-    stderr_thread.start()
-    gen_proc.stdout.read()
-    gen_proc.wait()
-    stderr_thread.join()
-    log_lines.extend(gen_stderr)
-
-    if gen_proc.returncode != 0:
-        log_lines.append(f"  [{pipeline_name}] FAILED (generate): {model}")
-        if pbar:
-            pbar.write(f"  {short} | {pipeline_name}: FAILED (generate)")
-        return {
-            "pipeline": pipeline_name,
-            "status": "generate_failed",
-            "error": "\n".join(gen_stderr[-20:]),
-        }
-
-    # Find the responses path from this pipeline's generate stderr
+    # Resume support: check if responses file already exists with enough data
+    expected_responses_path = output_dir / f"{model_slug}_{pipeline_name}_responses.jsonl"
     responses_path = None
-    for line in gen_stderr:
-        if "Responses saved to" in line:
-            responses_path = line.split("Responses saved to")[-1].strip()
+    if expected_responses_path.exists():
+        line_count = sum(1 for _ in open(expected_responses_path))
+        if line_count >= limit > 0 or (limit == 0 and line_count > 0):
+            log_lines.append(f"  [{pipeline_name}] RESUMING — found {line_count} existing responses")
+            if pbar:
+                pbar.write(f"  {short} | {pipeline_name}: skipping generate ({line_count} responses exist)")
+            responses_path = str(expected_responses_path)
 
-    if not responses_path:
-        return {
-            "pipeline": pipeline_name,
-            "status": "no_responses_path",
-            "error": "\n".join(gen_stderr[-20:]),
-        }
+    if responses_path is None:
+        log_lines.append(f"  [{pipeline_name}] generating...")
+        if pbar:
+            pbar.write(f"  {short} | {pipeline_name}: generating...")
+
+        # Generate — stream stderr so we see per-question progress
+        gen_cmd = [
+            sys.executable,
+            script,
+            "generate",
+            "--model",
+            model,
+            "--limit",
+            str(limit),
+            "--output-dir",
+            str(output_dir),
+        ]
+        if pmcids_file:
+            gen_cmd.extend(["--pmcids-file", str(pmcids_file)])
+        gen_proc = subprocess.Popen(
+            gen_cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        gen_stderr: list[str] = []
+        stderr_thread = threading.Thread(
+            target=_stream_stderr,
+            args=(gen_proc, gen_stderr, pbar, model, pipeline_name),
+        )
+        stderr_thread.start()
+        gen_proc.stdout.read()
+        gen_proc.wait()
+        stderr_thread.join()
+        log_lines.extend(gen_stderr)
+
+        if gen_proc.returncode != 0:
+            log_lines.append(f"  [{pipeline_name}] FAILED (generate): {model}")
+            if pbar:
+                pbar.write(f"  {short} | {pipeline_name}: FAILED (generate)")
+            return {
+                "pipeline": pipeline_name,
+                "status": "generate_failed",
+                "error": "\n".join(gen_stderr[-20:]),
+            }
+
+        # Find the responses path from this pipeline's generate stderr
+        for line in gen_stderr:
+            if "Responses saved to" in line:
+                responses_path = line.split("Responses saved to")[-1].strip()
+
+        if not responses_path:
+            return {
+                "pipeline": pipeline_name,
+                "status": "no_responses_path",
+                "error": "\n".join(gen_stderr[-20:]),
+            }
 
     log_lines.append(f"  [{pipeline_name}] scoring...")
     if pbar:
@@ -228,6 +243,7 @@ def run_model(
     pipelines: list[str],
     output_dir: Path,
     pbar: tqdm | None = None,
+    pmcids_file: str | None = None,
 ) -> dict:
     """Run generate + score for all requested pipelines on a single model.
 
@@ -245,6 +261,7 @@ def run_model(
             output_dir,
             log_lines,
             pbar=pbar,
+            pmcids_file=pmcids_file,
         )
         pipeline_results[pipeline_name] = result
         if pbar:
@@ -273,6 +290,16 @@ def main():
         nargs="+",
         default=MODELS,
         help="Model identifiers to evaluate",
+    )
+    parser.add_argument(
+        "--pmcids-file",
+        default=None,
+        help="Path to file with one PMCID per line to filter questions",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help="Resume into an existing run directory (skips generate if responses exist)",
     )
     parser.add_argument(
         "--dataset",
@@ -305,7 +332,11 @@ def main():
     else:
         pipelines = [args.dataset]
 
-    run_dir = _make_run_dir(args.dataset)
+    if args.output_dir:
+        run_dir = Path(args.output_dir)
+        run_dir.mkdir(parents=True, exist_ok=True)
+    else:
+        run_dir = _make_run_dir(args.dataset)
     start = datetime.now()
     results: list[dict] = []
 
@@ -326,7 +357,7 @@ def main():
         """Run models sequentially within a single provider group."""
         group_results = []
         for model in models:
-            result = run_model(model, args.limit, pipelines, run_dir, pbar)
+            result = run_model(model, args.limit, pipelines, run_dir, pbar, pmcids_file=args.pmcids_file)
             group_results.append(result)
             status = (
                 "OK" if result["status"] == "ok" else f"FAILED ({result['status']})"

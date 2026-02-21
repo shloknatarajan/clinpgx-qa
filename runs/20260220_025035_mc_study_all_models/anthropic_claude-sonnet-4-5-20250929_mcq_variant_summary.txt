@@ -1,0 +1,52 @@
+
+======================================================================
+Mcq Variant Results  |  model=anthropic/claude-sonnet-4-5-20250929  |  0/10000 (0.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above                0     5000      0.0%
+  standard                         0     5000      0.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        0    10000      0.0%
+
+  Parse failures: 10000/10000 (100.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=drug  pmcid=PMC8887949
+  Sentence: ______ is associated with decreased clinical benefit to cytarabine in children with Leukemia, Myeloid, Acute as compared
+  Options: a) rs5841  b) rs4643786  c) rs4646437  d) rs1044457
+  Expected: b  Got: 
+
+  [2] type=standard  table=drug  pmcid=PMC3988537
+  Sentence: ______ is not associated with response to sertraline in people with Anxiety Disorders as compared to allele A.
+  Options: a) rs2278060  b) rs2134227  c) rs2278293  d) rs3742278
+  Expected: d  Got: 
+
+  [3] type=standard  table=drug  pmcid=PMC3225067
+  Sentence: ______ is not associated with response to methylphenidate in children with Attention Deficit Disorder with Hyperactivity
+  Options: a) rs73044680  b) rs4680662  c) rs1800544  d) rs4680
+  Expected: d  Got: 
+
+  [4] type=none_of_the_above  table=drug  pmcid=PMC1874463
+  Sentence: ______ is associated with decreased metabolism of nicotine as compared to allele A.
+  Options: a) rs1050316  b) rs10170310  c) None of the options  d) rs1731017
+  Expected: c  Got: 
+
+  [5] type=none_of_the_above  table=drug  pmcid=PMC4468641
+  Sentence: ______ is associated with decreased response to metformin in healthy individuals as compared to allele C.
+  Options: a) rs1476823  b) rs1876829  c) None of the options  d) rs1876828
+  Expected: c  Got: 
+
+Eval results saved to runs/20260220_025035_mc_study_all_models/anthropic_claude-sonnet-4-5-20250929_mcq_variant_eval_results.jsonl

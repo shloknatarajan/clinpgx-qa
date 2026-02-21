@@ -1,0 +1,70 @@
+
+======================================================================
+Study Param Results  |  model=anthropic/claude-sonnet-4-5-20250929  |  both: 0/10000 (0.0%)
+======================================================================
+
+By field:
+  Field                 Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  p_value                     0    10000      0.0%
+  significance                0    10000      0.0%
+  both                        0    10000      0.0%
+
+By question_type:
+  Type                         P-value    Signif.       Both    Total
+  ------------------------- ---------- ---------- ---------- --------
+  correct                        0.0%      0.0%      0.0%     3334
+  modified_drug                  0.0%      0.0%      0.0%     3333
+  modified_variant               0.0%      0.0%      0.0%     3333
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        0    10000      0.0%
+
+  JSON parse failures: 10000/10000 (100.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=modified_variant  table=drug  pmcid=PMC6411020
+  Expected p_value:      not found
+  Response p_value:      parse_error
+  Expected significance: not found
+  Response significance: parse_error
+  Raw response: 
+
+  [2] type=correct  table=drug  pmcid=PMC6262886
+  Expected p_value:      = 0.02
+  Response p_value:      parse_error
+  Expected significance: yes
+  Response significance: parse_error
+  Raw response: 
+
+  [3] type=modified_drug  table=drug  pmcid=PMC9931738
+  Expected p_value:      not found
+  Response p_value:      parse_error
+  Expected significance: not found
+  Response significance: parse_error
+  Raw response: 
+
+  [4] type=correct  table=drug  pmcid=PMC6426691
+  Expected p_value:      = 4.4E-5
+  Response p_value:      parse_error
+  Expected significance: no
+  Response significance: parse_error
+  Raw response: 
+
+  [5] type=modified_drug  table=drug  pmcid=PMC4876172
+  Expected p_value:      not found
+  Response p_value:      parse_error
+  Expected significance: not found
+  Response significance: parse_error
+  Raw response: 
+
+Eval results saved to runs/20260220_025035_mc_study_all_models/anthropic_claude-sonnet-4-5-20250929_study_param_eval_results.jsonl

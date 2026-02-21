@@ -60,6 +60,15 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
             questions.append(json.loads(line))
     logger.info(f"Loaded {len(questions)} questions from {questions_path}")
 
+    # Filter by PMCIDs if specified
+    pmcids_file = getattr(args, "pmcids_file", None)
+    if pmcids_file:
+        with open(pmcids_file) as pf:
+            allowed = {line.strip() for line in pf if line.strip()}
+        before = len(questions)
+        questions = [q for q in questions if q["pmcid"] in allowed]
+        logger.info(f"Filtered to {len(questions)}/{before} questions matching {len(allowed)} PMCIDs from {pmcids_file}")
+
     paper_index = build_paper_index()
 
     if args.limit > 0:
@@ -76,6 +85,8 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
         output_dir.mkdir(parents=True, exist_ok=True)
         file_prefix = f"{model_slug}_study_param"
     responses_path = output_dir / f"{file_prefix}_responses.jsonl"
+
+    consecutive_errors = 0
 
     with open(responses_path, "w") as out_f:
         for i, q in enumerate(questions):
@@ -106,9 +117,19 @@ def generate(args: argparse.Namespace, output_dir: Path | None = None) -> Path:
 
             try:
                 response = call_llm(messages, args.model)
+                consecutive_errors = 0
             except Exception as e:
-                print(f"LLM error on question {i}: {e}")
+                consecutive_errors += 1
+                logger.error(f"LLM error on question {i} (pmcid={pmcid}): {type(e).__name__}: {e}")
                 response = ""
+                if consecutive_errors >= 5:
+                    logger.error(
+                        f"ABORTING: {consecutive_errors} consecutive LLM errors — "
+                        f"likely a systemic API issue. Last error: {e}"
+                    )
+                    raise RuntimeError(
+                        f"{consecutive_errors} consecutive LLM errors for model={args.model}"
+                    ) from e
 
             # Parse JSON from response
             resp_p_value, resp_significance = _parse_json_response(response)
@@ -450,6 +471,11 @@ def main() -> None:
         "--output-dir",
         default=None,
         help="Output directory (default: auto-generated timestamped dir)",
+    )
+    gen_p.add_argument(
+        "--pmcids-file",
+        default=None,
+        help="Path to file with one PMCID per line to filter questions",
     )
 
     # score

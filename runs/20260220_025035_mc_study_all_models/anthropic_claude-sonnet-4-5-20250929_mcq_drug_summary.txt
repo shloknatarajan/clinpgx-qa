@@ -1,0 +1,52 @@
+
+======================================================================
+Mcq Drug Results  |  model=anthropic/claude-sonnet-4-5-20250929  |  0/10000 (0.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above                0     5000      0.0%
+  standard                         0     5000      0.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        0    10000      0.0%
+
+  Parse failures: 10000/10000 (100.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=drug  pmcid=PMC2386778
+  Sentence: Allele T is not associated with response to ______ as compared to allele G.
+  Options: a) None of the options  b) halothane  c) methadone  d) butorphanol
+  Expected: a  Got: 
+
+  [2] type=none_of_the_above  table=drug  pmcid=PMC5943457
+  Sentence: Allele A is not associated with response to ______ in people with Arthritis, Rheumatoid as compared to allele G.
+  Options: a) pemetrexed  b) trimethoprim  c) None of the options  d) pralatrexate
+  Expected: c  Got: 
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC7968507
+  Sentence: Allele G is not associated with metabolism of ______ in men with Heroin Dependence as compared to allele A.
+  Options: a) S-methadone  b) dexamethasone  c) None of the options  d) levomethadone
+  Expected: c  Got: 
+
+  [4] type=none_of_the_above  table=drug  pmcid=PMC3506814
+  Sentence: Genotypes GT + TT are not associated with response to ______ in people with Macular Degeneration as compared to genotype
+  Options: a) mepolizumab  b) None of the options  c) omalizumab  d) eculizumab
+  Expected: b  Got: 
+
+  [5] type=none_of_the_above  table=drug  pmcid=PMC5538123
+  Sentence: Allele T is associated with decreased response to ______ in people with Schizophrenia as compared to allele C.
+  Options: a) None of the options  b) paliperidone  c) iloperidone  d) bromperidol
+  Expected: a  Got: 
+
+Eval results saved to runs/20260220_025035_mc_study_all_models/anthropic_claude-sonnet-4-5-20250929_mcq_drug_eval_results.jsonl

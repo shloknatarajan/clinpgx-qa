@@ -1,0 +1,105 @@
+
+======================================================================
+Study Param Results  |  model=gpt-5.2  |  both: 108/300 (36.0%)
+======================================================================
+
+By field:
+  Field                 Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  p_value                   115      300     38.3%
+  significance              128      300     42.7%
+  both                      108      300     36.0%
+
+By question_type:
+  Type                         P-value    Signif.       Both    Total
+  ------------------------- ---------- ---------- ---------- --------
+  correct                       57.3%     73.2%     48.8%       82
+  modified_drug                 28.4%     28.4%     28.4%       81
+  modified_phenotype            18.2%     18.2%     18.2%       55
+  modified_variant              42.7%     42.7%     42.7%       82
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       39       78     50.0%
+  pheno                      69      222     31.1%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=correct  table=pheno  pmcid=PMC3548984
+  Expected p_value:      = 0.6
+  Response p_value:      0.60
+  Expected significance: no
+  Response significance: no
+  Raw response: {"p_value":"0.60","significance":"no"}
+
+  [2] type=modified_drug  table=pheno  pmcid=PMC10880264
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value":"not found","significance":"not found"}
+
+  [3] type=modified_phenotype  table=pheno  pmcid=PMC4916189
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value":"not found","significance":"not found"}
+
+  [4] type=modified_drug  table=drug  pmcid=PMC4706412
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value":"not found","significance":"not found"}
+
+  [5] type=modified_variant  table=drug  pmcid=PMC4706412
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value":"not found","significance":"not found"}
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=modified_drug  table=pheno  pmcid=PMC384715
+  Expected p_value:      not found
+  Response p_value:      <0.00001
+  Expected significance: not found
+  Response significance: yes
+  Raw response: {"p_value":"<0.00001","significance":"yes"}
+
+  [2] type=modified_drug  table=pheno  pmcid=PMC554812
+  Expected p_value:      not found
+  Response p_value:      1.4 × 10-19
+  Expected significance: not found
+  Response significance: yes
+  Raw response: {"p_value":"1.4 × 10-19","significance":"yes"}
+
+  [3] type=modified_drug  table=drug  pmcid=PMC5508045
+  Expected p_value:      not found
+  Response p_value:      0.921
+  Expected significance: not found
+  Response significance: no
+  Raw response: {"p_value":"0.921","significance":"no"}
+
+  [4] type=modified_phenotype  table=pheno  pmcid=PMC554812
+  Expected p_value:      not found
+  Response p_value:      2.8 × 10-6
+  Expected significance: not found
+  Response significance: yes
+  Raw response: {"p_value":"2.8 × 10-6","significance":"yes"}
+
+  [5] type=modified_drug  table=pheno  pmcid=PMC11971672
+  Expected p_value:      not found
+  Response p_value:      0.048
+  Expected significance: not found
+  Response significance: yes
+  Raw response: {"p_value":"0.048","significance":"yes"}
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/gpt-5.2_study_param_eval_results.jsonl

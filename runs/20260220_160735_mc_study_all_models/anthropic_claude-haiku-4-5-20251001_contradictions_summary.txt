@@ -1,0 +1,1279 @@
+======================================================================
+Contradiction Analysis  |  model=anthropic/claude-haiku-4-5-20251001
+======================================================================
+
+## Type 1: Standard vs NOTA contradictions
+--------------------------------------------------
+
+  VARIANT MCQ (120 annotation pairs):
+    Correct standard, wrong NOTA:     39  (32.5%)
+    Wrong standard, correct NOTA:     24  (20.0%)
+    Total contradictions:             63  (52.5%)
+
+  DRUG MCQ (120 annotation pairs):
+    Correct standard, wrong NOTA:     39  (32.5%)
+    Wrong standard, correct NOTA:      4  (3.3%)
+    Total contradictions:             43  (35.8%)
+
+## Type 2: Distractor-as-correct-answer contradictions
+--------------------------------------------------
+
+  VARIANT MCQ (150 standard questions, 41 wrong answers):
+    Contradiction instances:           44
+    Unique wrong answers involved:     24
+    Wrong answers that contradict:  58.5%
+
+  DRUG MCQ (150 standard questions, 4 wrong answers):
+    Contradiction instances:            0
+    Unique wrong answers involved:      0
+    Wrong answers that contradict:  0.0%
+
+## Type 3: Cross-type contradictions
+--------------------------------------------------
+  Annotations in 2+ MCQ types:       120
+  Cross-type contradictions:           35  (29.2%)
+
+  Conflict breakdown (correct_type -> wrong_type):
+            drug correct, variant      wrong: 32
+         variant correct, drug         wrong: 3
+
+======================================================================
+Total contradictions: 185  (across 600 total questions)
+======================================================================
+
+----------------------------------------------------------------------
+All Type 1: Standard vs NOTA contradictions (106)
+----------------------------------------------------------------------
+
+  #1
+  [Correct standard, wrong NOTA]  annotation=1454052260  pmcid=PMC12038368
+    Sentence: ______ is associated with increased concentrations of simvastatin acid in people with Cardiovascular Disease or Dyslipid
+    Correct entity: rs4149056
+    Standard picked: rs4149056  (Q137)
+    NOTA picked: rs4149057  (Q138, picked_none=False)
+
+  #2
+  [Correct standard, wrong NOTA]  annotation=1447682700  pmcid=PMC4706412
+    Sentence: ______ is associated with increased dose of warfarin as compared to CYP4F2 *1.
+    Correct entity: CYP4F2*1, CYP4F2*3
+    Standard picked: CYP4F2*1, CYP4F2*3  (Q567)
+    NOTA picked: rs9923231  (Q568, picked_none=False)
+
+  #3
+  [Correct standard, wrong NOTA]  annotation=1452390346  pmcid=PMC10880264
+    Sentence: ______ is associated with increased dose-adjusted trough concentrations of escitalopram in children with Depression or A
+    Correct entity: CYP2C19 intermediate metabolizer
+    Standard picked: CYP2C19 intermediate metabolizer  (Q2461)
+    NOTA picked: CYP2C19 intermediate metabolizer genotype  (Q2462, picked_none=False)
+
+  #4
+  [Wrong standard, correct NOTA]  annotation=1451769040  pmcid=PMC8973308
+    Sentence: ______ is associated with decreased dose of mercaptopurine in children with Precursor Cell Lymphoblastic Leukemia-Lympho
+    Correct entity: rs1800460
+    Standard picked: rs1800469  (Q4211)
+    NOTA picked: None of the options  (Q4212, picked_none=True)
+
+  #5
+  [Wrong standard, correct NOTA]  annotation=1448993666  pmcid=PMC2859392
+    Sentence: ______ is not associated with response to efavirenz in people with HIV Infections and Tuberculosis as compared to genoty
+    Correct entity: rs3745274
+    Standard picked: rs374515279  (Q8637)
+    NOTA picked: None of the options  (Q8638, picked_none=True)
+
+  #6
+  [Correct standard, wrong NOTA]  annotation=1451226960  pmcid=PMC6714829
+    Sentence: ______ is associated with increased response to simvastatin in people with Hypercholesterolemia as compared to genotypes
+    Correct entity: rs4149056
+    Standard picked: rs4149056  (Q9867)
+    NOTA picked: rs4149000  (Q9868, picked_none=False)
+
+  #7
+  [Correct standard, wrong NOTA]  annotation=1452143360  pmcid=PMC10275785
+    Sentence: ______ is associated with decreased response to etanercept or infliximab in people with Arthritis, Rheumatoid as compare
+    Correct entity: rs2043211
+    Standard picked: rs2043211  (Q10143)
+    NOTA picked: rs904323  (Q10144, picked_none=False)
+
+  #8
+  [Correct standard, wrong NOTA]  annotation=1452143400  pmcid=PMC10275785
+    Sentence: ______ is associated with decreased response to etanercept or infliximab in people with Arthritis, Rheumatoid as compare
+    Correct entity: rs4612666
+    Standard picked: rs4612666  (Q10147)
+    NOTA picked: rs1051266  (Q10148, picked_none=False)
+
+  #9
+  [Wrong standard, correct NOTA]  annotation=1184988061  pmcid=PMC2859392
+    Sentence: ______ is associated with decreased metabolism of efavirenz in people with HIV Infections and Tuberculosis as compared t
+    Correct entity: rs3745274
+    Standard picked: rs3745276  (Q11013)
+    NOTA picked: None of the options  (Q11014, picked_none=True)
+
+  #10
+  [Wrong standard, correct NOTA]  annotation=1448624157  pmcid=PMC5508045
+    Sentence: ______ are associated with decreased dose of warfarin in people with Atrial Fibrillation, heart valve replacement, Hyper
+    Correct entity: rs9923231
+    Standard picked: rs2108622  (Q11657)
+    NOTA picked: None of the options  (Q11658, picked_none=True)
+
+  #11
+  [Correct standard, wrong NOTA]  annotation=1448624168  pmcid=PMC5508045
+    Sentence: ______ are associated with decreased dose of warfarin in people with Atrial Fibrillation, heart valve replacement, Hyper
+    Correct entity: rs1057910
+    Standard picked: rs1057910  (Q11661)
+    NOTA picked: rs1057911  (Q11662, picked_none=False)
+
+  #12
+  [Correct standard, wrong NOTA]  annotation=1448624178  pmcid=PMC5508045
+    Sentence: ______ is associated with increased dose of warfarin in people with Atrial Fibrillation, heart valve replacement, Hypert
+    Correct entity: rs2108622
+    Standard picked: rs2108622  (Q11665)
+    NOTA picked: rs9923231  (Q11666, picked_none=False)
+
+  #13
+  [Correct standard, wrong NOTA]  annotation=994166507  pmcid=PMC3839910
+    Sentence: ______ is associated with increased risk of Stevens-Johnson Syndrome when treated with carbamazepine in children.
+    Correct entity: HLA-B*15:02
+    Standard picked: HLA-B*15:02  (Q13035)
+    NOTA picked: HLA-B*07:02  (Q13036, picked_none=False)
+
+  #14
+  [Correct standard, wrong NOTA]  annotation=1451510886  pmcid=PMC8790808
+    Sentence: ______ is associated with increased risk of Hypersensitivity when treated with pegaspargase.
+    Correct entity: HLA-DQB1*02:02
+    Standard picked: HLA-DQB1*02:02  (Q13371)
+    NOTA picked: HLA-DQB1*02:01  (Q13372, picked_none=False)
+
+  #15
+  [Correct standard, wrong NOTA]  annotation=1184466922  pmcid=PMC3113609
+    Sentence: ______ is associated with increased risk of severe cutaneous adverse reactions when treated with carbamazepine.
+    Correct entity: HLA-A*31:01
+    Standard picked: HLA-A*31:01  (Q13971)
+    NOTA picked: HLA-A*02:01  (Q13972, picked_none=False)
+
+  #16
+  [Correct standard, wrong NOTA]  annotation=1184466916  pmcid=PMC3113609
+    Sentence: ______ is associated with increased risk of Maculopapular Exanthema when treated with carbamazepine.
+    Correct entity: HLA-A*31:01
+    Standard picked: HLA-A*31:01  (Q13985)
+    NOTA picked: HLA-A*01:01  (Q13986, picked_none=False)
+
+  #17
+  [Correct standard, wrong NOTA]  annotation=1184466909  pmcid=PMC3113609
+    Sentence: ______ is associated with increased risk of Drug Hypersensitivity when treated with carbamazepine.
+    Correct entity: HLA-A*31:01
+    Standard picked: HLA-A*31:01  (Q13987)
+    NOTA picked: HLA-A*01:02  (Q13988, picked_none=False)
+
+  #18
+  [Wrong standard, correct NOTA]  annotation=1444933926  pmcid=PMC3548984
+    Sentence: ______ are associated with increased likelihood of Recurrence when treated with tamoxifen in women with Breast Neoplasms
+    Correct entity: CYP2D6*1, CYP2D6*3, CYP2D6*4
+    Standard picked: CYP2C19*4  (Q14327)
+    NOTA picked: None of the options  (Q14328, picked_none=True)
+
+  #19
+  [Correct standard, wrong NOTA]  annotation=981345654  pmcid=PMC554812
+    Sentence: ______ is associated with increased risk of severe cutaneous adverse reactions when treated with allopurinol.
+    Correct entity: HLA-B*58:01
+    Standard picked: HLA-B*58:01  (Q14657)
+    NOTA picked: rs1594  (Q14658, picked_none=False)
+
+  #20
+  [Correct standard, wrong NOTA]  annotation=993813998  pmcid=PMC3839910
+    Sentence: ______ is associated with increased risk of Maculopapular Exanthema when treated with carbamazepine in children.
+    Correct entity: HLA-A*31:01
+    Standard picked: HLA-A*31:01  (Q14683)
+    NOTA picked: HLA-A*01:02  (Q14684, picked_none=False)
+
+  #21
+  [Correct standard, wrong NOTA]  annotation=1185002071  pmcid=PMC3387531
+    Sentence: ______ is associated with increased risk of Drug Toxicity when treated with nevirapine in people with HIV Infections.
+    Correct entity: HLA-C*04:01
+    Standard picked: HLA-C*04:01  (Q14983)
+    NOTA picked: HLA-C*04:03  (Q14984, picked_none=False)
+
+  #22
+  [Correct standard, wrong NOTA]  annotation=1448926055  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*67:01
+    Standard picked: HLA-B*67:01  (Q14995)
+    NOTA picked: HLA-B*08:01  (Q14996, picked_none=False)
+
+  #23
+  [Wrong standard, correct NOTA]  annotation=1448926065  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*78:01
+    Standard picked: HLA-B*08:01  (Q15001)
+    NOTA picked: None of the options  (Q15002, picked_none=True)
+
+  #24
+  [Correct standard, wrong NOTA]  annotation=1184755056  pmcid=PMC554812
+    Sentence: ______ is associated with increased risk of severe cutaneous adverse reactions when treated with allopurinol.
+    Correct entity: HLA-A*33:03
+    Standard picked: HLA-A*33:03  (Q15399)
+    NOTA picked: rs1594  (Q15400, picked_none=False)
+
+  #25
+  [Wrong standard, correct NOTA]  annotation=1452196120  pmcid=PMC10399933
+    Sentence: ______ is not associated with increased risk of discontinuation when treated with fluvastatin as compared to CYP2C9 *1/*
+    Correct entity: CYP2C9*1, CYP2C9*2, CYP2C9*3
+    Standard picked: rs2231142  (Q15525)
+    NOTA picked: None of the options  (Q15526, picked_none=True)
+
+  #26
+  [Correct standard, wrong NOTA]  annotation=1452390389  pmcid=PMC10880264
+    Sentence: ______ is associated with increased likelihood of Psychomotor Agitation, Hyperkinesis or Impulse control disorder, unspe
+    Correct entity: CYP2D6 poor metabolizer
+    Standard picked: CYP2D6 poor metabolizer  (Q15879)
+    NOTA picked: CYP2D6 poor metabolizer genotype  (Q15880, picked_none=False)
+
+  #27
+  [Wrong standard, correct NOTA]  annotation=1452390301  pmcid=PMC10880264
+    Sentence: ______ is associated with increased likelihood of suicidal ideation, adverse events or deliberate self-harm when treated
+    Correct entity: CYP2C19 intermediate metabolizer
+    Standard picked: CYP2C19 intermediate metabolizer phenotype  (Q15881)
+    NOTA picked: None of the options  (Q15882, picked_none=True)
+
+  #28
+  [Correct standard, wrong NOTA]  annotation=1451237500  pmcid=PMC6465603
+    Sentence: ______ is associated with increased likelihood of Leukopenia when treated with azathioprine in people with Hepatitis, Au
+    Correct entity: rs116855232
+    Standard picked: rs116855232  (Q15977)
+    NOTA picked: rs11685873  (Q15978, picked_none=False)
+
+  #29
+  [Wrong standard, correct NOTA]  annotation=1452426860  pmcid=PMC10946077
+    Sentence: ______ is not associated with decreased likelihood of overall survival or progression-free survival when treated with ir
+    Correct entity: UGT1A1*1, UGT1A1*6, UGT1A1*28
+    Standard picked: UGT1A1*1, UGT1A1*28  (Q16287)
+    NOTA picked: None of the options  (Q16288, picked_none=True)
+
+  #30
+  [Correct standard, wrong NOTA]  annotation=1452474678  pmcid=PMC11062152
+    Sentence: ______ is associated with increased risk of Neutropenia or Leukopenia when treated with fluorouracil, irinotecan and leu
+    Correct entity: UGT1A1*1, UGT1A1*6, UGT1A1*28
+    Standard picked: UGT1A1*1, UGT1A1*6, UGT1A1*28  (Q16357)
+    NOTA picked: UGT1A1 deficiency  (Q16358, picked_none=False)
+
+  #31
+  [Correct standard, wrong NOTA]  annotation=1452437420  pmcid=PMC10993165
+    Sentence: ______ is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, Toxic or severe cutane
+    Correct entity: HLA-B*15:02
+    Standard picked: HLA-B*15:02  (Q16571)
+    NOTA picked: HLA-B*13:01  (Q16572, picked_none=False)
+
+  #32
+  [Correct standard, wrong NOTA]  annotation=1452439000  pmcid=PMC10993165
+    Sentence: ______ is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, Toxic or severe cutane
+    Correct entity: HLA-B*38:02
+    Standard picked: HLA-B*38:02  (Q16579)
+    NOTA picked: HLA-B*13:01  (Q16580, picked_none=False)
+
+  #33
+  [Wrong standard, correct NOTA]  annotation=1448926045  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*56:06
+    Standard picked: HLA-C*04:07  (Q16773)
+    NOTA picked: None of the options  (Q16774, picked_none=True)
+
+  #34
+  [Correct standard, wrong NOTA]  annotation=1448926229  pmcid=PMC5561238
+    Sentence: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eo
+    Correct entity: HLA-B*15:32
+    Standard picked: HLA-B*15:32  (Q16787)
+    NOTA picked: HLA-B*39:01  (Q16788, picked_none=False)
+
+  #35
+  [Correct standard, wrong NOTA]  annotation=1448925982  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*51:01
+    Standard picked: HLA-B*51:01  (Q16793)
+    NOTA picked: HLA-B*08:01  (Q16794, picked_none=False)
+
+  #36
+  [Correct standard, wrong NOTA]  annotation=1448926169  pmcid=PMC5561238
+    Sentence: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eo
+    Correct entity: HLA-B*15:12
+    Standard picked: HLA-B*15:12  (Q16799)
+    NOTA picked: HLA-B*15:02  (Q16800, picked_none=False)
+
+  #37
+  [Wrong standard, correct NOTA]  annotation=1448926299  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-DRB1*08:01
+    Standard picked: HLA-B*15:24  (Q16801)
+    NOTA picked: None of the options  (Q16802, picked_none=True)
+
+  #38
+  [Wrong standard, correct NOTA]  annotation=1448925972  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*39:10
+    Standard picked: HLA-B*35:10  (Q16803)
+    NOTA picked: None of the options  (Q16804, picked_none=True)
+
+  #39
+  [Correct standard, wrong NOTA]  annotation=1448926089  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*38:01
+    Standard picked: HLA-B*38:01  (Q16807)
+    NOTA picked: HLA-C*04:07  (Q16808, picked_none=False)
+
+  #40
+  [Wrong standard, correct NOTA]  annotation=1448926035  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*56:01
+    Standard picked: HLA-B*08:01  (Q16811)
+    NOTA picked: None of the options  (Q16812, picked_none=True)
+
+  #41
+  [Wrong standard, correct NOTA]  annotation=1448926269  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-DRB1*01:02
+    Standard picked: HLA-B*15:35  (Q16815)
+    NOTA picked: None of the options  (Q16816, picked_none=True)
+
+  #42
+  [Wrong standard, correct NOTA]  annotation=1448926139  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*39:09
+    Standard picked: HLA-B*15:32  (Q16817)
+    NOTA picked: None of the options  (Q16818, picked_none=True)
+
+  #43
+  [Correct standard, wrong NOTA]  annotation=1448926159  pmcid=PMC5561238
+    Sentence: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eo
+    Correct entity: HLA-B*15:01
+    Standard picked: HLA-B*15:01  (Q16819)
+    NOTA picked: HLA-B*08:01  (Q16820, picked_none=False)
+
+  #44
+  [Wrong standard, correct NOTA]  annotation=1448926149  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*57:01
+    Standard picked: HLA-B*15:25  (Q16827)
+    NOTA picked: None of the options  (Q16828, picked_none=True)
+
+  #45
+  [Wrong standard, correct NOTA]  annotation=1448926022  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*55:02
+    Standard picked: rs3745274  (Q16831)
+    NOTA picked: None of the options  (Q16832, picked_none=True)
+
+  #46
+  [Wrong standard, correct NOTA]  annotation=1448926012  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*55:01
+    Standard picked: HLA-B*35:10  (Q16835)
+    NOTA picked: None of the options  (Q16836, picked_none=True)
+
+  #47
+  [Wrong standard, correct NOTA]  annotation=1448926075  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*13:02
+    Standard picked: HLA-B*07:02  (Q16841)
+    NOTA picked: None of the options  (Q16842, picked_none=True)
+
+  #48
+  [Wrong standard, correct NOTA]  annotation=1448926129  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*39:06
+    Standard picked: HLA-B*27:06  (Q16845)
+    NOTA picked: None of the options  (Q16846, picked_none=True)
+
+  #49
+  [Correct standard, wrong NOTA]  annotation=1448926002  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*54:01
+    Standard picked: HLA-B*54:01  (Q16849)
+    NOTA picked: HLA-B*15:27  (Q16850, picked_none=False)
+
+  #50
+  [Wrong standard, correct NOTA]  annotation=1448926259  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-DRB1*01:01
+    Standard picked: HLA-B*15:32  (Q16851)
+    NOTA picked: None of the options  (Q16852, picked_none=True)
+
+  #51
+  [Correct standard, wrong NOTA]  annotation=1448926249  pmcid=PMC5561238
+    Sentence: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Adve
+    Correct entity: HLA-B*52:01
+    Standard picked: HLA-B*52:01  (Q16853)
+    NOTA picked: rs28399499  (Q16854, picked_none=False)
+
+  #52
+  [Wrong standard, correct NOTA]  annotation=1448926309  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-DRB1*10:01
+    Standard picked: HLA-B*15:32  (Q16855)
+    NOTA picked: None of the options  (Q16856, picked_none=True)
+
+  #53
+  [Correct standard, wrong NOTA]  annotation=1448925862  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-C*04:01
+    Standard picked: HLA-C*04:01  (Q16857)
+    NOTA picked: HLA-C*04:07  (Q16858, picked_none=False)
+
+  #54
+  [Wrong standard, correct NOTA]  annotation=1448926119  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+    Correct entity: HLA-B*39:05
+    Standard picked: HLA-C*04:07  (Q16859)
+    NOTA picked: None of the options  (Q16860, picked_none=True)
+
+  #55
+  [Correct standard, wrong NOTA]  annotation=1452720980  pmcid=PMC11603346
+    Sentence: ______ is associated with decreased likelihood of Drug-induced liver injury when treated with nevirapine in people with 
+    Correct entity: CYP2B6*1, CYP2B6*6
+    Standard picked: CYP2B6*1, CYP2B6*6  (Q17019)
+    NOTA picked: CYP2B6*13  (Q17020, picked_none=False)
+
+  #56
+  [Correct standard, wrong NOTA]  annotation=1452721001  pmcid=PMC11603346
+    Sentence: ______ is associated with increased likelihood of Drug-induced liver injury when treated with efavirenz in people with H
+    Correct entity: CYP2B6*1, CYP2B6*6
+    Standard picked: CYP2B6*1, CYP2B6*6  (Q17021)
+    NOTA picked: CYP2B6*13  (Q17022, picked_none=False)
+
+  #57
+  [Correct standard, wrong NOTA]  annotation=1452195940  pmcid=PMC10399933
+    Sentence: ______ is associated with increased risk of discontinuation when treated with simvastatin as compared to genotype TT.
+    Correct entity: rs4149056
+    Standard picked: rs4149056  (Q18965)
+    NOTA picked: CYP2C9*1, CYP2C9*2, CYP2C9*3  (Q18966, picked_none=False)
+
+  #58
+  [Correct standard, wrong NOTA]  annotation=1452195947  pmcid=PMC10399933
+    Sentence: ______ is associated with increased risk of discontinuation when treated with pravastatin as compared to genotype TT.
+    Correct entity: rs4149056
+    Standard picked: rs4149056  (Q18985)
+    NOTA picked: CYP2C9*1, CYP2C9*2, CYP2C9*3  (Q18986, picked_none=False)
+
+  #59
+  [Correct standard, wrong NOTA]  annotation=1185002099  pmcid=PMC3387531
+    Sentence: ______ is associated with increased risk of Drug Toxicity when treated with nevirapine in people with HIV Infections.
+    Correct entity: rs2054675
+    Standard picked: rs2054675  (Q19083)
+    NOTA picked: rs1054645  (Q19084, picked_none=False)
+
+  #60
+  [Wrong standard, correct NOTA]  annotation=1449155771  pmcid=PMC5561238
+    Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome and Drug Reaction with Eosinophilia and 
+    Correct entity: rs3745274
+    Standard picked: HLA-C*04:03  (Q20599)
+    NOTA picked: None of the options  (Q20600, picked_none=True)
+
+  #61
+  [Correct standard, wrong NOTA]  annotation=1448993767  pmcid=PMC4916189
+    Sentence: ______ are associated with increased likelihood of discontinuation when treated with efavirenz in people with HIV Infect
+    Correct entity: rs3745274
+    Standard picked: rs3745274  (Q21087)
+    NOTA picked: rs28399499  (Q21088, picked_none=False)
+
+  #62
+  [Correct standard, wrong NOTA]  annotation=1448993794  pmcid=PMC4916189
+    Sentence: ______ is associated with decreased likelihood of discontinuation when treated with efavirenz in people with HIV Infecti
+    Correct entity: rs2472677
+    Standard picked: rs2472677  (Q21101)
+    NOTA picked: rs7247267  (Q21102, picked_none=False)
+
+  #63
+  [Correct standard, wrong NOTA]  annotation=1448993831  pmcid=PMC4916189
+    Sentence: ______ are associated with increased risk of Central Nervous System Diseases when treated with efavirenz in people with 
+    Correct entity: rs1045642
+    Standard picked: rs1045642  (Q21117)
+    NOTA picked: rs1045644  (Q21118, picked_none=False)
+
+  #64
+  [Correct standard, wrong NOTA]  annotation=1454052260  pmcid=PMC12038368
+    Sentence: Genotypes CC + CT is associated with increased concentrations of ______ in people with Cardiovascular Disease or Dyslipi
+    Correct entity: simvastatin acid
+    Standard picked: simvastatin acid  (Q30137)
+    NOTA picked: etidronic acid  (Q30138, picked_none=False)
+
+  #65
+  [Correct standard, wrong NOTA]  annotation=1444930388  pmcid=PMC3584248
+    Sentence: CYP2D6 *10/*10 + *10/*41 + *1/*5 + *2/*5 + *5/*10 are associated with decreased concentrations of ______ in women with B
+    Correct entity: endoxifen
+    Standard picked: endoxifen  (Q30553)
+    NOTA picked: raloxifene-4′-glucuronide  (Q30554, picked_none=False)
+
+  #66
+  [Correct standard, wrong NOTA]  annotation=1447682700  pmcid=PMC4706412
+    Sentence: CYP4F2 *3 is associated with increased dose of ______ as compared to CYP4F2 *1.
+    Correct entity: warfarin
+    Standard picked: warfarin  (Q30567)
+    NOTA picked: coumarin  (Q30568, picked_none=False)
+
+  #67
+  [Correct standard, wrong NOTA]  annotation=1452390346  pmcid=PMC10880264
+    Sentence: CYP2C19 intermediate metabolizer is associated with increased dose-adjusted trough concentrations of ______ in children 
+    Correct entity: escitalopram
+    Standard picked: escitalopram  (Q32431)
+    NOTA picked: metoclopramide  (Q32432, picked_none=False)
+
+  #68
+  [Correct standard, wrong NOTA]  annotation=1447682605  pmcid=PMC4706412
+    Sentence: CYP2C9 *2 + *3 + *8 are associated with decreased dose of ______ as compared to CYP2C9 *1.
+    Correct entity: warfarin
+    Standard picked: warfarin  (Q33425)
+    NOTA picked: coumarin  (Q33426, picked_none=False)
+
+  #69
+  [Wrong standard, correct NOTA]  annotation=1448993666  pmcid=PMC2859392
+    Sentence: Genotype TT is not associated with response to ______ in people with HIV Infections and Tuberculosis as compared to geno
+    Correct entity: efavirenz
+    Standard picked: amprenavir  (Q38505)
+    NOTA picked: None of the options  (Q38506, picked_none=True)
+
+  #70
+  [Correct standard, wrong NOTA]  annotation=1184988061  pmcid=PMC2859392
+    Sentence: Genotype TT is associated with decreased metabolism of ______ in people with HIV Infections and Tuberculosis as compared
+    Correct entity: efavirenz
+    Standard picked: efavirenz  (Q40797)
+    NOTA picked: abacavir  (Q40798, picked_none=False)
+
+  #71
+  [Correct standard, wrong NOTA]  annotation=1448624178  pmcid=PMC5508045
+    Sentence: Genotype TT is associated with increased dose of ______ in people with Atrial Fibrillation, heart valve replacement, Hyp
+    Correct entity: warfarin
+    Standard picked: warfarin  (Q41445)
+    NOTA picked: coumarin  (Q41446, picked_none=False)
+
+  #72
+  [Correct standard, wrong NOTA]  annotation=1453076180  pmcid=PMC12035587
+    Sentence: NUDT15 *3/*3 is associated with increased severity of Myelosuppression, Toxic liver disease and Alopecia when treated wi
+    Correct entity: mercaptopurine
+    Standard picked: mercaptopurine  (Q42357)
+    NOTA picked: methylmercaptopurine  (Q42358, picked_none=False)
+
+  #73
+  [Correct standard, wrong NOTA]  annotation=1453096120  pmcid=PMC11971672
+    Sentence: CYP2C19 *1/*2 + *1/*3 + *2/*17 + *3/*17 + *2/*2 + *2/*3 + *3/*3 (assigned as intermediate metabolizer and poor metaboliz
+    Correct entity: clopidogrel
+    Standard picked: clopidogrel  (Q42411)
+    NOTA picked: pridopidine  (Q42412, picked_none=False)
+
+  #74
+  [Correct standard, wrong NOTA]  annotation=1454052160  pmcid=PMC12036300
+    Sentence: CYP2C19 *1/*17 + *17/*17 + *2/*17 is not associated with increased likelihood of Hemorrhage when treated with ______ as 
+    Correct entity: clopidogrel
+    Standard picked: clopidogrel  (Q42463)
+    NOTA picked: ticlopidine  (Q42464, picked_none=False)
+
+  #75
+  [Correct standard, wrong NOTA]  annotation=994166507  pmcid=PMC3839910
+    Sentence: HLA-B *15:02 is associated with increased risk of Stevens-Johnson Syndrome when treated with ______ in children.
+    Correct entity: carbamazepine
+    Standard picked: carbamazepine  (Q42765)
+    NOTA picked: oxcarbazepine  (Q42766, picked_none=False)
+
+  #76
+  [Correct standard, wrong NOTA]  annotation=1444876870  pmcid=PMC384715
+    Sentence: HLA-B *57:01 is associated with increased risk of Drug Hypersensitivity when treated with ______ in people with HIV Infe
+    Correct entity: abacavir
+    Standard picked: abacavir  (Q42983)
+    NOTA picked: indinavir  (Q42984, picked_none=False)
+
+  #77
+  [Correct standard, wrong NOTA]  annotation=1451510720  pmcid=PMC8790808
+    Sentence: HLA-DQA1 *02:01 is associated with increased risk of Hypersensitivity when treated with ______.
+    Correct entity: pegaspargase
+    Standard picked: pegaspargase  (Q43087)
+    NOTA picked: asparaginase  (Q43088, picked_none=False)
+
+  #78
+  [Correct standard, wrong NOTA]  annotation=1451510886  pmcid=PMC8790808
+    Sentence: HLA-DQB1 *02:02 is associated with increased risk of Hypersensitivity when treated with ______.
+    Correct entity: pegaspargase
+    Standard picked: pegaspargase  (Q43091)
+    NOTA picked: asparaginase  (Q43092, picked_none=False)
+
+  #79
+  [Correct standard, wrong NOTA]  annotation=1451510891  pmcid=PMC8790808
+    Sentence: HLA-DRB1 *07:01 is associated with increased risk of Hypersensitivity when treated with ______.
+    Correct entity: pegaspargase
+    Standard picked: pegaspargase  (Q43095)
+    NOTA picked: asparaginase  (Q43096, picked_none=False)
+
+  #80
+  [Correct standard, wrong NOTA]  annotation=1184466922  pmcid=PMC3113609
+    Sentence: HLA-A *31:01 is associated with increased risk of severe cutaneous adverse reactions when treated with ______.
+    Correct entity: carbamazepine
+    Standard picked: carbamazepine  (Q43657)
+    NOTA picked: oxcarbazepine  (Q43658, picked_none=False)
+
+  #81
+  [Correct standard, wrong NOTA]  annotation=1184466909  pmcid=PMC3113609
+    Sentence: HLA-A *31:01 is associated with increased risk of Drug Hypersensitivity when treated with ______.
+    Correct entity: carbamazepine
+    Standard picked: carbamazepine  (Q43669)
+    NOTA picked: oxcarbazepine  (Q43670, picked_none=False)
+
+  #82
+  [Correct standard, wrong NOTA]  annotation=994531642  pmcid=PMC3839910
+    Sentence: HLA-B *15:02 is not associated with increased risk of Maculopapular Exanthema when treated with ______ in children.
+    Correct entity: carbamazepine
+    Standard picked: carbamazepine  (Q43905)
+    NOTA picked: oxcarbazepine  (Q43906, picked_none=False)
+
+  #83
+  [Wrong standard, correct NOTA]  annotation=1444933959  pmcid=PMC3548984
+    Sentence: CYP2D6 *1/*3 + *1/*4 + *1/*6 are not associated with increased likelihood of Recurrence when treated with ______ in wome
+    Correct entity: tamoxifen
+    Standard picked: N-desmethyltamoxifen  (Q43997)
+    NOTA picked: None of the options  (Q43998, picked_none=True)
+
+  #84
+  [Wrong standard, correct NOTA]  annotation=1444933987  pmcid=PMC3548984
+    Sentence: CYP2D6 *1/*10 + *1/*41 + *10/*10 + *41/*41 are not associated with increased likelihood of Recurrence when treated with 
+    Correct entity: tamoxifen
+    Standard picked: N-desmethyltamoxifen  (Q44005)
+    NOTA picked: None of the options  (Q44006, picked_none=True)
+
+  #85
+  [Correct standard, wrong NOTA]  annotation=993944301  pmcid=PMC3839910
+    Sentence: HLA-A *31:01 is not associated with increased risk of Stevens-Johnson Syndrome when treated with ______ in children.
+    Correct entity: carbamazepine
+    Standard picked: carbamazepine  (Q44069)
+    NOTA picked: oxcarbazepine  (Q44070, picked_none=False)
+
+  #86
+  [Correct standard, wrong NOTA]  annotation=1185002083  pmcid=PMC3387531
+    Sentence: HLA-DRB1 *01:01 is associated with increased risk of Drug Toxicity when treated with ______ in people with HIV Infection
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q44591)
+    NOTA picked: noscapine  (Q44592, picked_none=False)
+
+  #87
+  [Correct standard, wrong NOTA]  annotation=1448926055  pmcid=PMC5561238
+    Sentence: HLA-B *67:01 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q44599)
+    NOTA picked: noscapine  (Q44600, picked_none=False)
+
+  #88
+  [Correct standard, wrong NOTA]  annotation=1448925992  pmcid=PMC5561238
+    Sentence: HLA-B *51:02 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q44751)
+    NOTA picked: clozapine  (Q44752, picked_none=False)
+
+  #89
+  [Correct standard, wrong NOTA]  annotation=1452390389  pmcid=PMC10880264
+    Sentence: CYP2D6 poor metabolizer is associated with increased likelihood of Psychomotor Agitation, Hyperkinesis or Impulse contro
+    Correct entity: escitalopram
+    Standard picked: escitalopram  (Q45421)
+    NOTA picked: citalopram  (Q45422, picked_none=False)
+
+  #90
+  [Correct standard, wrong NOTA]  annotation=1451237500  pmcid=PMC6465603
+    Sentence: Genotypes CT + TT is associated with increased likelihood of Leukopenia when treated with ______ in people with Hepatiti
+    Correct entity: azathioprine
+    Standard picked: azathioprine  (Q45515)
+    NOTA picked: thioguanine  (Q45516, picked_none=False)
+
+  #91
+  [Correct standard, wrong NOTA]  annotation=1452426961  pmcid=PMC10946077
+    Sentence: UGT1A1 *6 is associated with increased severity of Neutropenia, Leukopenia or Diarrhea when treated with ______ in peopl
+    Correct entity: irinotecan
+    Standard picked: irinotecan  (Q45815)
+    NOTA picked: FOLFIRINOX  (Q45816, picked_none=False)
+
+  #92
+  [Correct standard, wrong NOTA]  annotation=1452474670  pmcid=PMC11062152
+    Sentence: UGT1A1 *6 + *28 is not associated with increased risk of Diarrhea when treated with ______ in people with Pancreatic Neo
+    Correct entity: fluorouracil, irinotecan, leucovorin
+    Standard picked: fluorouracil, irinotecan, leucovorin  (Q45869)
+    NOTA picked: 2-aminoheptanoate  (Q45870, picked_none=False)
+
+  #93
+  [Correct standard, wrong NOTA]  annotation=1452474678  pmcid=PMC11062152
+    Sentence: UGT1A1 *6/*6 + *28/*28 + *6/*28 is associated with increased risk of Neutropenia or Leukopenia when treated with ______ 
+    Correct entity: fluorouracil, irinotecan, leucovorin
+    Standard picked: fluorouracil, irinotecan, leucovorin  (Q45873)
+    NOTA picked: 2-aminoheptanoate  (Q45874, picked_none=False)
+
+  #94
+  [Correct standard, wrong NOTA]  annotation=1448926289  pmcid=PMC5561238
+    Sentence: HLA-DRB1 *04:04 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophili
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q46295)
+    NOTA picked: clozapine  (Q46296, picked_none=False)
+
+  #95
+  [Correct standard, wrong NOTA]  annotation=1448925958  pmcid=PMC5561238
+    Sentence: HLA-B *35:05 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q46299)
+    NOTA picked: clozapine  (Q46300, picked_none=False)
+
+  #96
+  [Correct standard, wrong NOTA]  annotation=1448926159  pmcid=PMC5561238
+    Sentence: HLA-B *15:01 is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction w
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q46305)
+    NOTA picked: noscapine  (Q46306, picked_none=False)
+
+  #97
+  [Correct standard, wrong NOTA]  annotation=1448998275  pmcid=PMC5561238
+    Sentence: HLA-B *35:10 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Adverse Reaction
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q46309)
+    NOTA picked: noscapine  (Q46310, picked_none=False)
+
+  #98
+  [Correct standard, wrong NOTA]  annotation=1448926279  pmcid=PMC5561238
+    Sentence: HLA-DRB1 *01:03 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophili
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q46319)
+    NOTA picked: noscapine  (Q46320, picked_none=False)
+
+  #99
+  [Correct standard, wrong NOTA]  annotation=1448926199  pmcid=PMC5561238
+    Sentence: HLA-B *15:25 is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction w
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q46325)
+    NOTA picked: clozapine  (Q46326, picked_none=False)
+
+  #100
+  [Correct standard, wrong NOTA]  annotation=1448926309  pmcid=PMC5561238
+    Sentence: HLA-DRB1 *10:01 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophili
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q46337)
+    NOTA picked: noscapine  (Q46338, picked_none=False)
+
+  #101
+  [Correct standard, wrong NOTA]  annotation=1448926179  pmcid=PMC5561238
+    Sentence: HLA-B *15:24 is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction w
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q46345)
+    NOTA picked: noscapine  (Q46346, picked_none=False)
+
+  #102
+  [Correct standard, wrong NOTA]  annotation=1452720980  pmcid=PMC11603346
+    Sentence: CYP2B6 *1/*6 + *6/*6 is associated with decreased likelihood of Drug-induced liver injury when treated with ______ in pe
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q46497)
+    NOTA picked: efavirenz  (Q46498, picked_none=False)
+
+  #103
+  [Correct standard, wrong NOTA]  annotation=1452721001  pmcid=PMC11603346
+    Sentence: CYP2B6 *1/*6 + *6/*6 is associated with increased likelihood of Drug-induced liver injury when treated with ______ in pe
+    Correct entity: efavirenz
+    Standard picked: efavirenz  (Q46499)
+    NOTA picked: nevirapine  (Q46500, picked_none=False)
+
+  #104
+  [Correct standard, wrong NOTA]  annotation=1452196040  pmcid=PMC10399933
+    Sentence: Genotypes CC + CT is not associated with increased risk of discontinuation when treated with ______ as compared to genot
+    Correct entity: atorvastatin, fluvastatin, rosuvastatin
+    Standard picked: atorvastatin, fluvastatin, rosuvastatin  (Q48207)
+    NOTA picked: atorvastatin lactone  (Q48208, picked_none=False)
+
+  #105
+  [Correct standard, wrong NOTA]  annotation=1449155771  pmcid=PMC5561238
+    Sentence: Allele T is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome and Drug Reaction with Eosinophilia an
+    Correct entity: nevirapine
+    Standard picked: nevirapine  (Q49779)
+    NOTA picked: olanzapine  (Q49780, picked_none=False)
+
+  #106
+  [Wrong standard, correct NOTA]  annotation=1448993794  pmcid=PMC4916189
+    Sentence: Genotype TT is associated with decreased likelihood of discontinuation when treated with ______ in people with HIV Infec
+    Correct entity: efavirenz
+    Standard picked: darunavir  (Q50263)
+    NOTA picked: None of the options  (Q50264, picked_none=True)
+
+----------------------------------------------------------------------
+All Type 2: Distractor-as-correct contradictions (44)
+----------------------------------------------------------------------
+
+  #1
+  [Distractor-as-correct]  pmcid=PMC4706412  entity=rs1800566
+    Wrong Q8423: ______ are associated with decreased dose of warfarin as compared to genotype CC.
+      Model picked "rs1800566" but correct was "rs9923231"
+    Right Q8463: ______ are associated with increased dose of warfarin as compared to genotype GG.
+      "rs1800566" is correct here (model got it: True)
+
+  #2
+  [Distractor-as-correct]  pmcid=PMC5508045  entity=rs2108622
+    Wrong Q11657: ______ are associated with decreased dose of warfarin in people with Atrial Fibrillation, heart valv
+      Model picked "rs2108622" but correct was "rs9923231"
+    Right Q11665: ______ is associated with increased dose of warfarin in people with Atrial Fibrillation, heart valve
+      "rs2108622" is correct here (model got it: True)
+
+  #3
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-C*04:07
+    Wrong Q16773: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-C*04:07" but correct was "HLA-B*56:06"
+    Right Q16829: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Ad
+      "HLA-C*04:07" is correct here (model got it: False)
+
+  #4
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-B*56:01
+    Wrong Q16797: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, D
+      Model picked "HLA-B*56:01" but correct was "HLA-B*15:35"
+    Right Q16811: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      "HLA-B*56:01" is correct here (model got it: False)
+
+  #5
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-B*15:24
+    Wrong Q16801: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-B*15:24" but correct was "HLA-DRB1*08:01"
+    Right Q16863: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, D
+      "HLA-B*15:24" is correct here (model got it: True)
+
+  #6
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-B*35:10
+    Wrong Q16803: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-B*35:10" but correct was "HLA-B*39:10"
+    Right Q16823: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Ad
+      "HLA-B*35:10" is correct here (model got it: False)
+
+  #7
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-B*15:35
+    Wrong Q16815: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-B*15:35" but correct was "HLA-DRB1*01:02"
+    Right Q16797: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, D
+      "HLA-B*15:35" is correct here (model got it: False)
+
+  #8
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-B*15:32
+    Wrong Q16817: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-B*15:32" but correct was "HLA-B*39:09"
+    Right Q16787: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, D
+      "HLA-B*15:32" is correct here (model got it: True)
+
+  #9
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-C*04:01
+    Wrong Q16823: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Ad
+      Model picked "HLA-C*04:01" but correct was "HLA-B*35:10"
+    Right Q16857: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      "HLA-C*04:01" is correct here (model got it: True)
+
+  #10
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-B*15:25
+    Wrong Q16827: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-B*15:25" but correct was "HLA-B*57:01"
+    Right Q16843: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, D
+      "HLA-B*15:25" is correct here (model got it: True)
+
+  #11
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-DRB1*01:03
+    Wrong Q16829: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Ad
+      Model picked "HLA-DRB1*01:03" but correct was "HLA-C*04:07"
+    Right Q16833: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      "HLA-DRB1*01:03" is correct here (model got it: True)
+
+  #12
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=rs3745274
+    Wrong Q16831: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "rs3745274" but correct was "HLA-B*55:02"
+    Right Q20599: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome and Drug Reaction wi
+      "rs3745274" is correct here (model got it: False)
+
+  #13
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-B*35:10
+    Wrong Q16835: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-B*35:10" but correct was "HLA-B*55:01"
+    Right Q16823: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Ad
+      "HLA-B*35:10" is correct here (model got it: False)
+
+  #14
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-B*15:32
+    Wrong Q16851: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-B*15:32" but correct was "HLA-DRB1*01:01"
+    Right Q16787: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, D
+      "HLA-B*15:32" is correct here (model got it: True)
+
+  #15
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-B*15:32
+    Wrong Q16855: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-B*15:32" but correct was "HLA-DRB1*10:01"
+    Right Q16787: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, D
+      "HLA-B*15:32" is correct here (model got it: True)
+
+  #16
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-C*04:07
+    Wrong Q16859: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      Model picked "HLA-C*04:07" but correct was "HLA-B*39:05"
+    Right Q16829: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Ad
+      "HLA-C*04:07" is correct here (model got it: False)
+
+  #17
+  [Distractor-as-correct]  pmcid=PMC5561238  entity=HLA-C*04:03
+    Wrong Q20599: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome and Drug Reaction wi
+      Model picked "HLA-C*04:03" but correct was "rs3745274"
+    Right Q16847: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with 
+      "HLA-C*04:03" is correct here (model got it: True)
+
+  #18
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs2231142
+    Wrong Q15525: ______ is not associated with increased risk of discontinuation when treated with fluvastatin as com
+      Model picked "rs2231142" but correct was "CYP2C9*1, CYP2C9*2, CYP2C9*3"
+    Right Q18921: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs2231142" is correct here (model got it: False)
+
+  #19
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs2231142
+    Wrong Q15525: ______ is not associated with increased risk of discontinuation when treated with fluvastatin as com
+      Model picked "rs2231142" but correct was "CYP2C9*1, CYP2C9*2, CYP2C9*3"
+    Right Q18923: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs2231142" is correct here (model got it: False)
+
+  #20
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs2231142
+    Wrong Q15525: ______ is not associated with increased risk of discontinuation when treated with fluvastatin as com
+      Model picked "rs2231142" but correct was "CYP2C9*1, CYP2C9*2, CYP2C9*3"
+    Right Q18925: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs2231142" is correct here (model got it: False)
+
+  #21
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18921: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18895: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs4149056" is correct here (model got it: True)
+
+  #22
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18921: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18897: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs4149056" is correct here (model got it: True)
+
+  #23
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18921: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18899: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs4149056" is correct here (model got it: True)
+
+  #24
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18921: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18963: ______ is associated with increased risk of discontinuation when treated with simvastatin as compare
+      "rs4149056" is correct here (model got it: True)
+
+  #25
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18921: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18965: ______ is associated with increased risk of discontinuation when treated with simvastatin as compare
+      "rs4149056" is correct here (model got it: True)
+
+  #26
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18921: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18985: ______ is associated with increased risk of discontinuation when treated with pravastatin as compare
+      "rs4149056" is correct here (model got it: True)
+
+  #27
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18923: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18895: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs4149056" is correct here (model got it: True)
+
+  #28
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18923: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18897: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs4149056" is correct here (model got it: True)
+
+  #29
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18923: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18899: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs4149056" is correct here (model got it: True)
+
+  #30
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18923: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18963: ______ is associated with increased risk of discontinuation when treated with simvastatin as compare
+      "rs4149056" is correct here (model got it: True)
+
+  #31
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18923: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18965: ______ is associated with increased risk of discontinuation when treated with simvastatin as compare
+      "rs4149056" is correct here (model got it: True)
+
+  #32
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18923: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18985: ______ is associated with increased risk of discontinuation when treated with pravastatin as compare
+      "rs4149056" is correct here (model got it: True)
+
+  #33
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18925: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18895: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs4149056" is correct here (model got it: True)
+
+  #34
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18925: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18897: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs4149056" is correct here (model got it: True)
+
+  #35
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18925: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18899: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      "rs4149056" is correct here (model got it: True)
+
+  #36
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18925: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18963: ______ is associated with increased risk of discontinuation when treated with simvastatin as compare
+      "rs4149056" is correct here (model got it: True)
+
+  #37
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18925: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18965: ______ is associated with increased risk of discontinuation when treated with simvastatin as compare
+      "rs4149056" is correct here (model got it: True)
+
+  #38
+  [Distractor-as-correct]  pmcid=PMC10399933  entity=rs4149056
+    Wrong Q18925: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluv
+      Model picked "rs4149056" but correct was "rs2231142"
+    Right Q18985: ______ is associated with increased risk of discontinuation when treated with pravastatin as compare
+      "rs4149056" is correct here (model got it: True)
+
+  #39
+  [Distractor-as-correct]  pmcid=PMC10946077  entity=UGT1A1*1, UGT1A1*28
+    Wrong Q16287: ______ is not associated with decreased likelihood of overall survival or progression-free survival 
+      Model picked "UGT1A1*1, UGT1A1*28" but correct was "UGT1A1*1, UGT1A1*6, UGT1A1*28"
+    Right Q16289: ______ is not associated with increased severity of Neutropenia, Leukopenia or Diarrhea when treated
+      "UGT1A1*1, UGT1A1*28" is correct here (model got it: True)
+
+  #40
+  [Distractor-as-correct]  pmcid=PMC10946077  entity=UGT1A1*1, UGT1A1*28
+    Wrong Q16287: ______ is not associated with decreased likelihood of overall survival or progression-free survival 
+      Model picked "UGT1A1*1, UGT1A1*28" but correct was "UGT1A1*1, UGT1A1*6, UGT1A1*28"
+    Right Q16291: ______ is not associated with increased severity of Neutropenia, Leukopenia or Diarrhea when treated
+      "UGT1A1*1, UGT1A1*28" is correct here (model got it: True)
+
+  #41
+  [Distractor-as-correct]  pmcid=PMC10946077  entity=UGT1A1*1, UGT1A1*28
+    Wrong Q16287: ______ is not associated with decreased likelihood of overall survival or progression-free survival 
+      Model picked "UGT1A1*1, UGT1A1*28" but correct was "UGT1A1*1, UGT1A1*6, UGT1A1*28"
+    Right Q16293: ______ is not associated with increased severity of Neutropenia, Leukopenia or Diarrhea when treated
+      "UGT1A1*1, UGT1A1*28" is correct here (model got it: True)
+
+  #42
+  [Distractor-as-correct]  pmcid=PMC10993165  entity=HLA-B*15:02
+    Wrong Q16575: ______ is associated with increased likelihood of severe cutaneous adverse reactions when treated wi
+      Model picked "HLA-B*15:02" but correct was "HLA-B*13:01"
+    Right Q16569: ______ is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, To
+      "HLA-B*15:02" is correct here (model got it: False)
+
+  #43
+  [Distractor-as-correct]  pmcid=PMC10993165  entity=HLA-B*15:02
+    Wrong Q16575: ______ is associated with increased likelihood of severe cutaneous adverse reactions when treated wi
+      Model picked "HLA-B*15:02" but correct was "HLA-B*13:01"
+    Right Q16571: ______ is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, To
+      "HLA-B*15:02" is correct here (model got it: True)
+
+  #44
+  [Distractor-as-correct]  pmcid=PMC10993165  entity=HLA-B*13:01
+    Wrong Q16577: ______ is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, To
+      Model picked "HLA-B*13:01" but correct was "HLA-B*38:02"
+    Right Q16575: ______ is associated with increased likelihood of severe cutaneous adverse reactions when treated wi
+      "HLA-B*13:01" is correct here (model got it: False)
+
+----------------------------------------------------------------------
+All Type 3: Cross-type contradictions (35)
+----------------------------------------------------------------------
+
+  #1
+  [Cross-type]  annotation=1448926269  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16815: selected=HLA-B*15:35  expected=HLA-DRB1*01:02  [WRONG]
+    drug         Q46301: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #2
+  [Cross-type]  annotation=1448926035  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16811: selected=HLA-B*08:01  expected=HLA-B*56:01  [WRONG]
+    drug         Q46297: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #3
+  [Cross-type]  annotation=1448926022  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16831: selected=rs3745274  expected=HLA-B*55:02  [WRONG]
+    drug         Q46317: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #4
+  [Cross-type]  annotation=1448998275  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16823: selected=HLA-C*04:01  expected=HLA-B*35:10  [WRONG]
+    drug         Q46309: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #5
+  [Cross-type]  annotation=1444933926  pmcid=PMC3548984  correct=['drug']  wrong=['variant']
+    variant      Q14327: selected=CYP2C19*4  expected=CYP2D6*1, CYP2D6*3, CYP2D6*4  [WRONG]
+    drug         Q43963: selected=tamoxifen  expected=tamoxifen  [CORRECT]
+
+  #6
+  [Cross-type]  annotation=1448926309  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16855: selected=HLA-B*15:32  expected=HLA-DRB1*10:01  [WRONG]
+    drug         Q46337: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #7
+  [Cross-type]  annotation=1449155771  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q20599: selected=HLA-C*04:03  expected=rs3745274  [WRONG]
+    drug         Q49779: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #8
+  [Cross-type]  annotation=1448926149  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16827: selected=HLA-B*15:25  expected=HLA-B*57:01  [WRONG]
+    drug         Q46313: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #9
+  [Cross-type]  annotation=1448926045  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16773: selected=HLA-C*04:07  expected=HLA-B*56:06  [WRONG]
+    drug         Q46259: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #10
+  [Cross-type]  annotation=1448993794  pmcid=PMC4916189  correct=['variant']  wrong=['drug']
+    variant      Q21101: selected=rs2472677  expected=rs2472677  [CORRECT]
+    drug         Q50263: selected=darunavir  expected=efavirenz  [WRONG]
+
+  #11
+  [Cross-type]  annotation=1451769040  pmcid=PMC8973308  correct=['drug']  wrong=['variant']
+    variant      Q4211: selected=rs1800469  expected=rs1800460  [WRONG]
+    drug         Q34171: selected=mercaptopurine  expected=mercaptopurine  [CORRECT]
+
+  #12
+  [Cross-type]  annotation=1448926259  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16851: selected=HLA-B*15:32  expected=HLA-DRB1*01:01  [WRONG]
+    drug         Q46333: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #13
+  [Cross-type]  annotation=1184988061  pmcid=PMC2859392  correct=['drug']  wrong=['variant']
+    variant      Q11013: selected=rs3745276  expected=rs3745274  [WRONG]
+    drug         Q40797: selected=efavirenz  expected=efavirenz  [CORRECT]
+
+  #14
+  [Cross-type]  annotation=1448926065  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q15001: selected=HLA-B*08:01  expected=HLA-B*78:01  [WRONG]
+    drug         Q44605: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #15
+  [Cross-type]  annotation=1444930388  pmcid=PMC3584248  correct=['drug']  wrong=['variant']
+    variant      Q553: selected=CYP2D6 deficiency  expected=CYP2D6*1, CYP2D6*2, CYP2D6*5, CYP2D6*10, CYP2D6*41  [WRONG]
+    drug         Q30553: selected=endoxifen  expected=endoxifen  [CORRECT]
+
+  #16
+  [Cross-type]  annotation=1448926129  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16845: selected=HLA-B*27:06  expected=HLA-B*39:06  [WRONG]
+    drug         Q46327: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #17
+  [Cross-type]  annotation=1448926099  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16805: selected=HLA-B*07:02  expected=HLA-B*38:02  [WRONG]
+    drug         Q46291: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #18
+  [Cross-type]  annotation=1448624157  pmcid=PMC5508045  correct=['drug']  wrong=['variant']
+    variant      Q11657: selected=rs2108622  expected=rs9923231  [WRONG]
+    drug         Q41441: selected=warfarin  expected=warfarin  [CORRECT]
+
+  #19
+  [Cross-type]  annotation=1444933987  pmcid=PMC3548984  correct=['variant']  wrong=['drug']
+    variant      Q14379: selected=CYP2D6*1, CYP2D6*10, CYP2D6*41  expected=CYP2D6*1, CYP2D6*10, CYP2D6*41  [CORRECT]
+    drug         Q44005: selected=N-desmethyltamoxifen  expected=tamoxifen  [WRONG]
+
+  #20
+  [Cross-type]  annotation=1448925972  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16803: selected=HLA-B*35:10  expected=HLA-B*39:10  [WRONG]
+    drug         Q46289: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #21
+  [Cross-type]  annotation=1448993783  pmcid=PMC4916189  correct=['drug']  wrong=['variant']
+    variant      Q14707: selected=CYP2A6*9  expected=CYP2B6*1, CYP2B6*9  [WRONG]
+    drug         Q44321: selected=efavirenz  expected=efavirenz  [CORRECT]
+
+  #22
+  [Cross-type]  annotation=1452196080  pmcid=PMC10399933  correct=['drug']  wrong=['variant']
+    variant      Q18925: selected=rs4149056  expected=rs2231142  [WRONG]
+    drug         Q48233: selected=atorvastatin, fluvastatin, rosuvastatin  expected=atorvastatin, fluvastatin, rosuvastatin  [CORRECT]
+
+  #23
+  [Cross-type]  annotation=1448926239  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16797: selected=HLA-B*56:01  expected=HLA-B*15:35  [WRONG]
+    drug         Q46283: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #24
+  [Cross-type]  annotation=1448926299  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16801: selected=HLA-B*15:24  expected=HLA-DRB1*08:01  [WRONG]
+    drug         Q46287: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #25
+  [Cross-type]  annotation=1448926139  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16817: selected=HLA-B*15:32  expected=HLA-B*39:09  [WRONG]
+    drug         Q46303: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #26
+  [Cross-type]  annotation=1444933959  pmcid=PMC3548984  correct=['variant']  wrong=['drug']
+    variant      Q14369: selected=CYP2D6*1, CYP2D6*3, CYP2D6*4, CYP2D6*6  expected=CYP2D6*1, CYP2D6*3, CYP2D6*4, CYP2D6*6  [CORRECT]
+    drug         Q43997: selected=N-desmethyltamoxifen  expected=tamoxifen  [WRONG]
+
+  #27
+  [Cross-type]  annotation=1448925893  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16829: selected=HLA-DRB1*01:03  expected=HLA-C*04:07  [WRONG]
+    drug         Q46315: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #28
+  [Cross-type]  annotation=1452390301  pmcid=PMC10880264  correct=['drug']  wrong=['variant']
+    variant      Q15881: selected=CYP2C19 intermediate metabolizer phenotype  expected=CYP2C19 intermediate metabolizer  [WRONG]
+    drug         Q45423: selected=escitalopram  expected=escitalopram  [CORRECT]
+
+  #29
+  [Cross-type]  annotation=1448926075  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16841: selected=HLA-B*07:02  expected=HLA-B*13:02  [WRONG]
+    drug         Q46323: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #30
+  [Cross-type]  annotation=1452196120  pmcid=PMC10399933  correct=['drug']  wrong=['variant']
+    variant      Q15525: selected=rs2231142  expected=CYP2C9*1, CYP2C9*2, CYP2C9*3  [WRONG]
+    drug         Q45101: selected=fluvastatin  expected=fluvastatin  [CORRECT]
+
+  #31
+  [Cross-type]  annotation=1452426860  pmcid=PMC10946077  correct=['drug']  wrong=['variant']
+    variant      Q16287: selected=UGT1A1*1, UGT1A1*28  expected=UGT1A1*1, UGT1A1*6, UGT1A1*28  [WRONG]
+    drug         Q45803: selected=irinotecan  expected=irinotecan  [CORRECT]
+
+  #32
+  [Cross-type]  annotation=1447682688  pmcid=PMC4706412  correct=['drug']  wrong=['variant']
+    variant      Q8425: selected=None  expected=rs9923231  [WRONG]
+    drug         Q38305: selected=warfarin  expected=warfarin  [CORRECT]
+
+  #33
+  [Cross-type]  annotation=1448926012  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16835: selected=HLA-B*35:10  expected=HLA-B*55:01  [WRONG]
+    drug         Q46321: selected=nevirapine  expected=nevirapine  [CORRECT]
+
+  #34
+  [Cross-type]  annotation=1452438980  pmcid=PMC10993165  correct=['drug']  wrong=['variant']
+    variant      Q16575: selected=HLA-B*15:02  expected=HLA-B*13:01  [WRONG]
+    drug         Q46067: selected=sulfamethoxazole, sulfamethoxazole / trimethoprim  expected=sulfamethoxazole, sulfamethoxazole / trimethoprim  [CORRECT]
+
+  #35
+  [Cross-type]  annotation=1448926119  pmcid=PMC5561238  correct=['drug']  wrong=['variant']
+    variant      Q16859: selected=HLA-C*04:07  expected=HLA-B*39:05  [WRONG]
+    drug         Q46341: selected=nevirapine  expected=nevirapine  [CORRECT]

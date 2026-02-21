@@ -1,0 +1,52 @@
+
+======================================================================
+Mcq Drug Results  |  model=anthropic/claude-haiku-4-5-20251001  |  0/10000 (0.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above                0     5000      0.0%
+  standard                         0     5000      0.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        0    10000      0.0%
+
+  Parse failures: 10000/10000 (100.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=drug  pmcid=PMC4694426
+  Sentence: CYP3A5 *3 is associated with increased dose-adjusted trough concentrations of ______ in people with Kidney Transplantati
+  Options: a) sirolimus  b) None of the options  c) temsirolimus  d) everolimus
+  Expected: b  Got: 
+
+  [2] type=none_of_the_above  table=drug  pmcid=PMC6037621
+  Sentence: Allele A is associated with decreased exposure to ______ in women with HIV Infections as compared to allele C.
+  Options: a) None of the options  b) indinavir  c) lopinavir  d) darunavir
+  Expected: a  Got: 
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC7260086
+  Sentence: Allele C is not associated with response to ______ in healthy individuals as compared to allele T.
+  Options: a) dihydromorphine  b) None of the options  c) butorphanol  d) ethylmorphine
+  Expected: b  Got: 
+
+  [4] type=standard  table=drug  pmcid=PMC4972156
+  Sentence: Genotype GG is associated with increased dose of ______ in people with Epilepsy as compared to genotypes AA + AG.
+  Options: a) almotriptan  b) lamotrigine  c) famotidine  d) lamivudine
+  Expected: b  Got: 
+
+  [5] type=none_of_the_above  table=drug  pmcid=PMC5496343
+  Sentence: Allele C is not associated with concentrations of ______ in women with Malaria and Pregnancy as compared to allele T.
+  Options: a) memantine  b) berberine  c) ephedrine  d) None of the options
+  Expected: d  Got: 
+
+Eval results saved to runs/20260220_025035_mc_study_all_models/anthropic_claude-haiku-4-5-20251001_mcq_drug_eval_results.jsonl

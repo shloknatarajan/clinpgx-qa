@@ -1,0 +1,78 @@
+
+======================================================================
+Mcq Drug Results  |  model=anthropic/claude-haiku-4-5-20251001  |  240/300 (80.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above               94      150     62.7%
+  standard                       146      150     97.3%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       41       52     78.8%
+  pheno                     199      248     80.2%
+
+  Parse failures: 3/300 (1.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC3387531
+  Sentence: Allele C is associated with increased risk of Drug Toxicity when treated with ______ in people with HIV Infections.
+  Options: a) noscapine  b) clozapine  c) None of the options  d) olanzapine
+  Expected: c  Got: c
+
+  [2] type=standard  table=pheno  pmcid=PMC4916189
+  Sentence: CYP2B6 *9 is associated with increased likelihood of discontinuation when treated with ______ in people with HIV as comp
+  Options: a) abacavir  b) efavirenz  c) darunavir  d) amprenavir
+  Expected: b  Got: b
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC8973308
+  Sentence: Genotype CT is associated with decreased dose of ______ in children with Precursor Cell Lymphoblastic Leukemia-Lymphoma 
+  Options: a) allopurinol  b) methylmercaptopurine  c) captopril  d) None of the options
+  Expected: d  Got: d
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *55:01 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+  Options: a) olanzapine  b) clozapine  c) None of the options  d) noscapine
+  Expected: c  Got: c
+
+  [5] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *51:02 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+  Options: a) noscapine  b) nevirapine  c) olanzapine  d) clozapine
+  Expected: b  Got: b
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *35:05 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+  Options: a) noscapine  b) None of the options  c) olanzapine  d) clozapine
+  Expected: b  Got: d
+
+  [2] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *35:10 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Adverse Reaction
+  Options: a) None of the options  b) clozapine  c) olanzapine  d) noscapine
+  Expected: a  Got: d
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC10946077
+  Sentence: UGT1A1 *6 is associated with increased severity of Neutropenia, Leukopenia or Diarrhea when treated with ______ in peopl
+  Options: a) topotecan  b) None of the options  c) diflomotecan  d) FOLFIRINOX
+  Expected: b  Got: d
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC11603346
+  Sentence: CYP2B6 *1/*6 + *6/*6 is associated with decreased likelihood of Drug-induced liver injury when treated with ______ in pe
+  Options: a) None of the options  b) clozapine  c) noscapine  d) efavirenz
+  Expected: a  Got: d
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC3113609
+  Sentence: HLA-A *31:01 is associated with increased risk of Drug Hypersensitivity when treated with ______.
+  Options: a) procarbazine  b) oxcarbazepine  c) dacarbazine  d) None of the options
+  Expected: d  Got: b
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/anthropic_claude-haiku-4-5-20251001_mcq_drug_eval_results.jsonl

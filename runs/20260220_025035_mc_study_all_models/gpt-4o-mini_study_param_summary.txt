@@ -1,0 +1,105 @@
+
+======================================================================
+Study Param Results  |  model=gpt-4o-mini  |  both: 5447/10000 (54.5%)
+======================================================================
+
+By field:
+  Field                 Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  p_value                  5929    10000     59.3%
+  significance             6013    10000     60.1%
+  both                     5447    10000     54.5%
+
+By question_type:
+  Type                         P-value    Signif.       Both    Total
+  ------------------------- ---------- ---------- ---------- --------
+  correct                       33.7%     35.6%     19.2%     3334
+  modified_drug                 72.7%     72.9%     72.7%     3333
+  modified_variant              71.5%     71.9%     71.5%     3333
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                     5447    10000     54.5%
+
+  JSON parse failures: 1/10000 (0.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=modified_variant  table=drug  pmcid=PMC4425504
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+  [2] type=correct  table=drug  pmcid=PMC6631360
+  Expected p_value:      = 0.0011
+  Response p_value:      0.0011
+  Expected significance: yes
+  Response significance: yes
+  Raw response: {"p_value": "0.0011", "significance": "yes"}
+
+  [3] type=modified_drug  table=drug  pmcid=PMC5789875
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+  [4] type=modified_drug  table=drug  pmcid=PMC5316146
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+  [5] type=modified_drug  table=drug  pmcid=PMC5619051
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: not found
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=correct  table=drug  pmcid=PMC10038974
+  Expected p_value:      not found
+  Response p_value:      not found
+  Expected significance: yes
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+  [2] type=modified_variant  table=drug  pmcid=PMC5514947
+  Expected p_value:      not found
+  Response p_value:      0.259
+  Expected significance: not found
+  Response significance: no
+  Raw response: {"p_value": "0.259", "significance": "no"}
+
+  [3] type=correct  table=drug  pmcid=PMC2386778
+  Expected p_value:      = 0.43
+  Response p_value:      not found
+  Expected significance: no
+  Response significance: not found
+  Raw response: {"p_value": "not found", "significance": "not found"}
+
+  [4] type=modified_drug  table=drug  pmcid=PMC3530397
+  Expected p_value:      not found
+  Response p_value:      7.10E-03
+  Expected significance: not found
+  Response significance: yes
+  Raw response: {"p_value": "7.10E-03", "significance": "yes"}
+
+  [5] type=modified_variant  table=drug  pmcid=PMC5808057
+  Expected p_value:      not found
+  Response p_value:      not stated
+  Expected significance: not found
+  Response significance: not stated
+  Raw response: {"p_value": "not stated", "significance": "not stated"}
+
+Eval results saved to runs/20260220_025035_mc_study_all_models/gpt-4o-mini_study_param_eval_results.jsonl

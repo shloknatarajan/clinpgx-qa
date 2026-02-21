@@ -1,0 +1,75 @@
+
+======================================================================
+Mcq Phenotype Results  |  model=anthropic/claude-opus-4-6  |  115/284 (40.5%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above               38      142     26.8%
+  standard                        77      142     54.2%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  pheno                     115      284     40.5%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC6465603
+  Sentence: Genotypes CT + TT is associated with increased likelihood of ______ when treated with azathioprine in people with Hepati
+  Options: a) Side Effect:interval of therapy to leukopenia onset  b) Absence  c) Side Effect:severe leukopenia  d) Side Effect:Leukopenia
+  Expected: d  Got: d
+
+  [2] type=standard  table=pheno  pmcid=PMC554812
+  Sentence: HLA-DRB1 *03:01 is associated with increased risk of ______ when treated with allopurinol.
+  Options: a) Side Effect:Severe Cutaneous Adverse Reactions  b) Side Effect:adverse reactions  c) Side Effect:severe adverse reactions  d) Side Effect:severe cutaneous adverse drug reactions
+  Expected: a  Got: a
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC10880264
+  Sentence: CYP2D6 poor metabolizer is associated with increased likelihood of ______, unspecified when treated with escitalopram in
+  Options: a) Side Effect:Agitation  b) Disease:Bipolar Disorder  c) None of the options  d) Side Effect:suicidal ideation, Side Effect:adverse events, Side Effect:deliberate self-harm
+  Expected: c  Got: c
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC10880264
+  Sentence: CYP2C19 intermediate metabolizer is associated with increased likelihood of ______ when treated with escitalopram in chi
+  Options: a) None of the options  b) Other:suicidal ideation  c) Other:adverse events  d) Side Effect:Psychomotor Agitation, Side Effect:Hyperkinesis, Side Effect:Impulse control disorder
+  Expected: a  Got: a
+
+  [5] type=standard  table=pheno  pmcid=PMC12319246
+  Sentence: Genotype AA is associated with increased likelihood of ______ when treated with tacrolimus in people with Kidney Transpl
+  Options: a) Efficacy:Death  b) Side Effect:Nephrotoxicity  c) Other:tacrolimus nephrotoxicity  d) Efficacy:Transplant rejection
+  Expected: b  Got: b
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC11971672
+  Sentence: CYP2C19 *1/*2 + *1/*3 + *2/*17 + *3/*17 + *2/*2 + *2/*3 + *3/*3 (assigned as intermediate metabolizer and poor metaboliz
+  Options: a) nonfatal myocardial infarction or nonfatal stroke)  b) Disease:Myocardial Infarction  c) myocardial infarction or stroke  d) None of the options
+  Expected: d  Got: c
+
+  [2] type=none_of_the_above  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DQB1 *02:02 is associated with increased risk of ______ when treated with pegaspargase.
+  Options: a) Side Effect:aspirin hypersensitivity  b) None of the options  c) Side Effect:Hypersensitivity Syndrome  d) Disease:Drug Hypersensitivity
+  Expected: b  Got: c
+
+  [3] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: Allele C is associated with Epidermal Necrolysis, Toxic, ______ when treated with nevirapine in people with HIV Infectio
+  Options: a) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Severe Cutaneous Adverse Reactions, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms  b) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms, Side Effect:Severe Cutaneous Adverse Reactions  c) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms  d) Disease:Drug Reaction with Eosinophilia and Systemic Symptoms
+  Expected: b  Got: c
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC12036300
+  Sentence: CYP2C19 *1/*2 + *2/*2 + *2/*17 is not associated with increased likelihood of ______ when treated with clopidogrel as co
+  Options: a) Other:major adverse cardiovascular events  b) Other:major adverse cardiac events  c) None of the options  d) Side Effect:major adverse cardiac and cerebrovascular events
+  Expected: c  Got: b
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC3387531
+  Sentence: HLA-B *35:01 is associated with increased risk of ______ when treated with nevirapine in people with HIV Infections.
+  Options: a) Disease:Drug Resistance  b) Disease:Drug Hypersensitivity  c) Disease:Gastrointestinal toxicity  d) None of the options
+  Expected: d  Got: b
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/anthropic_claude-opus-4-6_mcq_phenotype_eval_results.jsonl

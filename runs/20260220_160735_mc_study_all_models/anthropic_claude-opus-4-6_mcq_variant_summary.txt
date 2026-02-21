@@ -1,0 +1,76 @@
+
+======================================================================
+Mcq Variant Results  |  model=anthropic/claude-opus-4-6  |  239/300 (79.7%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above              105      150     70.0%
+  standard                       134      150     89.3%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       45       52     86.5%
+  pheno                     194      248     78.2%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eo
+  Options: a) HLA-B*55:02  b) HLA-B*38:01  c) HLA-B*13:25  d) HLA-B*15:25
+  Expected: d  Got: d
+
+  [2] type=standard  table=pheno  pmcid=PMC8790808
+  Sentence: ______ is associated with increased risk of Hypersensitivity when treated with pegaspargase.
+  Options: a) HLA-DRB1*01:01  b) HLA-DRB1*01:02  c) HLA-DRB1*07:01  d) HLA-C*07:01
+  Expected: c  Got: c
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC5508045
+  Sentence: ______ are associated with decreased dose of warfarin in people with Atrial Fibrillation, heart valve replacement, Hyper
+  Options: a) rs739923  b) rs2108622  c) None of the options  d) rs887829
+  Expected: c  Got: c
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC554812
+  Sentence: ______ is associated with increased risk of severe cutaneous adverse reactions when treated with allopurinol.
+  Options: a) HLA-DRB1*01:03  b) rs1594  c) HLA-DRB1*01:01  d) None of the options
+  Expected: d  Got: d
+
+  [5] type=standard  table=pheno  pmcid=PMC3839910
+  Sentence: ______ is not associated with increased risk of Maculopapular Exanthema when treated with carbamazepine in children.
+  Options: a) HLA-B*13:02  b) HLA-B*15:02  c) HLA-B*07:02  d) HLA-A*31:01
+  Expected: b  Got: b
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC10993165
+  Sentence: ______ is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, Toxic or severe cutane
+  Options: a) HLA-B*13:02  b) HLA-B*13:01  c) HLA-B*15:02  d) HLA-B*07:02
+  Expected: c  Got: b
+
+  [2] type=none_of_the_above  table=pheno  pmcid=PMC10993165
+  Sentence: ______ is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, Toxic or severe cutane
+  Options: a) None of the options  b) HLA-B*13:02  c) HLA-B*07:02  d) HLA-B*13:01
+  Expected: a  Got: d
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC10993165
+  Sentence: ______ is associated with increased likelihood of Stevens-Johnson Syndrome, Epidermal Necrolysis, Toxic or severe cutane
+  Options: a) HLA-B*13:01  b) HLA-B*13:02  c) None of the options  d) HLA-B*07:02
+  Expected: c  Got: a
+
+  [4] type=none_of_the_above  table=drug  pmcid=PMC3584248
+  Sentence: ______ are associated with decreased concentrations of endoxifen in women with Breast Neoplasms as compared to CYP2D6 *1
+  Options: a) None of the options  b) CYP2D6*100  c) CYP2A6*41  d) CYP2D6 deficiency
+  Expected: a  Got: d
+
+  [5] type=none_of_the_above  table=drug  pmcid=PMC10880264
+  Sentence: ______ is associated with increased dose-adjusted trough concentrations of escitalopram in children with Depression or A
+  Options: a) rs6311  b) CYP2C19 intermediate metabolizer genotype  c) CYP2D6 poor metabolizer  d) None of the options
+  Expected: d  Got: b
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/anthropic_claude-opus-4-6_mcq_variant_eval_results.jsonl

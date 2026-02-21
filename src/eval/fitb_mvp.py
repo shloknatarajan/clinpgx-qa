@@ -112,6 +112,7 @@ def main() -> None:
     results: list[dict] = []
     correct = 0
     total = 0
+    consecutive_errors = 0
 
     for i, q in enumerate(questions):
         ground_truth = q.blanks[0].ground_truth
@@ -119,9 +120,19 @@ def main() -> None:
 
         try:
             prediction = call_llm(q.blanked_sentence, args.model)
+            consecutive_errors = 0
         except Exception as e:
-            print(f"LLM error on question {i}: {e}")
+            consecutive_errors += 1
+            logger.error(f"LLM error on question {i}: {type(e).__name__}: {e}")
             prediction = ""
+            if consecutive_errors >= 5:
+                logger.error(
+                    f"ABORTING: {consecutive_errors} consecutive LLM errors — "
+                    f"likely a systemic API issue. Last error: {e}"
+                )
+                raise RuntimeError(
+                    f"{consecutive_errors} consecutive LLM errors for model={args.model}"
+                ) from e
 
         is_correct = score_prediction(prediction, ground_truth)
         correct += int(is_correct)

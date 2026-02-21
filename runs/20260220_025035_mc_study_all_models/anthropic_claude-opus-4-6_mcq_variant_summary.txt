@@ -1,0 +1,52 @@
+
+======================================================================
+Mcq Variant Results  |  model=anthropic/claude-opus-4-6  |  0/10000 (0.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above                0     5000      0.0%
+  standard                         0     5000      0.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                        0    10000      0.0%
+
+  Parse failures: 10000/10000 (100.0%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (0 randomly chosen)
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=drug  pmcid=PMC5483245
+  Sentence: ______ is associated with increased response to ethanol in healthy individuals as compared to allele GGGGGCCCTGCATGCGTCC
+  Options: a) rs1799971  b) rs72836346  c) None of the options  d) rs72836345
+  Expected: c  Got: 
+
+  [2] type=none_of_the_above  table=drug  pmcid=PMC3944214
+  Sentence: ______ is associated with decreased response to atorvastatin, hmg coa reductase inhibitors or simvastatin as compared to
+  Options: a) rs4149056  b) rs310786  c) rs1180012  d) None of the options
+  Expected: d  Got: 
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC5943457
+  Sentence: ______ is not associated with response to methotrexate in people with Arthritis, Rheumatoid as compared to allele C.
+  Options: a) None of the options  b) rs1801394  c) rs1012650  d) rs726501
+  Expected: a  Got: 
+
+  [4] type=none_of_the_above  table=drug  pmcid=PMC4224698
+  Sentence: ______ is associated with decreased response to interferon alfa-2a, recombinant, interferon alfa-2b, recombinant and rib
+  Options: a) None of the options  b) rs113993960  c) rs2299939  d) rs1799939
+  Expected: a  Got: 
+
+  [5] type=standard  table=drug  pmcid=PMC6021962
+  Sentence: ______ is associated with trough concentration of tacrolimus in people with Kidney Transplantation and Transplantation a
+  Options: a) rs8176746  b) rs776746  c) rs1176746  d) rs776744
+  Expected: b  Got: 
+
+Eval results saved to runs/20260220_025035_mc_study_all_models/anthropic_claude-opus-4-6_mcq_variant_eval_results.jsonl

@@ -1,0 +1,76 @@
+
+======================================================================
+Mcq Variant Results  |  model=gpt-5.2  |  226/300 (75.3%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above              105      150     70.0%
+  standard                       121      150     80.7%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       35       52     67.3%
+  pheno                     191      248     77.0%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC554812
+  Sentence: ______ is associated with increased risk of severe cutaneous adverse reactions when treated with allopurinol.
+  Options: a) None of the options  b) rs1594  c) HLA-DRB1*01:03  d) HLA-DRB1*01:01
+  Expected: a  Got: a
+
+  [2] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+  Options: a) HLA-B*15:32  b) HLA-B*78:01  c) HLA-B*15:01  d) HLA-B*08:01
+  Expected: b  Got: b
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC4706412
+  Sentence: ______ are associated with decreased dose of warfarin as compared to CYP2C9 *1.
+  Options: a) CYP1A2*8  b) CYP4F2*1, CYP4F2*3  c) rs1800566  d) None of the options
+  Expected: d  Got: d
+
+  [4] type=standard  table=pheno  pmcid=PMC4916189
+  Sentence: ______ are associated with increased likelihood of discontinuation when treated with efavirenz in people with HIV Infect
+  Options: a) rs28399499  b) rs4803419  c) rs374527  d) rs3745274
+  Expected: d  Got: d
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+  Options: a) HLA-B*15:27  b) None of the options  c) HLA-B*08:01  d) HLA-B*15:01
+  Expected: b  Got: b
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=drug  pmcid=PMC4706412
+  Sentence: ______ are associated with decreased dose of warfarin as compared to genotype CC.
+  Options: a) rs1800566  b) None of the options  c) rs739923  d) CYP4F2*1, CYP4F2*3
+  Expected: b  Got: c
+
+  [2] type=none_of_the_above  table=pheno  pmcid=PMC10880264
+  Sentence: ______ is associated with increased likelihood of Psychomotor Agitation, Hyperkinesis or Impulse control disorder, unspe
+  Options: a) None of the options  b) CYP2D6 poor metabolizer genotype  c) CYP2C19 intermediate metabolizer  d) rs6311
+  Expected: a  Got: b
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC5508045
+  Sentence: ______ are associated with decreased dose of warfarin in people with Atrial Fibrillation, heart valve replacement, Hyper
+  Options: a) rs739923  b) rs2108622  c) None of the options  d) rs887829
+  Expected: c  Got: b
+
+  [4] type=standard  table=drug  pmcid=PMC3584248
+  Sentence: ______ are not associated with decreased concentrations of 4-hydroxytamoxifen, n-desmethyltamoxifen and tamoxifen in wom
+  Options: a) CYP2D6*1, CYP2D6*2, CYP2D6*5, CYP2D6*10, CYP2D6*41  b) CYP2D6 deficiency  c) CYP2A6*41  d) CYP2D6*100
+  Expected: a  Got: b
+
+  [5] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Adverse Reactions and 
+  Options: a) HLA-B*35:10  b) HLA-B*15:10  c) HLA-DRB1*01:03  d) HLA-C*04:01
+  Expected: a  Got: d
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/gpt-5.2_mcq_variant_eval_results.jsonl

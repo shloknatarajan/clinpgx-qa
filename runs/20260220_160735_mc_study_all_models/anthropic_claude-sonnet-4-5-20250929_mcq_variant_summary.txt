@@ -1,0 +1,93 @@
+
+======================================================================
+Mcq Variant Results  |  model=anthropic/claude-sonnet-4-5-20250929  |  159/300 (53.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above               46      150     30.7%
+  standard                       113      150     75.3%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       28       52     53.8%
+  pheno                     131      248     52.8%
+
+  Parse failures: 13/300 (4.3%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC6465603
+  Sentence: ______ is associated with increased likelihood of Leukopenia when treated with azathioprine in people with Hepatitis, Au
+  Options: a) rs11685873  b) rs16855294  c) rs116855232  d) rs1051685
+  Expected: c  Got: c
+
+  [2] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+  Options: a) HLA-B*15:12  b) HLA-B*15:25  c) HLA-C*03:04  d) HLA-C*04:06
+  Expected: d  Got: d
+
+  [3] type=standard  table=pheno  pmcid=PMC10946077
+  Sentence: ______ is associated with increased severity of Neutropenia, Leukopenia or Diarrhea when treated with irinotecan in peop
+  Options: a) UGT1A1*1, UGT1A1*6, UGT1A1*28  b) CYP2B6*6  c) UGT1A1*1, UGT1A1*6  d) CYP2A6*6
+  Expected: c  Got: c
+
+  [4] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+  Options: a) HLA-B*15:35  b) HLA-B*08:01  c) HLA-B*67:01  d) rs3745274
+  Expected: c  Got: c
+
+  [5] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+  Options: a) HLA-C*04:03  b) HLA-C*03:04  c) HLA-B*15:25  d) HLA-B*15:27
+  Expected: a  Got: a
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC4916189
+  Sentence: ______ is not associated with virological response when treated with efavirenz in people with HIV Infections as compared
+  Options: a) rs28399499  b) None of the options  c) rs374527  d) rs1045642
+  Expected: b  Got: c
+
+  [2] type=none_of_the_above  table=drug  pmcid=PMC8973308
+  Sentence: ______ is associated with decreased dose of mercaptopurine in children with Precursor Cell Lymphoblastic Leukemia-Lympho
+  Options: a) rs1800042  b) None of the options  c) rs1800462  d) rs1800469
+  Expected: b  Got: Looking at the paper, I need to find information about genetic variants and their association with mercaptopurine dose reduction.
+
+The paper discusses several SNPs:
+- NUDT15 (rs116855232)
+- TPMT polymorphisms: rs1800462, rs1800460, and rs1142345
+
+The paper states that heterozygous patients for these variants may require dose reductions, though no statistically significant associations were found in this particular study.
+
+The question asks about a comparison to "genotype CC", which suggests we're looking at a C to another allele variant.
+
+For rs1800462, the genotypes mentioned are C/C and C/G.
+For rs1800460, the genotypes are T/C and C/C and C/T.
+
+Based on the TPMT polymorphisms studied and the reference to CC genotype in the context of mercaptopurine dose reduction in pediatric ALL, the answer is:
+
+**c**
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+  Options: a) HLA-B*15:27  b) None of the options  c) HLA-B*08:01  d) HLA-B*15:01
+  Expected: b  Got: d
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC3113609
+  Sentence: ______ is associated with increased risk of Maculopapular Exanthema when treated with carbamazepine.
+  Options: a) HLA-A*02:01  b) None of the options  c) HLA-A*01:02  d) HLA-A*01:01
+  Expected: b  Got: d
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia and Sys
+  Options: a) None of the options  b) HLA-B*15:25  c) HLA-B*15:10  d) HLA-B*35:10
+  Expected: a  Got: b
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/anthropic_claude-sonnet-4-5-20250929_mcq_variant_eval_results.jsonl

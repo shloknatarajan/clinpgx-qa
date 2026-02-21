@@ -1,0 +1,76 @@
+
+======================================================================
+Mcq Variant Results  |  model=gpt-4o-mini  |  187/300 (62.3%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above               85      150     56.7%
+  standard                       102      150     68.0%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       27       52     51.9%
+  pheno                     160      248     64.5%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC10399933
+  Sentence: ______ is not associated with increased risk of discontinuation when treated with atorvastatin, fluvastatin or rosuvasta
+  Options: a) CYP2C9*1, CYP2C9*2, CYP2C9*3  b) rs2231142  c) rs2231148  d) rs4149056
+  Expected: b  Got: b
+
+  [2] type=none_of_the_above  table=drug  pmcid=PMC2859392
+  Sentence: ______ is not associated with response to efavirenz in people with HIV Infections and Tuberculosis as compared to genoty
+  Options: a) rs374515279  b) rs3745276  c) rs374527  d) None of the options
+  Expected: d  Got: d
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC3839910
+  Sentence: ______ is not associated with increased risk of Maculopapular Exanthema when treated with carbamazepine in children.
+  Options: a) None of the options  b) HLA-B*07:02  c) HLA-B*13:02  d) HLA-A*31:01
+  Expected: a  Got: a
+
+  [4] type=standard  table=pheno  pmcid=PMC3113609
+  Sentence: ______ is associated with increased risk of Maculopapular Exanthema when treated with carbamazepine.
+  Options: a) HLA-A*31:01  b) HLA-A*01:02  c) HLA-A*02:01  d) HLA-A*01:01
+  Expected: a  Got: a
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC3113609
+  Sentence: ______ is associated with increased risk of severe cutaneous adverse reactions when treated with carbamazepine.
+  Options: a) None of the options  b) HLA-A*01:02  c) HLA-A*01:01  d) HLA-A*02:01
+  Expected: a  Got: a
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eo
+  Options: a) HLA-B*39:05  b) HLA-B*15:02  c) None of the options  d) HLA-B*55:01
+  Expected: c  Got: b
+
+  [2] type=standard  table=drug  pmcid=PMC2859392
+  Sentence: ______ is associated with decreased metabolism of efavirenz in people with HIV Infections and Tuberculosis as compared t
+  Options: a) rs374515279  b) rs3745274  c) rs374527  d) rs3745276
+  Expected: b  Got: c
+
+  [3] type=standard  table=pheno  pmcid=PMC4916189
+  Sentence: ______ is not associated with virological response when treated with efavirenz in people with HIV Infections as compared
+  Options: a) rs3745274  b) rs28399499  c) rs1045642  d) rs374527
+  Expected: a  Got: b
+
+  [4] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eo
+  Options: a) HLA-B*15:24  b) HLA-B*15:02  c) HLA-DRB1*01:03  d) HLA-B*51:01
+  Expected: a  Got: b
+
+  [5] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: ______ is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Severe Cutaneous Adverse Reactions and 
+  Options: a) HLA-B*35:10  b) HLA-B*15:10  c) HLA-DRB1*01:03  d) HLA-C*04:01
+  Expected: a  Got: d
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/gpt-4o-mini_mcq_variant_eval_results.jsonl

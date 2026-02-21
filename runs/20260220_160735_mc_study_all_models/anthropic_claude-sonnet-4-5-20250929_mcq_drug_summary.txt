@@ -1,0 +1,90 @@
+
+======================================================================
+Mcq Drug Results  |  model=anthropic/claude-sonnet-4-5-20250929  |  219/300 (73.0%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above               71      150     47.3%
+  standard                       148      150     98.7%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       32       52     61.5%
+  pheno                     187      248     75.4%
+
+  Parse failures: 14/300 (4.7%)
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DQB1 *02:02 is associated with increased risk of Hypersensitivity when treated with ______.
+  Options: a) asparaginase  b) pegaspargase  c) sparteine  d) l-asparagine
+  Expected: b  Got: b
+
+  [2] type=standard  table=pheno  pmcid=PMC11062152
+  Sentence: UGT1A1 *6/*6 + *28/*28 + *6/*28 is associated with increased risk of Neutropenia or Leukopenia when treated with ______ 
+  Options: a) 10-monohydroxy oxcarbazepine  b) 2-aminoheptanoate  c) fluorouracil, irinotecan, leucovorin  d) 1-hydroxymidazolam
+  Expected: c  Got: c
+
+  [3] type=standard  table=pheno  pmcid=PMC10399933
+  Sentence: Genotypes CC + CT is not associated with increased risk of discontinuation when treated with ______ as compared to genot
+  Options: a) atorvastatin, fluvastatin, rosuvastatin  b) 1-hydroxymidazolam  c) atorvastatin lactone  d) 10-monohydroxy oxcarbazepine
+  Expected: a  Got: a
+
+  [4] type=standard  table=pheno  pmcid=PMC12036300
+  Sentence: CYP2C19 *1/*2 + *2/*2 + *2/*17 is not associated with increased likelihood of Major Adverse Cardiac Events (MACE) when t
+  Options: a) cangrelor  b) clopidogrel  c) pridopidine  d) ticlopidine
+  Expected: b  Got: b
+
+  [5] type=standard  table=drug  pmcid=PMC3584248
+  Sentence: CYP2D6 *10/*10 + *10/*41 + *1/*5 + *2/*5 + *5/*10 are not associated with decreased concentrations of ______, n-desmethy
+  Options: a) n  b) 4-hydroxyatorvastatin lactone  c) clozapine n-oxide  d) 4-hydroxytamoxifen, N-desmethyltamoxifen, tamoxifen
+  Expected: d  Got: d
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=drug  pmcid=PMC4706412
+  Sentence: CYP2C9 *2 + *3 + *8 are associated with decreased dose of ______ as compared to CYP2C9 *1.
+  Options: a) heparin  b) None of the options  c) 6-hydroxy r-warfarin  d) coumarin
+  Expected: b  Got: d
+
+  [2] type=none_of_the_above  table=pheno  pmcid=PMC6465603
+  Sentence: Genotypes CT + TT is associated with increased likelihood of Leukopenia when treated with ______ in people with Hepatiti
+  Options: a) None of the options  b) perindopril  c) thioguanine  d) thioridazine
+  Expected: a  Got: c
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DQB1 *02:02 is associated with increased risk of Hypersensitivity when treated with ______.
+  Options: a) l-asparagine  b) None of the options  c) asparaginase  d) sparteine
+  Expected: b  Got: c
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC554812
+  Sentence: HLA-C *03:02 is associated with increased risk of severe cutaneous adverse reactions when treated with ______.
+  Options: a) methylmercaptopurine  b) None of the options  c) talinolol  d) mercaptopurine
+  Expected: b  Got: Based on the paper, HLA-Cw*0302 (HLA-C*03:02) was found in 94% of patients with allopurinol-induced severe cutaneous adverse reactions (SCAR), compared to only 14% of tolerant patients and 20% of the general population. The paper specifically states that HLA-Cw*0302 is part of the extended haplotype associated with allopurinol-SCAR.
+
+However, looking at the answer options provided, allopurinol is not listed. The options are:
+a) methylmercaptopurine
+b) None of the options
+c) talinolol
+d) mercaptopurine
+
+Since the paper is about allopurinol and none of the options include allopurinol, the correct answer is:
+
+b
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC3113609
+  Sentence: HLA-A *31:01 is associated with increased risk of severe cutaneous adverse reactions when treated with ______.
+  Options: a) dacarbazine  b) None of the options  c) oxcarbazepine  d) procarbazine
+  Expected: b  Got: Based on the paper, HLA-A*3101 (HLA-A*31:01) is associated with carbamazepine-induced hypersensitivity reactions. The paper does not discuss oxcarbazepine, dacarbazine, or procarbazine in relation to HLA-A*3101.
+
+b
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/anthropic_claude-sonnet-4-5-20250929_mcq_drug_eval_results.jsonl

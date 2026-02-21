@@ -1,0 +1,76 @@
+
+======================================================================
+Mcq Drug Results  |  model=anthropic/claude-opus-4-6  |  281/300 (93.7%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above              135      150     90.0%
+  standard                       146      150     97.3%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  drug                       46       52     88.5%
+  pheno                     235      248     94.8%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-DRB1 *01:03 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophili
+  Options: a) noscapine  b) nevirapine  c) olanzapine  d) clozapine
+  Expected: b  Got: b
+
+  [2] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *39:06 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+  Options: a) clozapine  b) nevirapine  c) noscapine  d) olanzapine
+  Expected: b  Got: b
+
+  [3] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *55:02 is associated with Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction with Eosinophilia a
+  Options: a) noscapine  b) olanzapine  c) nevirapine  d) clozapine
+  Expected: c  Got: c
+
+  [4] type=standard  table=pheno  pmcid=PMC3548984
+  Sentence: CYP2D6 *3/*3 + *4/*4 are associated with increased likelihood of Recurrence when treated with ______ in women with Breas
+  Options: a) tamoxifen  b) endoxifen  c) 4-hydroxytamoxifen  d) N-desmethyltamoxifen
+  Expected: a  Got: a
+
+  [5] type=standard  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *15:01 is associated with decreased risk of Epidermal Necrolysis, Toxic, Stevens-Johnson Syndrome, Drug Reaction w
+  Options: a) nevirapine  b) noscapine  c) olanzapine  d) clozapine
+  Expected: a  Got: a
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC3839910
+  Sentence: HLA-A *31:01 is not associated with increased risk of Stevens-Johnson Syndrome when treated with ______ in children.
+  Options: a) None of the options  b) procarbazine  c) oxcarbazepine  d) dacarbazine
+  Expected: a  Got: c
+
+  [2] type=none_of_the_above  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DQA1 *02:01 is associated with increased risk of Hypersensitivity when treated with ______.
+  Options: a) l-asparagine  b) None of the options  c) asparaginase  d) sparteine
+  Expected: b  Got: c
+
+  [3] type=none_of_the_above  table=drug  pmcid=PMC4706412
+  Sentence: CYP2C9 *2 + *3 + *8 are associated with decreased dose of ______ as compared to CYP2C9 *1.
+  Options: a) heparin  b) 6-hydroxy r-warfarin  c) coumarin  d) None of the options
+  Expected: d  Got: c
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC8790808
+  Sentence: HLA-DRB1 *07:01 is associated with increased risk of Hypersensitivity when treated with ______.
+  Options: a) None of the options  b) asparaginase  c) sparteine  d) l-asparagine
+  Expected: a  Got: b
+
+  [5] type=none_of_the_above  table=drug  pmcid=PMC4706412
+  Sentence: CYP2C9 *2 + *3 + *8 are associated with decreased dose of ______ as compared to CYP2C9 *1.
+  Options: a) heparin  b) None of the options  c) 6-hydroxy r-warfarin  d) coumarin
+  Expected: b  Got: d
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/anthropic_claude-opus-4-6_mcq_drug_eval_results.jsonl

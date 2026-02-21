@@ -1,0 +1,75 @@
+
+======================================================================
+Mcq Phenotype Results  |  model=gpt-5.2  |  115/284 (40.5%)
+======================================================================
+
+By question_type:
+  Type                       Correct    Total   Accuracy
+  ------------------------- -------- -------- ----------
+  none_of_the_above               37      142     26.1%
+  standard                        78      142     54.9%
+
+By table_type:
+  Type                  Correct    Total   Accuracy
+  -------------------- -------- -------- ----------
+  pheno                     115      284     40.5%
+
+----------------------------------------------------------------------
+Example CORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC12319246
+  Sentence: Genotype CC is associated with increased likelihood of ______ when treated with tacrolimus in people with Kidney Transpl
+  Options: a) Side Effect:Nephrotoxicity  b) Efficacy:Transplant rejection  c) Efficacy:Median Overall Survival  d) None of the options
+  Expected: d  Got: d
+
+  [2] type=standard  table=pheno  pmcid=PMC11062152
+  Sentence: UGT1A1 *6/*6 + *28/*28 + *6/*28 is associated with increased risk of ______ when treated with fluorouracil, irinotecan a
+  Options: a) Side Effect:Neutropenia, Side Effect:Leukopenia  b) Side Effect:Febrile neutropenia  c) Disease:Leukopenia  d) Disease:Neutropenia
+  Expected: a  Got: a
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC10399933
+  Sentence: Genotypes CC + CT is not associated with increased risk of ______ when treated with atorvastatin, fluvastatin or rosuvas
+  Options: a) Side Effect:time to discontinuation or dose reduction  b) Side Effect:discontinuation syndrome  c) None of the options  d) Efficacy:permanent early discontinuation
+  Expected: c  Got: c
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC5561238
+  Sentence: HLA-B *15:27 is associated with decreased risk of Epidermal Necrolysis, Toxic, ______ when treated with nevirapine in pe
+  Options: a) None of the options  b) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms  c) Side Effect:Toxic Epidermal Necrolysis, Side Effect:Stevens-Johnson Syndrome, Side Effect:Severe Cutaneous Adverse Reactions, Side Effect:Drug Reaction with Eosinophilia and Systemic Symptoms  d) Disease:Drug Reaction with Eosinophilia and Systemic Symptoms
+  Expected: a  Got: a
+
+  [5] type=standard  table=pheno  pmcid=PMC10399933
+  Sentence: Genotype CC is associated with increased risk of ______ when treated with simvastatin as compared to genotype TT.
+  Options: a) Efficacy:permanent early discontinuation  b) Side Effect:time to discontinuation or dose reduction  c) Side Effect:Discontinuation  d) Side Effect:discontinuation syndrome
+  Expected: c  Got: c
+
+----------------------------------------------------------------------
+Example INCORRECT answers (5 randomly chosen)
+----------------------------------------------------------------------
+
+  [1] type=none_of_the_above  table=pheno  pmcid=PMC8790808
+  Sentence: Allele T is associated with increased risk of ______ when treated with pegaspargase as compared to allele A.
+  Options: a) Disease:Drug Hypersensitivity  b) None of the options  c) Side Effect:aspirin hypersensitivity  d) Side Effect:Hypersensitivity Syndrome
+  Expected: b  Got: a
+
+  [2] type=none_of_the_above  table=pheno  pmcid=PMC554812
+  Sentence: HLA-DRB1 *03:01 is associated with increased risk of ______ when treated with allopurinol.
+  Options: a) None of the options  b) Side Effect:adverse reactions  c) Side Effect:severe adverse reactions  d) Side Effect:severe cutaneous adverse drug reactions
+  Expected: a  Got: d
+
+  [3] type=none_of_the_above  table=pheno  pmcid=PMC12331468
+  Sentence: Genotype GG is associated with decreased likelihood of ______ when treated with FOLFOX or XELOX in people with Colorecta
+  Options: a) None of the options  b) Disease:Peripheral Nervous System Diseases  c) Side Effect:Hand-foot syndrome, Side Effect:Exanthema, Side Effect:Drug Toxicity  d) Side Effect:Mucositis
+  Expected: a  Got: b
+
+  [4] type=none_of_the_above  table=pheno  pmcid=PMC10399933
+  Sentence: Genotypes GT + TT is not associated with increased risk of ______ when treated with atorvastatin, fluvastatin or rosuvas
+  Options: a) Side Effect:time to discontinuation or dose reduction  b) Efficacy:permanent early discontinuation  c) Side Effect:discontinuation syndrome  d) None of the options
+  Expected: d  Got: a
+
+  [5] type=none_of_the_above  table=pheno  pmcid=PMC4916189
+  Sentence: Allele T is not associated with ______ when treated with efavirenz in people with HIV Infections as compared to allele G
+  Options: a) Efficacy:Discontinuation  b) None of the options  c) Side Effect:Central Nervous System Disorder  d) Efficacy:virological response (early
+  Expected: b  Got: c
+
+Eval results saved to runs/20260220_160735_mc_study_all_models/gpt-5.2_mcq_phenotype_eval_results.jsonl
